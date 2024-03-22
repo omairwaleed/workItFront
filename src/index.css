@@ -91,6 +91,7 @@ html {
 }
 .error {
   color: red;
+  animation: fadeIn 1s ease-in-out forwards;
 }
 .left {
   position: inherit;
@@ -120,7 +121,7 @@ html {
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
-  /* z-index: 1; */
+  z-index: 1;
   position: relative;
   left: 153px;
   top: 440px;
@@ -156,6 +157,8 @@ html {
 
 .right {
   display: none;
+  position: relative;
+  overflow: hidden;
   /* height: -5px; */
 }
 
@@ -167,6 +170,8 @@ html {
   width: 100%;
   height: 100%;
   object-fit: fill;
+  /* flex-wrap: wrap; */
+  justify-content: center;
 }
 .registration {
   text-decoration: none;
@@ -211,6 +216,16 @@ html {
   padding: 12px;
 }
 
+.image-container{
+  position: relative;
+}
+
+.overlay{
+  position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
 .image-container .btn {
   display: flex;
   position: absolute;
@@ -244,6 +259,7 @@ html {
 
 .image-container .btn:hover {
   background-color: black;
+  color: white !important;
 }
 .image-container .btn2:hover {
   background-color: black;
@@ -317,7 +333,7 @@ html {
 .welcome {
   flex-wrap: wrap;
   display: flex;
-  font-size: 70px;
+  font-size: 5rem;
   margin: 40px;
   font-weight: 800;
   z-index: 2;
@@ -459,7 +475,7 @@ html {
   .welcome {
     flex-wrap: wrap;
     display: flex;
-    font-size: 70px;
+    font-size: 3rem;
     margin: 40px;
     font-weight: 800;
     z-index: 2;
@@ -498,7 +514,7 @@ html {
   .text-overlay {
     font-family: inter;
     position: absolute;
-    top: 30%;
+    top: 50%;
     left: 35%;
     transform: translate(-50%, -50%);
     color: white;
@@ -633,3 +649,15 @@ html {
   }
 }
 /*new styles*/
+/* fade in animation */
+
+
+.fade-in {
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+

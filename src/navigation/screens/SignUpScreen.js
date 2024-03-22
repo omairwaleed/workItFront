@@ -16,16 +16,16 @@ const SignUpScreen = () => {
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState("user");
   const [error, setError] = useState();
-
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [mobileNumber, setMobileNumber] = useState();
-  const [country, setCountry] = useState();
-  const [city, setCity] = useState();
-  const [companySize, setCompanySize] = useState();
-  const [companyCategory, setCompanyCategory] = useState();
-
+  
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
+  const [companySize, setCompanySize] = useState("");
+  const [companyCategory, setCompanyCategory] = useState("");
+  
   const [cities, setCities] = useState([{}]);
   const [countries, setCountries] = useState([{}]);
 

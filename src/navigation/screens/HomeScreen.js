@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 
 const HomeScreen = () => {
   return (
-    <div class="body_omar">
-      <div class="mobile-header">
+    <div className="body_omar">
+      <div className="mobile-header">
         {!localStorage.getItem("user") && (
           <>
-            <Link to={"/login"} class="button button1">
+            <Link to={"/login"} className="button button1">
               Login
             </Link>
             <Link to={"/signUp"} className="button button2">
@@ -30,26 +30,27 @@ const HomeScreen = () => {
         <img
           className="silhouette-people-working-offi-icon"
           src={landingImage}
-          alt=""
+          alt="home hero image"
         />
+        <div className="overlay" />
         {/* <div class="buttons"> */}
         {!localStorage.getItem("user") && (
           <>
             <Link
               onClick={() => console.log("omair")}
               to={"/login"}
-              class="btn"
+              className="btn"
             >
               Login
             </Link>
-            <Link to={"/signUp"} class="btn2">
+            <Link to={"/signUp"} className="btn2">
               Sign Up
             </Link>
           </>
         )}
 
         {/* </div> */}
-        <div class="text-overlay">
+        <div className="text-overlay">
           GRAB
           <br />
           YOUR CHANCE
@@ -69,14 +70,14 @@ const HomeScreen = () => {
         kickstart your professional journey with an internship, Work-IT ! is
         here to guide you towards success.
       </div>
-      <div class="grandparent">
+      <div className="grandparent">
         <Link
           to={"/preview"}
           style={{ textDecoration: "none" }}
-          class="parent_omar"
+          className="parent_omar"
         >
-          <div class="son">JOBS</div>
-          <div class="son2">
+          <div className="son">JOBS</div>
+          <div className="son2">
             Explore a vast array of job listings from top companies across
             various industries. Our user-friendly interface allows you to
             customize your search based on your skills, experience, and career
@@ -90,10 +91,10 @@ const HomeScreen = () => {
         <Link
           to={"/preview"}
           style={{ textDecoration: "none" }}
-          class="parent_omar"
+          className="parent_omar"
         >
-          <div class="son">SCHOLARSHIPS</div>
-          <div class="son2">
+          <div className="son">SCHOLARSHIPS</div>
+          <div className="son2">
             Unleash your academic potential by accessing a curated list of
             scholarships tailored to your field of study. WORK-IT ! understands
             the importance of education, and we're here to help you achieve your
@@ -106,10 +107,10 @@ const HomeScreen = () => {
         <Link
           to={"/preview"}
           style={{ textDecoration: "none" }}
-          class="parent_omar"
+          className="parent_omar"
         >
-          <div class="son">INTERNSHIPS</div>
-          <div class="son2">
+          <div className="son">INTERNSHIPS</div>
+          <div className="son2">
             Kickstart your career with valuable hands-on experience through our
             extensive internship listings. WORK-iIT ! collaborates with leading
             companies to provide you with diverse internship opportunities,

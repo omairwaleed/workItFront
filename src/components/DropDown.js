@@ -22,14 +22,10 @@ const DropDown = ({ data, state, setState, placeholder, needIndex }) => {
             : setState(e.target.value)
         }
       >
-        <option value="" disabled selected hidden>
-          {placeholder}
-        </option>
-
         {data.map((element) => (
           <option
             value={element.value}
-            key={element.index}
+            key={element.value + element.index}
             data-key={element.index}
           >
             {element.value}
