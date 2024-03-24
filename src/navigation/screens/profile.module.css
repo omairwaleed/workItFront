@@ -103,16 +103,26 @@ input[type="file"] {
 .email {
   display: flex;
   flex-direction: column;
+  @media (width>625px) {
+    input{width: 400px;}  
+  }
 }
 
 .address_inputs {
   display: flex;
   gap: 5px;
+  flex-wrap: wrap;
+  @media (width<700px) {
+    select{width: 300px !important;}  
+  }
 }
 
 .pass {
   display: flex;
   flex-direction: column;
+  @media (width>625px) {
+    input{width: 400px;}  
+  }
 }
 
 .phone {
@@ -125,13 +135,6 @@ input[type="file"] {
   flex-direction: column;
 }
 
-.email input {
-  width: 500px;
-}
-
-.pass input {
-  width: 500px;
-}
 
 .phone input {
   width: 200px;
@@ -173,15 +176,6 @@ input[type="file"] {
   }
 }
 
-@media (max-width: 768px) {
-  .email input {
-    width: 420px;
-  }
-
-  .pass input {
-    width: 420px;
-  }
-}
 
 @media (max-width: 625px) {
   .main {
@@ -192,14 +186,6 @@ input[type="file"] {
     display: flex;
     flex-direction: column;
     gap: 40px;
-  }
-
-  .email input {
-    width: 300px;
-  }
-
-  .pass input {
-    width: 300px;
   }
 }
 

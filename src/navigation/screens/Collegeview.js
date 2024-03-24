@@ -34,10 +34,10 @@ return (
           </div>
         </div>
         <div className={styles.rightbar}>
-          <button className="button-68" role="button">
-            Add IS
+          <button className="button-68 my_button" role="button">
+            Add Intern
           </button>
-          <button className="button-68" role="button">
+          <button className="button-68 my_button" role="button">
             Add Job
           </button>
         </div>

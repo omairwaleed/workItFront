@@ -57,7 +57,11 @@ header {
 
 .title {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
+  @media screen and (max-width: 480px) {
+    flex-direction: column;
+  }
 }
 
 .title span {
@@ -71,6 +75,9 @@ header {
 .title .job_text {
   color: #ffffffc7;
   cursor: pointer;
+  &:hover{
+  color: rgba(0, 0, 255, 0.25);
+  }
 }
 .title .selectedJobText {
   color: blue;
@@ -81,8 +88,7 @@ header {
 }
 
 header button {
-  width: 100px;
-  height: 40px;
+  padding: .5rem 1rem;
   border: 0;
   border-radius: 50px;
   color: #313945;
@@ -95,6 +101,9 @@ header button {
   display: flex;
   gap: 25px;
   flex-shrink: 0;
+  @media (width<300px) {
+    flex-direction: column;
+  }
 }
 
 .box {
@@ -155,10 +164,23 @@ header button {
 
 .main {
   display: flex;
-  padding: 40px 180px;
+  margin: 40px auto;
   justify-content: space-around;
   width: 100%;
   gap: 25px;
+
+  @media screen and (min-width: 576px) {
+    width: 90dvw;
+  }
+
+  &>div>div{
+    width: 300px;
+
+    @media screen and (min-width: 576px) {
+    width: 600px;
+      
+    }
+  }
 }
 
 .main_left {
@@ -185,15 +207,18 @@ header button {
 .my_card {
   display: flex;
   gap: 20px;
-  padding: 5px 10px;
+  padding: 1rem;
   border-radius: 15px 8px;
   border: 2px solid #02132d;
-  background: #d2dbe6;
-  /* flex-shrink: 0; */
+  background: #dbdfe4;
 }
 .showMoreButton {
-  margin-left: 70%;
-  padding: 5px;
+  margin-left: auto;
+  width: max-content;
+  display: block;
+  @media (width < 576px ) {
+    font-size: 14px;
+    }
 }
 .show_more{
   display: flex;
@@ -209,6 +234,9 @@ header button {
 .content_title {
   font-size: 19px;
   font-weight: bolder;
+  @media (width < 576px ) {
+  font-size: 14px;
+  }
 }
 
 .content_body {
@@ -233,17 +261,6 @@ footer a {
 }
 
 @media (max-width: 576px) {
-  .main {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    padding-left: 370px;
-    /* position: relative; */
-    left: -40px;
-    flex-shrink: 0;
-    gap: 25px;
-  }
-
   .main_left {
     min-width: 100%;
   }
@@ -256,27 +273,18 @@ footer a {
     /* display: none; */
     font-size: 26px;
   }
-
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 139%;
-  }
-
+  
   .header_left {
     display: flex;
   }
 
   .box {
     display: flex;
-    /* justify-content: flex-end; */
-    padding-left: 350px;
+    flex-wrap: wrap;
   }
   .Jobs_int_sch{
-    display: flex;
-    /* justify-content: center; */
-    padding-left: 150px;
+   display: grid;
+   place-items: center;
   }
 
   .box .search div {
@@ -290,43 +298,13 @@ footer a {
   .show_more{
     display: flex;
     justify-content: center;
-    position: relative;
-    left: 170px;
   } 
 }
-@media (max-width: 430px){
-  header {
-    width: 155%;
-  }
-  .main{
-    padding-left: 300px;
-  }
-  .show_more{
-    position: relative;
-    left: 100px;
-  }
-}
-@media only screen and (min-width: 430px) and (max-width: 576px){
-  header {
-    width: 130%;
-  }
-}
-
 
 @media only screen and (min-width: 576px) and (max-width: 1024px) {
-  header {
-    display: flex;
-    padding: 27px 110px;
-    width: 118%;
-  }
-
   footer {
     position: relative;
     left: 100px;
-  }
-
-  .main {
-    width: 113%;
   }
 
   .box {
@@ -343,11 +321,5 @@ footer a {
 @media (max-width: 1024px) {
   .box .search div {
     display: none;
-  }
-}
-
-@media (min-width: 1024px) {
-  header {
-    padding: 26px 130px;
   }
 }

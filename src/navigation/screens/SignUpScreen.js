@@ -9,14 +9,17 @@ import TextBox from "../../components/TextBox";
 import DropDown from "../../components/DropDown";
 import { useNavigate } from "react-router-dom";
 import { CompanySizes, CompanyCategories } from "../../data/DropDownData";
-import { getAllCountries, getAllCitiesInCountry } from "../../utilities/getCountriesAndCities";
+import {
+  getAllCountries,
+  getAllCitiesInCountry,
+} from "../../utilities/getCountriesAndCities";
 import "react-dropdown/style.css";
 
 const SignUpScreen = () => {
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState("user");
   const [error, setError] = useState();
-  
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +28,7 @@ const SignUpScreen = () => {
   const [city, setCity] = useState("");
   const [companySize, setCompanySize] = useState("");
   const [companyCategory, setCompanyCategory] = useState("");
-  
+
   const [cities, setCities] = useState([{}]);
   const [countries, setCountries] = useState([{}]);
 
@@ -67,7 +70,7 @@ const SignUpScreen = () => {
 
     if (response.ok) {
       console.log("every thing is ok");
-      setError();
+      setError("");
       navigate("/login");
       //redirected to the login page
     }
@@ -79,11 +82,11 @@ const SignUpScreen = () => {
   };
 
   const refrechCities = async () => {
-    setCities(await getAllCitiesInCountry(country))
-  }
+    setCities(await getAllCitiesInCountry(country));
+  };
   const refrechCountries = async () => {
-    setCountries(await getAllCountries())
-  }
+    setCountries(await getAllCountries());
+  };
 
   useEffect(() => {
     refrechCountries();
@@ -225,7 +228,7 @@ const SignUpScreen = () => {
               />
             )}
 
-            {error && <p style={{ maxWidth: '480px' }} className="error">{error}</p>}
+            <p className="error">{error}</p>
           </div>
 
           <div className="button_box d-flex justify-content-center align-items-center mt-4">
@@ -234,7 +237,9 @@ const SignUpScreen = () => {
 
           {/* LOGIN */}
 
-          <Link className="having_acc" to={"/login"}>  {/*having_acc */}
+          <Link className="having_acc" to={"/login"}>
+            {" "}
+            {/*having_acc */}
             already have an account?
           </Link>
         </div>

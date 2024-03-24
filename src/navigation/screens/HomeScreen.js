@@ -71,11 +71,7 @@ const HomeScreen = () => {
         here to guide you towards success.
       </div>
       <div className="grandparent">
-        <Link
-          to={"/preview"}
-          style={{ textDecoration: "none" }}
-          className="parent_omar"
-        >
+        <span className="parent_omar">
           <div className="son">JOBS</div>
           <div className="son2">
             Explore a vast array of job listings from top companies across
@@ -83,42 +79,46 @@ const HomeScreen = () => {
             customize your search based on your skills, experience, and career
             preferences. Say goodbye to job-hunting stress and hello to your
             next exciting career move.
-            <br />
-            {/* <a href="url">See More</a> */}
+            {JSON.parse(localStorage.getItem("user"))?.userType !==
+              "university" && (
+              <Link to={"/preview?type=jobs"} className="see_more">
+                See More...
+              </Link>
+            )}
           </div>
-        </Link>
+        </span>
 
-        <Link
-          to={"/preview"}
-          style={{ textDecoration: "none" }}
-          className="parent_omar"
-        >
+        <span className="parent_omar">
           <div className="son">SCHOLARSHIPS</div>
           <div className="son2">
             Unleash your academic potential by accessing a curated list of
             scholarships tailored to your field of study. WORK-IT ! understands
             the importance of education, and we're here to help you achieve your
             academic goals without the financial burden.
-            <br />
-            {/* <a href="url">See More</a> */}
+            {JSON.parse(localStorage.getItem("user"))?.userType !==
+              "company" && (
+              <Link to={"/preview?type=scholarships"} className="see_more">
+                See More...
+              </Link>
+            )}
           </div>
-        </Link>
+        </span>
 
-        <Link
-          to={"/preview"}
-          style={{ textDecoration: "none" }}
-          className="parent_omar"
-        >
+        <span className="parent_omar">
           <div className="son">INTERNSHIPS</div>
           <div className="son2">
             Kickstart your career with valuable hands-on experience through our
             extensive internship listings. WORK-iIT ! collaborates with leading
             companies to provide you with diverse internship opportunities,
             allowing you to build a foundation for success in your chosen field.
-            <br />
-            {/* <a href="url">See More</a> */}
+            {JSON.parse(localStorage.getItem("user"))?.userType !==
+            "university" ? (
+              <Link to={"/preview?type=interns"} className="see_more">
+                See More...
+              </Link>
+            ) : null}
           </div>
-        </Link>
+        </span>
       </div>
     </div>
   );

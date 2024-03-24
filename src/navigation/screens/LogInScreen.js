@@ -15,7 +15,7 @@ const LogInScreen = () => {
   const navigate = useNavigate();
   // const [emptyFields, setEmptyFields] = useState([]);
 
-  const handelSubmit = async (e) => {
+  const handelSubmit = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email || !emailRegex.test(email)) {
       setError("Please Enter Valid email");
@@ -36,14 +36,8 @@ const LogInScreen = () => {
       console.log("every thing is ok");
       setError();
       console.log(json);
-      // if(localStorage.getItem('user')){
-      //   navigate("/preview");
-      // }
-
-
-      await localStorage.setItem('user', JSON.stringify(json))
+      localStorage.setItem("user", JSON.stringify(json));
       navigate("/preview");
-
     }
     if (!response.ok) {
       // console.log(json);
@@ -76,7 +70,7 @@ const LogInScreen = () => {
           </div>
 
           <div className="box d-flex flex-column gap-3 justify-content-center align-items-center ">
-            {error && <p className="error">{error}</p>}
+            <p className="error">{error}</p>
             <TextBox
               type="email"
               placeholder="Email"
@@ -117,7 +111,9 @@ const LogInScreen = () => {
             </a>
 
             {/* REGISTRATION  */}
-            <Link to={"/signUp"} className="registration">  {/*registration */}
+            <Link to={"/signUp"} className="registration">
+              {" "}
+              {/*registration */}
               REGISTER WITH US NOW!
             </Link>
           </div>

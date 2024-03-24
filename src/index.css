@@ -91,7 +91,8 @@ html {
 }
 .error {
   color: red;
-  animation: fadeIn 1s ease-in-out forwards;
+  animation: fadeIn 3000ms ease-in-out forwards;
+  height: 1rem;
 }
 .left {
   position: inherit;
@@ -102,14 +103,15 @@ html {
   /* overflow: hidden; */
   /* object-fit: cover; */
 }
-
+button{box-shadow: 2px 1px 0px 3px #00000008;}
 .my_button {
-  height: 40px;
   border: 0;
   border-radius: 50px;
   background: #abbbcd;
   font-style: italic;
   font-weight: bolder;
+  padding: .5rem 1.6rem;
+  transition: background-color 0.2s ease-in-out;
 }
 
 .my_button:hover {
@@ -152,7 +154,7 @@ html {
   position: absolute;
   top: 1px;
   right: 215px;
-  width: 100px;
+  width: 150px;
 }
 
 .right {
@@ -164,14 +166,13 @@ html {
 
 .parent {
   background-color: var(--body_bg);
-  /* position: relative; */
   right: 0;
   left: 0;
   width: 100%;
   height: 100%;
   object-fit: fill;
-  /* flex-wrap: wrap; */
   justify-content: center;
+  overflow: hidden;
 }
 .registration {
   text-decoration: none;
@@ -352,10 +353,28 @@ html {
 }
 
 .parent_omar {
-  width: 25%;
+  max-width: 350px;
   background-color: #313945;
   border-radius: 0px 0px 35px 0px;
-  margin-bottom: 100px;
+  box-shadow: 14px 20px 17px 0 #00000020;
+  display: flex;
+  flex-direction: column;
+  a{
+    display: block;
+    margin-top: 1rem;
+    margin-inline: auto;
+    width: fit-content;
+    text-decoration: none;
+    color: initial;
+    padding: .2rem 2rem;
+    border: 1px solid;
+    border-radius: 2rem;
+    transition: background-color, .2s ease-in-out,color, .2s ease-in-out;
+    &:hover{
+      background-color: black;
+      color: white;
+    }
+  }
 }
 
 .son {
@@ -376,27 +395,28 @@ html {
 .grandparent {
   justify-content: center;
   display: flex;
-  gap: 30px;
+  gap: 2rem;
+  padding-bottom: 5rem;
+  align-items: center;
+  @media (width<980px) {
+    flex-direction: column;
+  }
 }
 
 .son2 {
-  padding: 20px 10px;
+  padding: 2rem 1.6rem;
   background-color: #d9d9d9;
   color: black;
   border-radius: 35px 0px 35px 0px;
-  height: 72%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 @media (max-width: 700px) {
   .image-container {
     display: none;
-  }
-
-  .grandparent {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
   }
 
   .silhouette-people-working-offi-icon {
@@ -410,7 +430,7 @@ html {
   .image-text-container {
     display: none;
   }
-
+  universityProfile
   .text-overlay {
     display: none;
   }
@@ -424,13 +444,6 @@ html {
     width: 100%;
     margin-bottom: 50px;
     padding: 0px 30px;
-  }
-
-  .parent_omar {
-    width: 70%;
-    background-color: #313945;
-    border-radius: 0px 0px 35px 0px;
-    margin-bottom: 20px;
   }
 
   .button {
@@ -484,7 +497,6 @@ html {
   }
 
   .son2 {
-    padding: 20px 10px;
     background-color: #d9d9d9;
     color: black;
     border-radius: 35px 0px 35px 0px;
@@ -533,18 +545,10 @@ html {
     width: 100%;
     margin-bottom: 50px;
     padding: 0px 30px;
-    margin-bottom: 20px;
   }
 
-  .parent_omar {
-    width: 30%;
-    background-color: #313945;
-    border-radius: 0px 0px 35px 0px;
-    margin-bottom: 0px;
-  }
 
   .son2 {
-    padding: 20px 10px;
     background-color: #d9d9d9;
     color: black;
     border-radius: 35px 0px 35px 0px;
@@ -578,12 +582,6 @@ html {
     border: none;
     cursor: pointer;
     border-radius: 5px;
-  }
-
-  .grandparent {
-    justify-content: center;
-    display: flex;
-    padding-bottom: 50px;
   }
 }
 
@@ -645,19 +643,14 @@ html {
 @media (min-width:1550px){
   .right{
     position: relative;
-    left: 150px;
+    left: 12%;
   }
 }
 /*new styles*/
 /* fade in animation */
 
-
-.fade-in {
-  animation: fadeIn 1s ease-in-out forwards;
-}
-
-@-webkit-keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
+@keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
 }
 

@@ -13,7 +13,6 @@ import { Dropdown } from "react-bootstrap";
 const PreviewScreen = () => {
   const [countries, setCountries] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(1);
-  const [type, setType] = useState("jobs");
   const [data, setData] = useState();
   const [renderedData, setRenderedData] = useState();
   console.log(renderedData);
@@ -22,20 +21,15 @@ const PreviewScreen = () => {
   const [countrysearchQuery, setCountrySearchQuery] = useState("");
   const [size, setSize] = useState();
   const [myUser, setMyUser] = useState();
-  // console.log("countrysearchQuery", countrysearchQuery);
-  // console.log("namesearchQuery", namesearchQuery);
-  // console.log("filteredData", filteredData);
-  // console.log("data", data);
-  // console.log("size", size);
-  // console.log("renderedData", renderedData);
-  // console.log("type", type);
+  const [type, setType] = useState("");
 
   const [selectedPage, setSelectedPage] = useState("");
 
   const navigate = useNavigate();
 
   const getData = async () => {
-    let url;
+    const user = JSON.parse(localStorage.getItem("user")) || myUser;
+    let url, newData;
     if (type === "jobs") url = "api/job/allJobs/";
     else if (type === "scholarships") url = "api/scholarship/allScholarships/";
     else url = "api/internship/allInternships/";
@@ -47,8 +41,18 @@ const PreviewScreen = () => {
 
       const json = await response.json();
       setData(json);
-      setFilteredData(json);
+      console.log(user);
+      // [x] filter json here
+      if (user.userType === "company")
+        newData = json.filter((d) => d.companyid === user.user.companyid);
+      else if (user.userType === "university")
+        newData = json.filter((d) => d.universityid === user.user.universityid);
+      else newData = json;
+
+      console.log(newData);
+      setFilteredData(newData);
       setSize(json.length);
+
       //the json is an array of jobs joined with company
     } catch (error) {
       console.log(error);
@@ -91,8 +95,8 @@ const PreviewScreen = () => {
       type === "jobs"
         ? "jobtitle"
         : type === "interns"
-          ? "internshiptitle"
-          : "scholarshiptitle";
+        ? "internshiptitle"
+        : "scholarshiptitle";
     if (namesearchQuery && countrysearchQuery) {
       filtered = data.filter(
         (el) =>
@@ -111,14 +115,16 @@ const PreviewScreen = () => {
       filtered = data;
     }
     setFilteredData(filtered);
-    setRenderedData(filtered.slice(0, currentIndex * 8));
     setSize(filtered.length);
   };
 
   useEffect(() => {
     refreshCountries();
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) setMyUser(storedUser);
+    if (storedUser) {
+      setMyUser(storedUser);
+      setType(storedUser.userType === "university" ? "scholarships" : "jobs");
+    }
   }, []);
 
   useEffect(() => {
@@ -133,18 +139,20 @@ const PreviewScreen = () => {
   }, [namesearchQuery, countrysearchQuery]);
 
   useEffect(() => {
-    if (filteredData) {
-      setRenderedData(filteredData.slice(0, currentIndex * 8));
-    }
+    setRenderedData(filteredData?.slice(0, currentIndex * 8));
   }, [filteredData, currentIndex]);
 
   return (
     <div className={styles.body}>
       <div className={styles.parent}>
         <header>
-          <div className={styles.header_left}>
+          <Link
+            to={"/"}
+            style={{ textDecoration: "none" }}
+            className={styles.header_left}
+          >
             <div className={styles.text}>WORK-IT!</div>
-          </div>
+          </Link>
           {!localStorage.getItem("user") && (
             <div className={styles.button_container}>
               <Link to={"/login"}>
@@ -167,10 +175,28 @@ const PreviewScreen = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  {JSON.parse(localStorage.getItem('user')).userType == "user" && <p>Hello, {myUser.user.name}</p>}
-                  {JSON.parse(localStorage.getItem('user')).userType == "company" && <p>Hello, {JSON.parse(localStorage.getItem('user')).user.companyname}</p>}
-                  {JSON.parse(localStorage.getItem('user')).userType == "university" && <p>Hello, {JSON.parse(localStorage.getItem('user')).user.universityname}</p>}
-
+                  {JSON.parse(localStorage.getItem("user")).userType ==
+                    "user" && <p>Hello, {myUser.user.name}</p>}
+                  {JSON.parse(localStorage.getItem("user")).userType ==
+                    "company" && (
+                    <p>
+                      Hello,{" "}
+                      {
+                        JSON.parse(localStorage.getItem("user")).user
+                          .companyname
+                      }
+                    </p>
+                  )}
+                  {JSON.parse(localStorage.getItem("user")).userType ==
+                    "university" && (
+                    <p>
+                      Hello,{" "}
+                      {
+                        JSON.parse(localStorage.getItem("user")).user
+                          .universityname
+                      }
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -184,33 +210,41 @@ const PreviewScreen = () => {
                   ></Dropdown.Toggle>
 
                   <Dropdown.Menu>
+                    {JSON.parse(localStorage.getItem("user")).userType ==
+                      "user" && (
+                      <Dropdown.Item>
+                        <Link
+                          style={{ textDecoration: "none", color: "black" }}
+                          to={"/profile"}
+                        >
+                          profile
+                        </Link>
+                      </Dropdown.Item>
+                    )}
 
-                    {JSON.parse(localStorage.getItem('user')).userType == "user" && <Dropdown.Item>
-                      <Link
-                        style={{ textDecoration: "none", color: "black" }}
-                        to={"/profile"}
-                      >
-                        profile
-                      </Link>
-                    </Dropdown.Item>}
+                    {JSON.parse(localStorage.getItem("user")).userType ==
+                      "company" && (
+                      <Dropdown.Item>
+                        <Link
+                          style={{ textDecoration: "none", color: "black" }}
+                          to={"/companyProfile"}
+                        >
+                          profile
+                        </Link>
+                      </Dropdown.Item>
+                    )}
 
-                    {JSON.parse(localStorage.getItem('user')).userType == "company" && <Dropdown.Item>
-                      <Link
-                        style={{ textDecoration: "none", color: "black" }}
-                        to={"/companyProfile"}
-                      >
-                        profile
-                      </Link>
-                    </Dropdown.Item>}
-
-                    {JSON.parse(localStorage.getItem('user')).userType == "university" && <Dropdown.Item>
-                      <Link
-                        style={{ textDecoration: "none", color: "black" }}
-                        to={"/universityProfile"}
-                      >
-                        profile
-                      </Link>
-                    </Dropdown.Item>}
+                    {JSON.parse(localStorage.getItem("user")).userType ==
+                      "university" && (
+                      <Dropdown.Item>
+                        <Link
+                          style={{ textDecoration: "none", color: "black" }}
+                          to={"/universityProfile"}
+                        >
+                          profile
+                        </Link>
+                      </Dropdown.Item>
+                    )}
 
                     <Dropdown.Item>
                       <Link
@@ -274,24 +308,35 @@ const PreviewScreen = () => {
 
         <div className={styles.Jobs_int_sch}>
           <div className={styles.title}>
-            <span
-              className={`${styles.job_text} ${type === "jobs" && styles.selectedJobText
+            {myUser?.userType === "user" || myUser?.userType === "company" ? (
+              <span
+                className={`${styles.job_text} ${
+                  type === "jobs" && styles.selectedJobText
                 }`}
-            >
-              <p onClick={() => setType("jobs")}>JOBS</p>
-            </span>
-            <span
-              className={`${styles.job_text} ${type === "interns" && styles.selectedJobText
+              >
+                <p onClick={() => setType("jobs")}>JOBS</p>
+              </span>
+            ) : null}
+
+            {myUser?.userType === "user" || myUser?.userType === "company" ? (
+              <span
+                className={`${styles.job_text} ${
+                  type === "interns" && styles.selectedJobText
                 }`}
-            >
-              <p onClick={() => setType("interns")}>INTERNSHIPS</p>
-            </span>
-            <span
-              className={`${styles.job_text} ${type === "scholarships" && styles.selectedJobText
+              >
+                <p onClick={() => setType("interns")}>INTERNSHIPS</p>
+              </span>
+            ) : null}
+            {myUser?.userType === "user" ||
+            myUser?.userType === "university" ? (
+              <span
+                className={`${styles.job_text} ${
+                  type === "scholarships" && styles.selectedJobText
                 }`}
-            >
-              <p onClick={() => setType("scholarships")}>SCHOLARSIHPS</p>
-            </span>
+              >
+                <p onClick={() => setType("scholarships")}>SCHOLARSIHPS</p>
+              </span>
+            ) : null}
           </div>
         </div>
 
@@ -304,24 +349,25 @@ const PreviewScreen = () => {
                 flexDirection: "row",
                 justifyContent: "center",
                 flexWrap: "wrap",
+                gap: 20,
               }}
             >
               {renderedData?.map((el, index) => {
                 if (type === "jobs")
                   return (
-                    <div style={{ flexBasis: "50%" }} key={index}>
+                    <div key={index}>
                       <JobCard data={el} />
                     </div>
                   );
                 else if (type === "scholarships")
                   return (
-                    <div style={{ flexBasis: "50%" }} key={index}>
+                    <div key={index}>
                       <ScholarshipCard data={el} />
                     </div>
                   );
                 else
                   return (
-                    <div style={{ flexBasis: "50%" }} key={index}>
+                    <div key={index}>
                       <InternCard data={el} />
                     </div>
                   );

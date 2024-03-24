@@ -5,8 +5,8 @@ import Button from "./Button";
 import { Link } from "react-router-dom";
 const JobCard = ({ data }) => {
   return (
-    <div style={{ width: "500px", marginBottom: 20 }}>
-      <a className={styles.my_card} style={{ width: "100%" }}>
+    <div>
+      <span className={styles.my_card} style={{ width: "100%" }}>
         <div className="d-flex justify-content-center align-items-center ">
           <img src={scarab} width="78" height="80" alt="" />
         </div>
@@ -27,7 +27,7 @@ const JobCard = ({ data }) => {
             Applicant review time is typically 4 days
           </span> */}
         </div>
-      </a>
+      </span>
     </div>
   );
 };
