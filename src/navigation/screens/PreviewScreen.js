@@ -1,19 +1,19 @@
 import React from "react";
 import styles from "./previewStyle.module.css";
 import scarab from "../../assets/scarab.png";
-import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { getAllCountries } from "../../utilities/getCountriesAndCities";
 import ScholarshipCard from "../../components/ScholarshipCard";
 import JobCard from "../../components/JobCard";
 import InternCard from "../../components/InternCard";
-import { Dropdown } from "react-bootstrap";
 import Loader from "../../components/Loader";
+import Navbar from "../../components/Navbar";
 // 3ashan mohanned ya3rf ya8yr el styles
 
 const PreviewScreen = () => {
   const [countries, setCountries] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(1);
+  console.log(currentIndex);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState();
   const [renderedData, setRenderedData] = useState();
@@ -23,8 +23,6 @@ const PreviewScreen = () => {
   const [size, setSize] = useState();
   const [myUser, setMyUser] = useState();
   const [type, setType] = useState("");
-  const [selectedPage, setSelectedPage] = useState("");
-  const navigate = useNavigate();
 
   const getData = async () => {
     setLoading(true);
@@ -46,6 +44,7 @@ const PreviewScreen = () => {
       console.log(user);
 
       if (!user) {
+        setLoading(false);
         setFilteredData(json);
         setSize(json.length);
         return;
@@ -59,45 +58,18 @@ const PreviewScreen = () => {
       else newData = json;
 
       console.log(newData);
+      setLoading(false);
       setFilteredData(newData);
       setSize(json.length);
-      setRenderedData(newData?.slice(0, currentIndex * 8));
 
       //the json is an array of jobs joined with company
     } catch (error) {
       console.log(error);
     }
-    setLoading(false);
   };
 
   const refreshCountries = async () => {
     setCountries(await getAllCountries());
-  };
-
-  const handleNavigation = async (selectedPage) => {
-    switch (selectedPage) {
-      case "profile":
-        navigate("/profile");
-        break;
-      case "applications":
-        navigate("/test");
-        break;
-      case "settings":
-        navigate("/test");
-        break;
-      case "home":
-        navigate("/test");
-        break;
-      case "logout":
-        localStorage.removeItem("user");
-        navigate("/");
-        break;
-      default:
-        // Handle other cases if needed
-        break;
-    }
-
-    // console.log("check point up")
   };
 
   const filterData = () => {
@@ -126,6 +98,7 @@ const PreviewScreen = () => {
       filtered = data;
     }
     setFilteredData(filtered);
+    // setRenderedData(filtered);
     setSize(filtered.length);
   };
 
@@ -149,143 +122,14 @@ const PreviewScreen = () => {
     if (data) filterData();
   }, [namesearchQuery, countrysearchQuery]);
 
-  // useEffect(() => {
-  //   setRenderedData(filteredData?.slice(0, currentIndex * 8));
-  // }, [filteredData, currentIndex]);
+  useEffect(() => {
+    setRenderedData(filteredData?.slice(0, currentIndex * 8));
+  }, [filteredData, currentIndex]);
 
   return (
     <div className={styles.body}>
       <div className={styles.parent}>
-        <header>
-          <Link
-            to={"/"}
-            style={{ textDecoration: "none" }}
-            className={styles.header_left}
-          >
-            <div className={styles.text}>WORK-IT!</div>
-          </Link>
-          {!localStorage.getItem("user") && (
-            <div className={styles.button_container}>
-              <Link to={"/login"}>
-                <button>LOGIN</button>
-              </Link>
-              <Link to={"/signup"}>
-                <button>JOIN NOW</button>
-              </Link>
-            </div>
-          )}
-          {localStorage.getItem("user") && (
-            <div style={{ display: "flex", width: "fit-content" }}>
-              {myUser && (
-                <div
-                  style={{
-                    flex: 1,
-                    marginLeft: "auto",
-                    paddingTop: "10px",
-                    color: "black",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {JSON.parse(localStorage.getItem("user")).userType ==
-                    "user" && <p>Hello, {myUser.user.name}</p>}
-                  {JSON.parse(localStorage.getItem("user")).userType ==
-                    "company" && (
-                    <p>
-                      Hello,{" "}
-                      {
-                        JSON.parse(localStorage.getItem("user")).user
-                          .companyname
-                      }
-                    </p>
-                  )}
-                  {JSON.parse(localStorage.getItem("user")).userType ==
-                    "university" && (
-                    <p>
-                      Hello,{" "}
-                      {
-                        JSON.parse(localStorage.getItem("user")).user
-                          .universityname
-                      }
-                    </p>
-                  )}
-                </div>
-              )}
-
-              <div className={styles.button_container}>
-                <Dropdown>
-                  <Dropdown.Toggle
-                    variant="secondary"
-                    size="lg"
-                    value={selectedPage}
-                    onChange={(e) => handleNavigation(e.target.value)}
-                  ></Dropdown.Toggle>
-
-                  <Dropdown.Menu>
-                    {JSON.parse(localStorage.getItem("user")).userType ==
-                      "user" && (
-                      <Dropdown.Item>
-                        <Link
-                          style={{ textDecoration: "none", color: "black" }}
-                          to={"/profile"}
-                        >
-                          profile
-                        </Link>
-                      </Dropdown.Item>
-                    )}
-
-                    {JSON.parse(localStorage.getItem("user")).userType ==
-                      "company" && (
-                      <Dropdown.Item>
-                        <Link
-                          style={{ textDecoration: "none", color: "black" }}
-                          to={"/companyProfile"}
-                        >
-                          profile
-                        </Link>
-                      </Dropdown.Item>
-                    )}
-
-                    {JSON.parse(localStorage.getItem("user")).userType ==
-                      "university" && (
-                      <Dropdown.Item>
-                        <Link
-                          style={{ textDecoration: "none", color: "black" }}
-                          to={"/universityProfile"}
-                        >
-                          profile
-                        </Link>
-                      </Dropdown.Item>
-                    )}
-
-                    <Dropdown.Item>
-                      <Link
-                        style={{ textDecoration: "none", color: "black" }}
-                        to={
-                          myUser?.userType === "user"
-                            ? "/myapps"
-                            : myUser?.userType === "company"
-                            ? "/companyview"
-                            : "/collegeview"
-                        }
-                      >
-                        applications
-                      </Link>
-                    </Dropdown.Item>
-
-                    <Dropdown.Item
-                      onClick={() => {
-                        localStorage.removeItem("user");
-                        navigate("/");
-                      }}
-                    >
-                      logout
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
-            </div>
-          )}
-        </header>
+        <Navbar />
 
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div className={styles.box}>
@@ -314,12 +158,6 @@ const PreviewScreen = () => {
                 ))}
               </datalist>
             </div>
-            {/* <div className={styles.category}>
-              <div>
-                <span>Category</span>
-                <i className="fa-solid fa-caret-down"></i>
-              </div>
-            </div> */}
           </div>
         </div>
 
@@ -409,8 +247,10 @@ const PreviewScreen = () => {
               display: "flex",
               justifyContent: "center",
               cursor: "pointer",
+              userSelect: "none",
             }}
           >
+            {/* [ ] Show more */}
             <p style={{ fontSize: 20, fontWeight: 800 }}>Show more</p>
           </div>
         )}

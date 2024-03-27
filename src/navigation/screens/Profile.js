@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { getAllCountries, getAllCitiesInCountry } from "../../utilities/getCountriesAndCities";
 import DropDown from "../../components/DropDown";
 import defaultPP from "../../assets/defaultPP.jpeg";
-
+import Navbar from "../../components/Navbar";
 
 const Profile = () => {
   const [userData, setUserData] = useState("");
@@ -35,8 +35,8 @@ const Profile = () => {
 
   useEffect(() => {
     if (!loading) {
-      setUserData((prevUserData) => [{ ...prevUserData[0], country: country, },])
-      setUserData((prevUserData) => [{ ...prevUserData[0], city: city, },])
+      setUserData((prevUserData) => [{ ...prevUserData[0], country: country }]);
+      setUserData((prevUserData) => [{ ...prevUserData[0], city: city }]);
     }
   }, [country, city]);
 
@@ -89,11 +89,12 @@ const Profile = () => {
       localStorage.setItem("user", updatedUserDataString);
 
       //redirect to preview
-      if(response.ok){
-      navigate("/preview");
+      if (response.ok) {
+        navigate("/preview");
       }
     } catch (error) {
-      console.error("Error:", error);    }
+      console.error("Error:", error);
+    }
   };
 
   const handleImageChange = (event) => {
@@ -142,10 +143,8 @@ const Profile = () => {
       const data = await response.json();
 
       if (data.success) {
-        if (data.images[0].photo)
-          setProfilePhoto(data.images[0]);
-        else
-          setProfilePhoto({ photo: defaultPP });
+        if (data.images[0].photo) setProfilePhoto(data.images[0]);
+        else setProfilePhoto({ photo: defaultPP });
       } else {
         console.error("Failed to fetch images");
       }
@@ -180,11 +179,11 @@ const Profile = () => {
   };
 
   const refrechCountries = async () => {
-    setCountries(await getAllCountries())
-  }
+    setCountries(await getAllCountries());
+  };
   const refrechCities = async () => {
-    setCities(await getAllCitiesInCountry(country))
-  }
+    setCities(await getAllCitiesInCountry(country));
+  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -192,9 +191,10 @@ const Profile = () => {
 
   return (
     <div>
-      <header className={styles.header}>
-        <span className={styles.text}>EDIT YOUR PROFILE</span>
-      </header>
+      <Navbar />
+      <h2 className={styles.text} style={{ textAlign: "center" }}>
+        EDIT YOUR PROFILE
+      </h2>
       <div className={styles.main}>
         <div className={styles.user}>
           <div
@@ -230,7 +230,6 @@ const Profile = () => {
                 }}
               />
             )}
-
           </div>
           <label
             htmlFor="fileInput"
@@ -339,7 +338,6 @@ const Profile = () => {
         <div className={styles.address}>
           <span className={styles.text}>Address</span>
           <div className={styles.address_inputs}>
-
             <DropDown
               data={countries}
               placeholder={userData[0].country}

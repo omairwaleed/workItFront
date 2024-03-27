@@ -12,6 +12,7 @@ const DropDown = ({ data, state, setState, placeholder, needIndex }) => {
           outline: "none",
         }}
         value={state}
+        defaultValue={placeholder}
         onChange={(e) =>
           needIndex
             ? setState(

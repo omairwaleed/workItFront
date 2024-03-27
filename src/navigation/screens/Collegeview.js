@@ -4,6 +4,7 @@ import AppCard from "../../components/AppCard";
 import { getAllCountries } from "../../utilities/getCountriesAndCities";
 import Loader from "../../components/Loader";
 import { Link } from "react-router-dom";
+import Navbar from "../../components/Navbar";
 
 export default function Collegeview() {
   const [countries, setCountries] = useState([]);
@@ -73,16 +74,7 @@ export default function Collegeview() {
 
   return (
     <div className={styles.parent}>
-      <header>
-        <div className={styles.header_left}>
-          <div className={styles.text}>WORK-IT!</div>
-          <div className={styles.title}>
-            <Link to="/universityProfile">
-              <span>View My Profile</span>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Navbar />
       <div className={styles.collegebar}>
         <div style={styles.leftbar}>
           <div className={styles.box}>

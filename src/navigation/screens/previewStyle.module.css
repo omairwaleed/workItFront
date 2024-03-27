@@ -14,30 +14,6 @@
   background-color: #d0dbe8;
 }
 
-header {
-  background: linear-gradient(180deg, #02132d 0%, rgba(217, 217, 217, 0) 100%);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  padding: 27px 60px;
-  margin-bottom: 5px;
-  width: 100%;
-  flex-shrink: 0;
-  @media (width < 450px) {
-    justify-content: center;
-    gap: .5rem;
-  }
-}
-.header_left{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  /* gap: 80px; */
-  flex-shrink: 0;
-  /* border: solid; */
-}
 .Jobs_int_sch {
   display: flex;
   justify-content: center;
@@ -48,16 +24,6 @@ header {
   /* border: solid; */
 }
 
-.text {
-  color: #163043;
-  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  font-size: 32px;
-  font-weight: bolder;
-  display: flex;
-  flex-shrink: 0;
-  position: relative;
-  top: -10px;
-}
 
 .title {
   display: flex;
@@ -94,21 +60,6 @@ header {
   text-decoration: none;
 }
 
-header button {
-  padding: .5rem 1rem;
-  border: 0;
-  border-radius: 50px;
-  color: #313945;
-  background: #abbbcd;
-  font-weight: 800;
-  flex-shrink: 0;
-}
-
-.button_container {
-  display: flex;
-  gap: 25px;
-  width: fit-content;
-}
 
 .box {
   display: flex;
@@ -278,15 +229,8 @@ footer a {
   .main_right {
     min-width: 100%;
   }
-
-  .text {
-    /* display: none; */
-    font-size: 26px;
-  }
   
-  .header_left {
-    display: flex;
-  }
+
 
   .Jobs_int_sch{
    display: grid;

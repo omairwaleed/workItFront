@@ -116,53 +116,8 @@ color: red;
 font-weight: bolder;
 }
 
-
-
-
-
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-    transition: all 0.3s;
-}
-
-.body {
-    background-color: #D0DBE8;
-}
-
 .parent {
     background-color: #D0DBE8;
-}
-
-header {
-    background: linear-gradient(180deg, #02132D 0%, rgba(217, 217, 217, 0.00) 100%);
-    padding: 3rem 1.5rem;
-    flex-wrap: wrap;
-    &>div{
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1.5rem;
-
-        &>div:nth-child(2){
-            display: flex;
-            gap: 1.3rem;
-            flex-wrap: wrap;
-        }
-    }
-}
-
-.text {
-    color: #163043;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    font-size: 32px;
-    font-weight: bolder;
-    display: flex;
-    flex-shrink: 0;
 }
 
 .title span {
@@ -179,16 +134,6 @@ header {
 
 .title a {
     text-decoration: none;
-}
-
-header button {
-    padding: .5rem 1rem;
-    border: 0;
-    border-radius: 50px;
-    color: #313945;
-    background: #ABBBCD;
-    font-weight: 800;
-    flex-shrink: 0;
 }
 
 .button_container {
@@ -354,15 +299,6 @@ footer a {
     .main_right {
         min-width: 100%;
     }
-
-    .text {
-        display: none;
-    }
-
-    /* .title {
-        display: none;
-    } */
-
     .box .search div {
         display: none;
     }
