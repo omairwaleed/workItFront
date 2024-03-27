@@ -70,6 +70,7 @@
 }
 .sora {
   border-radius: 30px;
+  max-width: 100%;
 }
 
 .portfolio {
@@ -92,7 +93,7 @@
 
 .main {
   display: flex;
-  padding-top: 10px;
+  padding-block:1rem;
 }
 
 .right {

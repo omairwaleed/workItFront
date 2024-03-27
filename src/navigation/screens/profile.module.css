@@ -24,18 +24,16 @@ body {
   display: flex;
   flex-direction: column;
   padding: 0 250px 0;
-  /* width:750px; */
-  /* justify-content: center; */
-  /* align-items: center; */
   gap: 40px;
-  flex-shrink: 0;
 }
 
 .user {
   display: flex;
   align-items: flex-end;
   gap: 5px;
-  /* justify-content: center; */
+  @media screen and (width < 450px) {
+      justify-content: center;
+  }
 }
 
 .user a {
@@ -113,7 +111,7 @@ input[type="file"] {
   gap: 5px;
   flex-wrap: wrap;
   @media (width<700px) {
-    select{width: 300px !important;}  
+    select{width: 250px !important;}  
   }
 }
 

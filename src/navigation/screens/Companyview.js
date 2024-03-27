@@ -5,24 +5,20 @@ import { getAllCountries } from "../../utilities/getCountriesAndCities";
 import Loader from "../../components/Loader";
 import { Link } from "react-router-dom";
 
-export default function Collegeview() {
+export default function Companyview() {
   const [countries, setCountries] = useState([]);
   const [data, setData] = useState();
   const [filteredData, setFilteredData] = useState(data);
   const [namesearchQuery, setnameSearchQuery] = useState("");
   const [countrysearchQuery, setCountrySearchQuery] = useState("");
-  const [type, setType] = useState("scholarships");
+  const [type, setType] = useState("jobs");
   const [loading, setLoading] = useState(false);
-  const universityid = JSON.parse(localStorage?.getItem("user")).user
-    .universityid;
+  const companyid = JSON.parse(localStorage?.getItem("user")).user.companyid;
 
   const filterByName = (data) => {
-    console.log(data);
-    // scholarshiptitle
-    if (type === "scholarships")
-      return data.filter((d) =>
-        d.scholarshiptitle.toLowerCase().includes(namesearchQuery.toLowerCase())
-      );
+    return data.filter((d) =>
+      d.jobtitle.toLowerCase().includes(namesearchQuery.toLowerCase())
+    );
   };
 
   const filterByCountry = (data) => {
@@ -33,8 +29,9 @@ export default function Collegeview() {
 
   const getData = async () => {
     let url;
-    if (type === "scholarships") url = "api/scholarship/allScholarships/";
-    else url = "";
+    if (type === "jobs") url = "api/job/allJobs/";
+    // else if (type === "scholarships") url = "api/scholarship/allScholarships/";
+    else url = "api/internship/allInternships/";
 
     try {
       setLoading(true);
@@ -43,7 +40,7 @@ export default function Collegeview() {
 
       const json = await response.json();
 
-      const myData = json.filter((d) => d.universityid === universityid);
+      const myData = json.filter((d) => d.companyid === companyid);
 
       setData(myData);
       setFilteredData(myData);
@@ -77,7 +74,7 @@ export default function Collegeview() {
         <div className={styles.header_left}>
           <div className={styles.text}>WORK-IT!</div>
           <div className={styles.title}>
-            <Link to="/universityProfile">
+            <Link to="/companyProfile">
               <span>View My Profile</span>
             </Link>
           </div>
@@ -89,7 +86,7 @@ export default function Collegeview() {
             <div className={styles.search}>
               <input
                 type="text"
-                placeholder="Search For Scholarships"
+                placeholder={`Search For ${type}`}
                 value={namesearchQuery}
                 onChange={(e) => {
                   setnameSearchQuery(e.target.value);
@@ -124,6 +121,9 @@ export default function Collegeview() {
           <button className="button-68 my_button" role="button">
             Add Intern
           </button>
+          <button className="button-68 my_button" role="button">
+            Add Job
+          </button>
         </div>
       </div>
 
@@ -132,33 +132,43 @@ export default function Collegeview() {
         <div className={styles.checkbox}>
           <button
             className={`${styles.btnXX} ${
-              type === "scholarships" && styles.active
+              type === "internships" && styles.active
             }`}
             onClick={() => {
-              setType("scholarships");
+              setType("internships");
               setnameSearchQuery("");
               setCountrySearchQuery("");
             }}
           >
-            Scholarships
+            Internships
+          </button>
+        </div>
+        <div className={styles.checkbox}>
+          <button
+            className={`${styles.btnXX} ${type === "jobs" && styles.active}`}
+            onClick={() => {
+              setType("jobs");
+              setnameSearchQuery("");
+              setCountrySearchQuery("");
+            }}
+          >
+            Jobs
           </button>
         </div>
       </div>
-
       {loading && <Loader />}
 
       {!loading && (
         <ol>
           {filteredData?.map((d) => (
             <AppCard
-              key={d.scholarshiptitle}
+              key={d.jobid || d.internshipid}
               type={type}
-              title={d.scholarshiptitle}
+              title={d.jobtitle || d.internshiptitle}
               country={d.country}
               city={d.city}
-              jobdescription={d.description}
+              jobdescription={d.jobdescription}
               requiredskills={d.requiredskills}
-              fundingpercentage={d.fundingpercentage}
             />
           ))}
         </ol>

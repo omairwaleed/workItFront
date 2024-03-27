@@ -24,6 +24,10 @@ header {
   margin-bottom: 5px;
   width: 100%;
   flex-shrink: 0;
+  @media (width < 450px) {
+    justify-content: center;
+    gap: .5rem;
+  }
 }
 .header_left{
   display: flex;
@@ -59,8 +63,11 @@ header {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  @media screen and (max-width: 480px) {
+  @media screen and (width<576px) {
     flex-direction: column;
+    &>span{
+      text-align: center;
+    }
   }
 }
 
@@ -100,16 +107,19 @@ header button {
 .button_container {
   display: flex;
   gap: 25px;
-  flex-shrink: 0;
-  @media (width<300px) {
-    flex-direction: column;
-  }
+  width: fit-content;
 }
 
 .box {
   display: flex;
+  flex-wrap:wrap ;
+  justify-content: center;
   gap: 20px;
-  padding: 0px 260px;
+  width: fit-content;
+  margin-inline: auto;
+  @media (width<576px) {
+    flex-direction: column;
+  }
 }
 
 .box .search {
@@ -278,10 +288,6 @@ footer a {
     display: flex;
   }
 
-  .box {
-    display: flex;
-    flex-wrap: wrap;
-  }
   .Jobs_int_sch{
    display: grid;
    place-items: center;
@@ -289,10 +295,6 @@ footer a {
 
   .box .search div {
     display: none;
-  }
-
-  .box .search input {
-    width: 120px;
   }
 
   .show_more{
@@ -305,11 +307,6 @@ footer a {
   footer {
     position: relative;
     left: 100px;
-  }
-
-  .box {
-    display: flex;
-    justify-content: center;
   }
 
   .box .search div {

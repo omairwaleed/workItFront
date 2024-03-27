@@ -8,27 +8,28 @@ import ScholarshipCard from "../../components/ScholarshipCard";
 import JobCard from "../../components/JobCard";
 import InternCard from "../../components/InternCard";
 import { Dropdown } from "react-bootstrap";
+import Loader from "../../components/Loader";
 // 3ashan mohanned ya3rf ya8yr el styles
 
 const PreviewScreen = () => {
   const [countries, setCountries] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(1);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState();
   const [renderedData, setRenderedData] = useState();
-  console.log(renderedData);
   const [filteredData, setFilteredData] = useState();
   const [namesearchQuery, setnameSearchQuery] = useState("");
   const [countrysearchQuery, setCountrySearchQuery] = useState("");
   const [size, setSize] = useState();
   const [myUser, setMyUser] = useState();
   const [type, setType] = useState("");
-
   const [selectedPage, setSelectedPage] = useState("");
-
   const navigate = useNavigate();
 
   const getData = async () => {
+    setLoading(true);
     const user = JSON.parse(localStorage.getItem("user")) || myUser;
+
     let url, newData;
     if (type === "jobs") url = "api/job/allJobs/";
     else if (type === "scholarships") url = "api/scholarship/allScholarships/";
@@ -40,8 +41,16 @@ const PreviewScreen = () => {
       }
 
       const json = await response.json();
+
       setData(json);
       console.log(user);
+
+      if (!user) {
+        setFilteredData(json);
+        setSize(json.length);
+        return;
+      }
+
       // [x] filter json here
       if (user.userType === "company")
         newData = json.filter((d) => d.companyid === user.user.companyid);
@@ -52,11 +61,13 @@ const PreviewScreen = () => {
       console.log(newData);
       setFilteredData(newData);
       setSize(json.length);
+      setRenderedData(newData?.slice(0, currentIndex * 8));
 
       //the json is an array of jobs joined with company
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   };
 
   const refreshCountries = async () => {
@@ -138,9 +149,9 @@ const PreviewScreen = () => {
     if (data) filterData();
   }, [namesearchQuery, countrysearchQuery]);
 
-  useEffect(() => {
-    setRenderedData(filteredData?.slice(0, currentIndex * 8));
-  }, [filteredData, currentIndex]);
+  // useEffect(() => {
+  //   setRenderedData(filteredData?.slice(0, currentIndex * 8));
+  // }, [filteredData, currentIndex]);
 
   return (
     <div className={styles.body}>
@@ -164,12 +175,12 @@ const PreviewScreen = () => {
             </div>
           )}
           {localStorage.getItem("user") && (
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", width: "fit-content" }}>
               {myUser && (
                 <div
                   style={{
                     flex: 1,
-                    marginRight: "40px",
+                    marginLeft: "auto",
                     paddingTop: "10px",
                     color: "black",
                     fontWeight: "bold",
@@ -249,7 +260,13 @@ const PreviewScreen = () => {
                     <Dropdown.Item>
                       <Link
                         style={{ textDecoration: "none", color: "black" }}
-                        to={"/myapps"}
+                        to={
+                          myUser?.userType === "user"
+                            ? "/myapps"
+                            : myUser?.userType === "company"
+                            ? "/companyview"
+                            : "/collegeview"
+                        }
                       >
                         applications
                       </Link>
@@ -308,7 +325,9 @@ const PreviewScreen = () => {
 
         <div className={styles.Jobs_int_sch}>
           <div className={styles.title}>
-            {myUser?.userType === "user" || myUser?.userType === "company" ? (
+            {!myUser ||
+            myUser?.userType === "user" ||
+            myUser?.userType === "company" ? (
               <span
                 className={`${styles.job_text} ${
                   type === "jobs" && styles.selectedJobText
@@ -318,7 +337,9 @@ const PreviewScreen = () => {
               </span>
             ) : null}
 
-            {myUser?.userType === "user" || myUser?.userType === "company" ? (
+            {!myUser ||
+            myUser?.userType === "user" ||
+            myUser?.userType === "company" ? (
               <span
                 className={`${styles.job_text} ${
                   type === "interns" && styles.selectedJobText
@@ -327,7 +348,8 @@ const PreviewScreen = () => {
                 <p onClick={() => setType("interns")}>INTERNSHIPS</p>
               </span>
             ) : null}
-            {myUser?.userType === "user" ||
+            {!myUser ||
+            myUser?.userType === "user" ||
             myUser?.userType === "university" ? (
               <span
                 className={`${styles.job_text} ${
@@ -352,26 +374,29 @@ const PreviewScreen = () => {
                 gap: 20,
               }}
             >
-              {renderedData?.map((el, index) => {
-                if (type === "jobs")
-                  return (
-                    <div key={index}>
-                      <JobCard data={el} />
-                    </div>
-                  );
-                else if (type === "scholarships")
-                  return (
-                    <div key={index}>
-                      <ScholarshipCard data={el} />
-                    </div>
-                  );
-                else
-                  return (
-                    <div key={index}>
-                      <InternCard data={el} />
-                    </div>
-                  );
-              })}
+              {loading && <Loader />}
+
+              {!loading &&
+                renderedData?.map((el, index) => {
+                  if (type === "jobs")
+                    return (
+                      <div key={index}>
+                        <JobCard data={el} />
+                      </div>
+                    );
+                  else if (type === "scholarships")
+                    return (
+                      <div key={index}>
+                        <ScholarshipCard data={el} />
+                      </div>
+                    );
+                  else
+                    return (
+                      <div key={index}>
+                        <InternCard data={el} />
+                      </div>
+                    );
+                })}
             </div>
           </div>
         </div>

@@ -37,7 +37,9 @@ const LogInScreen = () => {
       setError();
       console.log(json);
       localStorage.setItem("user", JSON.stringify(json));
-      navigate("/preview");
+      if (json.userType === "user") navigate("/preview");
+      if (json.userType === "company") navigate("/companyview");
+      if (json.userType === "university") navigate("/collegeview");
     }
     if (!response.ok) {
       // console.log(json);

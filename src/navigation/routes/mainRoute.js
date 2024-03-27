@@ -15,6 +15,7 @@ import DetailsScreenScholar from "../screens/DetailsScreenScholar";
 import CompanyProfile from "../screens/CompanyProfile";
 import UniversityProfile from "../screens/UniversityProfile";
 import Collegeview from "../screens/Collegeview";
+import Companyview from "../screens/Companyview";
 
 const MainRoute = () => {
   const routes = createHashRouter([
@@ -77,6 +78,10 @@ const MainRoute = () => {
     {
       path: "/collegeview",
       element: <Collegeview />,
+    },
+    {
+      path: "/companyview",
+      element: <Companyview />,
     },
   ]);
   return <RouterProvider router={routes} />;

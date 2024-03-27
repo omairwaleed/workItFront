@@ -2,11 +2,26 @@
     display: flex;
     gap: 1.3rem;
     justify-content: center;
-    margin-top: 3rem;
+    margin-top: 1.6rem;
     flex-wrap: wrap;
 }
 
-
+.btnXX{
+    border: none;
+    background-color: white;
+    padding: .65rem 1rem;
+    border-radius: .5rem;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    &:hover{
+        background-color: rgba(171, 187, 205, 0.8);
+        color: white;
+    }
+    &.active{
+        background-color: #163043;
+        color: white;
+    }
+}
 
 .checkbox-group {
     display: flex;
@@ -196,7 +211,7 @@ p {
 }
 
 ol {
-
+    margin-top: 3rem;
     gap: 15px;
     display: flex;
     list-style: none;
@@ -215,12 +230,16 @@ li {
     position: relative;
     counter-increment: list;
     max-width: 45rem;
-    margin: 2rem auto;
     padding: 2rem 1rem 1rem;
     box-shadow: 0.1rem 0.1rem 1.5rem rgba(0, 0, 0, 0.3);
     border-radius: 0.25rem;
     overflow: hidden;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    @media (width > 980px) {
+        flex-basis: 48%;
+    }
 }
 
 li::before {
@@ -259,7 +278,6 @@ h3::before {
 
 @media (min-width: 40em) {
     li {
-        margin: 3rem auto;
         padding: 3rem 2rem 2rem;
     }
 
@@ -475,6 +493,7 @@ header button {
     display: flex;
     flex-direction: column;
     gap: 3px;
+    margin-top: auto;
 }
 
 .content_title {

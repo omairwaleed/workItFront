@@ -184,7 +184,7 @@ const SignUpScreen = () => {
             />
             {selectedOption === "user" && (
               <TextBox
-                type="text"
+                type="number"
                 placeholder="Mobile Number"
                 className="text_input"
                 onChange={(e) => setMobileNumber(e.target.value)}

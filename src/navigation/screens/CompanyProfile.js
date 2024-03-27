@@ -21,77 +21,75 @@ const CompanyProfile = () => {
     const [country, setCountry] = useState();
     const [city, setCity] = useState();
 
-
-
     useEffect(() => {
-        fetchCompany()
-        fetchImage()
-
+      fetchCompany();
+      fetchImage();
     }, []);
 
     useEffect(() => {
-        refrechCountries();
-        refrechCities();
+      refrechCountries();
+      refrechCities();
     }, [country]);
 
     useEffect(() => {
-        if (!loading) {
-            setCompanyData((prevUserData) => [{ ...prevUserData[0], companycountry: country, },])
-            setCompanyData((prevUserData) => [{ ...prevUserData[0], companycity: city, },])
-        }
+      if (!loading) {
+        setCompanyData((prevUserData) => [
+          { ...prevUserData[0], companycountry: country },
+        ]);
+        setCompanyData((prevUserData) => [
+          { ...prevUserData[0], companycity: city },
+        ]);
+      }
     }, [country, city]);
 
     const navigate = useNavigate();
 
-
     const fetchCompany = async () => {
-        try {
-            const localStrData = JSON.parse(localStorage.getItem('user'));
-            const type = localStrData.userType
-            const response = await fetch('api/company/companyDetails', {
-                method: "get",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStrData.token,
-                    'type': type,
-                },
-            })
-            const json = await response.json()
-            await setCompanyData(json)
-            await setCountry(companyData[0].companycountry)
-        }
-        catch (error) {
-            console.error('Error fetching user data:', error)
-        } finally {
-            setLoading(false)
-        }
-    }
+      try {
+        const localStrData = JSON.parse(localStorage.getItem("user"));
+        const type = localStrData.userType;
+        const response = await fetch("api/company/companyDetails", {
+          method: "get",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStrData.token,
+            type: type,
+          },
+        });
+        const json = await response.json();
+        setCompanyData(json);
+        setCountry(companyData[0].companycountry);
+      } catch (error) {
+        console.error("Error fetching company data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
     const handelSubmit = async () => {
-        try {
-            if (Image.url != null) {
-                handleFileChange();
-            }
-            const localStrData = JSON.parse(localStorage.getItem('user'));
-            const type = localStrData.userType
-            const response = await fetch("/api/company/editProfile", {
-                method: "put",
-                headers: {
-                    "Content-Type": "application/json",
-                    authorization:
-                        "token: " + localStrData.token,
-                    'type': type,
-                },
-                body: JSON.stringify({ companyData: companyData[0] }),
+      try {
+        if (Image.url != null) handleFileChange();
 
-            });
-            localStrData.user = companyData[0];
-            const updatedUserDataString = JSON.stringify(localStrData);
-            localStorage.setItem('user', updatedUserDataString);
-            navigate('/preview')
-        } catch (error) {
-            console.error("Error:", error);        }
-    }
+        const localStrData = JSON.parse(localStorage.getItem("user"));
+        const type = localStrData.userType;
+
+        const response = await fetch("/api/company/editProfile", {
+          method: "put",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: "token: " + localStrData.token,
+            type: type,
+          },
+          body: JSON.stringify({ companyData: companyData[0] }),
+        });
+        localStrData.user = companyData[0];
+        const updatedUserDataString = JSON.stringify(localStrData);
+        localStorage.setItem("user", updatedUserDataString);
+        navigate("/preview");
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
 
     const fetchImage = async () => {
         const localStrData = JSON.parse(localStorage.getItem('user'));
