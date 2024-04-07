@@ -27,7 +27,7 @@ const SignUpScreen = () => {
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
   const [companySize, setCompanySize] = useState("");
-  const [companyCategory, setCompanyCategory] = useState("");
+  const [companyCategory, setCompanyCategory] = useState("software");
 
   const [cities, setCities] = useState([{}]);
   const [countries, setCountries] = useState([{}]);
@@ -37,6 +37,7 @@ const SignUpScreen = () => {
   };
 
   const handelSubmit = async (e) => {
+    e.preventDefault();
     if (!name) {
       setError("Please Enter your " + selectedOption + " name");
       return;
@@ -51,6 +52,15 @@ const SignUpScreen = () => {
       setError("Please Enter Valid password");
       return;
     }
+    if (selectedOption === "user" && !mobileNumber) {
+      setError("Please Enter Valid mobile number");
+      return;
+    }
+
+    const companyCategoryId =
+      CompanyCategories.filter((con) => con.value === companyCategory)[0]
+        ?.index || 0;
+
     const response = await fetch("/api/user/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -63,7 +73,7 @@ const SignUpScreen = () => {
         city,
         companySize,
         selectedOption,
-        companyCategory,
+        companyCategoryId,
       }),
     });
     const json = await response.json();
@@ -114,7 +124,10 @@ const SignUpScreen = () => {
   return (
     <div className="body">
       <div className="parent d-flex ">
-        <div className="left d-flex justify-content-center flex-column p-5 gap-4 mt-4 ">
+        <form
+          className="left d-flex justify-content-center flex-column p-5 gap-4 mt-4"
+          onSubmit={handelSubmit}
+        >
           <div className="my_h1_size">Create Account</div>
           <div className="logos d-flex justify-content-center align-items-center gap-2  ">
             <a href="./" className="facebook ">
@@ -213,7 +226,7 @@ const SignUpScreen = () => {
                 data={CompanySizes}
                 state={companySize}
                 setState={setCompanySize}
-                placeholder="company size"
+                placeholder="Company size"
                 className="text_input"
               />
             )}
@@ -224,7 +237,7 @@ const SignUpScreen = () => {
                 state={companyCategory}
                 setState={setCompanyCategory}
                 placeholder="Company category"
-                needIndex={true}
+                className="text_input"
               />
             )}
 
@@ -232,7 +245,7 @@ const SignUpScreen = () => {
           </div>
 
           <div className="button_box d-flex justify-content-center align-items-center mt-4">
-            <Button buttonContent="JOIN NOW" onClick={handelSubmit} />
+            <Button buttonContent="JOIN NOW" />
           </div>
 
           {/* LOGIN */}
@@ -242,7 +255,7 @@ const SignUpScreen = () => {
             {/*having_acc */}
             already have an account?
           </Link>
-        </div>
+        </form>
 
         <div className="right">
           <div className="col-md-10">

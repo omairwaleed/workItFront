@@ -129,6 +129,7 @@
   justify-content: space-around;
   width: 100%;
   gap: 25px;
+  padding-bottom: 3rem;
 
   @media screen and (min-width: 576px) {
     width: 90dvw;
@@ -184,6 +185,7 @@
 .show_more{
   display: flex;
   justify-content: center;
+  padding-bottom: 3rem;
 }
 
 .content {
@@ -195,6 +197,7 @@
 .content_title {
   font-size: 19px;
   font-weight: bolder;
+  text-transform: capitalize;
   @media (width < 576px ) {
   font-size: 14px;
   }

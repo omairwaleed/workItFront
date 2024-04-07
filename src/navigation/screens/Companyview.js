@@ -3,21 +3,25 @@ import styles from "./collegeview.module.css";
 import AppCard from "../../components/AppCard";
 import { getAllCountries } from "../../utilities/getCountriesAndCities";
 import Loader from "../../components/Loader";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useSearchParams } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 
 export default function Companyview() {
+  const companyid = JSON.parse(localStorage?.getItem("user")).user.companyid;
+  const [searchParams] = useSearchParams();
+
   const [countries, setCountries] = useState([]);
   const [data, setData] = useState();
   const [filteredData, setFilteredData] = useState(data);
   const [namesearchQuery, setnameSearchQuery] = useState("");
   const [countrysearchQuery, setCountrySearchQuery] = useState("");
-  const [type, setType] = useState("jobs");
   const [loading, setLoading] = useState(false);
-  const companyid = JSON.parse(localStorage?.getItem("user")).user.companyid;
+  const [type, setType] = useState(
+    searchParams.get("type") ? searchParams.get("type") : "jobs"
+  );
 
   const filterByName = (data) => {
-    const title = type === "job" ? "jobtitle" : "internshiptitle";
+    const title = type === "jobs" ? "jobtitle" : "internshiptitle";
     return data?.filter((d) =>
       d[title]?.toLowerCase().includes(namesearchQuery.toLowerCase())
     );
@@ -32,7 +36,6 @@ export default function Companyview() {
   const getData = async () => {
     let url;
     if (type === "jobs") url = "api/job/allJobs/";
-    // else if (type === "scholarships") url = "api/scholarship/allScholarships/";
     else url = "api/internship/allInternships/";
 
     try {
@@ -70,6 +73,7 @@ export default function Companyview() {
     else setFilteredData(data);
   }, [countrysearchQuery, namesearchQuery]);
 
+  if (!companyid) return <Navigate to="/preview" />;
   return (
     <div className={styles.parent}>
       <Navbar />
@@ -111,12 +115,12 @@ export default function Companyview() {
         </div>
 
         <div className={styles.rightbar}>
-          <button className="button-68 my_button" role="button">
+          <Link to="/add-intern" className="button-68 my_button" role="button">
             Add Intern
-          </button>
-          <button className="button-68 my_button" role="button">
+          </Link>
+          <Link to="/add-job" className="button-68 my_button" role="button">
             Add Job
-          </button>
+          </Link>
         </div>
       </div>
 

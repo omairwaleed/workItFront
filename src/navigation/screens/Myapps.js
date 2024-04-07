@@ -1,7 +1,11 @@
+import { Navigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import styles from "./myapps.module.css";
 
 export default function Myapps() {
+  const user = JSON.parse(localStorage?.getItem("user"))?.userType;
+
+  if (user !== "user") return <Navigate to="/preview" />;
   return (
     <body className={styles.body}>
       <div className={styles.parent}>

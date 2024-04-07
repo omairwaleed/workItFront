@@ -1,19 +1,19 @@
-import React from "react";
 import styles from "./previewStyle.module.css";
-import scarab from "../../assets/scarab.png";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { getAllCountries } from "../../utilities/getCountriesAndCities";
 import ScholarshipCard from "../../components/ScholarshipCard";
 import JobCard from "../../components/JobCard";
 import InternCard from "../../components/InternCard";
 import Loader from "../../components/Loader";
 import Navbar from "../../components/Navbar";
+import { useSearchParams } from "react-router-dom";
 // 3ashan mohanned ya3rf ya8yr el styles
 
 const PreviewScreen = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  let [searchParams, setSearchParams] = useSearchParams();
   const [countries, setCountries] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(1);
-  console.log(currentIndex);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState();
   const [renderedData, setRenderedData] = useState();
@@ -21,14 +21,18 @@ const PreviewScreen = () => {
   const [namesearchQuery, setnameSearchQuery] = useState("");
   const [countrysearchQuery, setCountrySearchQuery] = useState("");
   const [size, setSize] = useState();
-  const [myUser, setMyUser] = useState();
-  const [type, setType] = useState("");
+  const [type, setType] = useState(
+    searchParams.get("type")
+      ? searchParams.get("type")
+      : user?.userType === "university"
+      ? "scholarships"
+      : "jobs"
+  );
 
   const getData = async () => {
     setLoading(true);
-    const user = JSON.parse(localStorage.getItem("user")) || myUser;
 
-    let url, newData;
+    let url;
     if (type === "jobs") url = "api/job/allJobs/";
     else if (type === "scholarships") url = "api/scholarship/allScholarships/";
     else url = "api/internship/allInternships/";
@@ -40,27 +44,21 @@ const PreviewScreen = () => {
 
       const json = await response.json();
 
+      setSize(json.length);
       setData(json);
-      console.log(user);
-
-      if (!user) {
-        setLoading(false);
-        setFilteredData(json);
-        setSize(json.length);
-        return;
-      }
 
       // [x] filter json here
-      if (user.userType === "company")
-        newData = json.filter((d) => d.companyid === user.user.companyid);
-      else if (user.userType === "university")
-        newData = json.filter((d) => d.universityid === user.user.universityid);
-      else newData = json;
+      if (user?.userType === "company")
+        setFilteredData(
+          json.filter((d) => d.companyid === user.user.companyid)
+        );
+      else if (user?.userType === "university")
+        setFilteredData(
+          json.filter((d) => d.universityid === user.user.universityid)
+        );
+      else setFilteredData(json);
 
-      console.log(newData);
       setLoading(false);
-      setFilteredData(newData);
-      setSize(json.length);
 
       //the json is an array of jobs joined with company
     } catch (error) {
@@ -98,17 +96,11 @@ const PreviewScreen = () => {
       filtered = data;
     }
     setFilteredData(filtered);
-    // setRenderedData(filtered);
     setSize(filtered.length);
   };
 
   useEffect(() => {
     refreshCountries();
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) {
-      setMyUser(storedUser);
-      setType(storedUser.userType === "university" ? "scholarships" : "jobs");
-    }
   }, []);
 
   useEffect(() => {
@@ -119,7 +111,7 @@ const PreviewScreen = () => {
   }, [type]);
 
   useEffect(() => {
-    if (data) filterData();
+    if (namesearchQuery || countrysearchQuery) filterData();
   }, [namesearchQuery, countrysearchQuery]);
 
   useEffect(() => {
@@ -163,9 +155,9 @@ const PreviewScreen = () => {
 
         <div className={styles.Jobs_int_sch}>
           <div className={styles.title}>
-            {!myUser ||
-            myUser?.userType === "user" ||
-            myUser?.userType === "company" ? (
+            {!user ||
+            user?.userType === "user" ||
+            user?.userType === "company" ? (
               <span
                 className={`${styles.job_text} ${
                   type === "jobs" && styles.selectedJobText
@@ -175,9 +167,9 @@ const PreviewScreen = () => {
               </span>
             ) : null}
 
-            {!myUser ||
-            myUser?.userType === "user" ||
-            myUser?.userType === "company" ? (
+            {!user ||
+            user?.userType === "user" ||
+            user?.userType === "company" ? (
               <span
                 className={`${styles.job_text} ${
                   type === "interns" && styles.selectedJobText
@@ -186,9 +178,9 @@ const PreviewScreen = () => {
                 <p onClick={() => setType("interns")}>INTERNSHIPS</p>
               </span>
             ) : null}
-            {!myUser ||
-            myUser?.userType === "user" ||
-            myUser?.userType === "university" ? (
+            {!user ||
+            user?.userType === "user" ||
+            user?.userType === "university" ? (
               <span
                 className={`${styles.job_text} ${
                   type === "scholarships" && styles.selectedJobText
@@ -238,7 +230,7 @@ const PreviewScreen = () => {
             </div>
           </div>
         </div>
-        {renderedData?.length !== size && (
+        {renderedData?.length !== 0 && renderedData?.length !== size && (
           <div
             className={styles.show_more}
             onClick={() => setCurrentIndex((prev) => prev + 1)}

@@ -13,9 +13,12 @@ const AppCard = ({
     <li>
       <h3>{title}</h3>
       <div className={styles.content}>
-        <span className={styles.content_body}>
-          <b>{type} Description:</b> {jobdescription}
-        </span>
+        {jobdescription && (
+          <span className={styles.content_body}>
+            <b>{type.slice(0, 1).toUpperCase() + type.slice(1)} Description:</b>{" "}
+            {jobdescription}
+          </span>
+        )}
         <span className={styles.content_body}>
           <b>Location:</b> {`${city}, ${country}`}
         </span>

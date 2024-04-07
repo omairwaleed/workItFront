@@ -1,9 +1,14 @@
-import Rectangle from "../../assets/Rectangle.png";
+// import Rectangle from "../../assets/Rectangle.png";
 import landingImage from "../../assets/landingImage.png";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 
 const HomeScreen = () => {
+  const user = JSON.parse(localStorage?.getItem("user"))?.userType;
+
+  if (user === "company" || user === "university")
+    return <Navigate to="/preview" />;
+
   return (
     <>
       <Navbar />
@@ -55,22 +60,6 @@ const HomeScreen = () => {
           </span>
 
           <span className="parent_omar">
-            <div className="son">SCHOLARSHIPS</div>
-            <div className="son2">
-              Unleash your academic potential by accessing a curated list of
-              scholarships tailored to your field of study. WORK-IT !
-              understands the importance of education, and we're here to help
-              you achieve your academic goals without the financial burden.
-              {JSON.parse(localStorage.getItem("user"))?.userType !==
-                "company" && (
-                <Link to={"/preview?type=scholarships"} className="see_more">
-                  See More...
-                </Link>
-              )}
-            </div>
-          </span>
-
-          <span className="parent_omar">
             <div className="son">INTERNSHIPS</div>
             <div className="son2">
               Kickstart your career with valuable hands-on experience through
@@ -84,6 +73,22 @@ const HomeScreen = () => {
                   See More...
                 </Link>
               ) : null}
+            </div>
+          </span>
+
+          <span className="parent_omar">
+            <div className="son">SCHOLARSHIPS</div>
+            <div className="son2">
+              Unleash your academic potential by accessing a curated list of
+              scholarships tailored to your field of study. WORK-IT !
+              understands the importance of education, and we're here to help
+              you achieve your academic goals without the financial burden.
+              {JSON.parse(localStorage.getItem("user"))?.userType !==
+                "company" && (
+                <Link to={"/preview?type=scholarships"} className="see_more">
+                  See More...
+                </Link>
+              )}
             </div>
           </span>
         </div>

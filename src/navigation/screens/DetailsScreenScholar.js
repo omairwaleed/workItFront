@@ -1,9 +1,7 @@
 import React from "react";
 import styles from "./detailsStyle.module.css";
 import scarab from "../../assets/scarab.png";
-import clock from "../../assets/clock.png";
 import pin from "../../assets/pin.png";
-import bag from "../../assets/bag.png";
 import { useLocation } from "react-router-dom";
 const DetailsScreenScholar = () => {
   const { state } = useLocation();
@@ -12,7 +10,13 @@ const DetailsScreenScholar = () => {
     <div className={styles.body}>
       <div className={styles.intro}>
         <div className={styles.img}>
-          <img className={styles.sora} src={scarab} width={200} height={200} alt="" />
+          <img
+            className={styles.sora}
+            src={state.logo ?? scarab}
+            width={200}
+            height={200}
+            alt=""
+          />
         </div>
         <div className={styles.portfolio}>
           <h1>{state.scholarshiptitle}</h1>
@@ -27,7 +31,7 @@ const DetailsScreenScholar = () => {
           <ol className={styles.carousel__viewport}>
             <li
               id="carousel__slide1"
-              tabindex="0"
+              tabIndex="0"
               className={styles.carousel__slide}
             >
               <div className={styles.carousel__snapper}>
@@ -46,7 +50,7 @@ const DetailsScreenScholar = () => {
             </li>
             <li
               id="carousel__slide2"
-              tabindex="0"
+              tabIndex="0"
               className={styles.carousel__slide}
             >
               <div className={styles.carousel__snapper}>
@@ -65,7 +69,7 @@ const DetailsScreenScholar = () => {
             </li>
             <li
               id="carousel__slide3"
-              tabindex="0"
+              tabIndex="0"
               className={styles.carousel__slide}
             >
               <div className={styles.carousel__snapper}>
@@ -84,7 +88,7 @@ const DetailsScreenScholar = () => {
             </li>
             <li
               id="carousel__slide4"
-              tabindex="0"
+              tabIndex="0"
               className={styles.carousel__slide}
             >
               <div className={styles.carousel__snapper}>
@@ -103,7 +107,7 @@ const DetailsScreenScholar = () => {
             </li>
             {/* <li
               id="carousel__slide5"
-              tabindex="0"
+              tabIndex="0"
               className={styles.carousel__slide}
             >
               <div className={styles.carousel__snapper}>
@@ -122,7 +126,7 @@ const DetailsScreenScholar = () => {
             </li> */}
             {/* <li
               id="carousel__slide5"
-              tabindex="0"
+              tabIndex="0"
               className={styles.carousel__slide}
             >
               <div className={styles.carousel__snapper}>

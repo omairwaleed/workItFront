@@ -1,5 +1,5 @@
 import React from "react";
-const DropDown = ({ data, state, setState, placeholder, needIndex }) => {
+const DropDown = ({ data, state, setState, placeholder, needIndex, name }) => {
   return (
     <div>
       <select
@@ -22,6 +22,8 @@ const DropDown = ({ data, state, setState, placeholder, needIndex }) => {
               )
             : setState(e.target.value)
         }
+        required
+        name={name}
       >
         {data.map((element) => (
           <option

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import fbIcon from "../../assets/fb-icon.png";
 import LinkedinIcon from "../../assets/Linkedin-icon.png";
 import googleIcon from "../../assets/google-icon.png";
@@ -49,10 +48,11 @@ const LogInScreen = () => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    if (localStorage.getItem("user")) {
       navigate("/");
     }
   }, [navigate]);
+
   return (
     <div className="body">
       <div className="parent d-flex">

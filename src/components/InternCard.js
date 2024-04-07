@@ -8,7 +8,7 @@ const InternCard = ({ data }) => {
     <div>
       <span className={styles.my_card} style={{ width: "100%" }}>
         <div className="d-flex justify-content-center align-items-center ">
-          <img src={scarab} width="78" height="80" alt="" />
+          <img src={data.logo ?? scarab} width="78" height="80" alt="" />
         </div>
         <div className={styles.content} style={{ width: "100%" }}>
           <span className={styles.content_title}>{data.internshiptitle}</span>

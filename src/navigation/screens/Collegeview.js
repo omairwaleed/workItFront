@@ -3,8 +3,8 @@ import styles from "./collegeview.module.css";
 import AppCard from "../../components/AppCard";
 import { getAllCountries } from "../../utilities/getCountriesAndCities";
 import Loader from "../../components/Loader";
-import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
+import { Link, Navigate } from "react-router-dom";
 
 export default function Collegeview() {
   const [countries, setCountries] = useState([]);
@@ -14,7 +14,7 @@ export default function Collegeview() {
   const [countrysearchQuery, setCountrySearchQuery] = useState("");
   const [type, setType] = useState("scholarships");
   const [loading, setLoading] = useState(false);
-  const universityid = JSON.parse(localStorage?.getItem("user")).user
+  const universityid = JSON.parse(localStorage?.getItem("user"))?.user
     .universityid;
 
   const filterByName = (data) => {
@@ -72,6 +72,7 @@ export default function Collegeview() {
     else setFilteredData(data);
   }, [countrysearchQuery, namesearchQuery]);
 
+  if (!universityid) return <Navigate to="/preview" />;
   return (
     <div className={styles.parent}>
       <Navbar />
@@ -113,9 +114,9 @@ export default function Collegeview() {
         </div>
 
         <div className={styles.rightbar}>
-          <button className="button-68 my_button" role="button">
-            Add Intern
-          </button>
+          <Link to="/add-scholar" className="button-68 my_button" role="button">
+            Add Scholarship
+          </Link>
         </div>
       </div>
 

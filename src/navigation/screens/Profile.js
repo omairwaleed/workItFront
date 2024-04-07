@@ -1,9 +1,11 @@
 import styles from "./profile.module.css";
 import { FaPenToSquare } from "react-icons/fa6";
-import { FaUser } from "react-icons/fa";
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { getAllCountries, getAllCitiesInCountry } from "../../utilities/getCountriesAndCities";
+import { Navigate, useNavigate } from "react-router-dom";
+import {
+  getAllCountries,
+  getAllCitiesInCountry,
+} from "../../utilities/getCountriesAndCities";
 import DropDown from "../../components/DropDown";
 import defaultPP from "../../assets/defaultPP.jpeg";
 import Navbar from "../../components/Navbar";
@@ -14,13 +16,10 @@ const Profile = () => {
   const [Image, setImage] = useState({ file: null, url: null });
   const [dataImage, setDataImage] = useState({ file: null, url: null });
   const [profilePhoto, setProfilePhoto] = useState({ file: null, url: null });
-
   const [countries, setCountries] = useState([{}]);
   const [cities, setCities] = useState([{}]);
-
   const [country, setCountry] = useState();
   const [city, setCity] = useState();
-
   const cvRef = useRef();
 
   useEffect(() => {
@@ -188,6 +187,10 @@ const Profile = () => {
   if (loading) {
     return <p>Loading...</p>;
   }
+
+  const user = JSON.parse(localStorage?.getItem("user"))?.userType;
+
+  if (user !== "user") return <Navigate to="/preview" />;
 
   return (
     <div>

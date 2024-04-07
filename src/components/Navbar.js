@@ -92,7 +92,7 @@ const Navbar = () => {
                         ? "/profile"
                         : type == "company"
                         ? "/companyProfile"
-                        : "universityProfile";
+                        : "/universityProfile";
 
                     navigate(path);
                   }}

@@ -3,7 +3,7 @@ import { createHashRouter, RouterProvider } from "react-router-dom";
 import LogInScreen from "../screens/LogInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import HomeScreen from "../screens/HomeScreen";
-import TestPage from "../screens/TestPage";
+// import TestPage from "../screens/TestPage";
 import PreviewScreen from "../screens/PreviewScreen";
 import Profile from "../screens/Profile";
 import DetailsScreen from "../screens/DetailsScreen";
@@ -12,37 +12,66 @@ import ImageGallery from "../screens/ImageDownload";
 import Myapps from "../screens/Myapps";
 import DetailsScreenIntern from "../screens/DetailsScreenIntern";
 import DetailsScreenScholar from "../screens/DetailsScreenScholar";
-import CompanyProfile from "../screens/CompanyProfile";
+import CompanyProfile, {
+  loader as cProfileLoader,
+} from "../screens/CompanyProfile";
 import UniversityProfile from "../screens/UniversityProfile";
 import Collegeview from "../screens/Collegeview";
 import Companyview from "../screens/Companyview";
+import AddInterScreen ,{loader as  addInternLoader, action as addInternAction }from "../screens/AddInterScreen";
+import AddJobScreen,{loader as  addJobLoader, action as addJobAction }  from "../screens/AddJobScreen";
+import AddScholarScreen ,{ action as addScholarAction}  from "../screens/AddScholarScreen";
 
 const MainRoute = () => {
   const routes = createHashRouter([
     {
       path: "/",
       element: <HomeScreen />,
-      // children: [
-      //     { index: true, element: <OverviewScreen /> },
-      //     { path: "studios", element: <StudiosScreen /> }
-      // ],
     },
     {
       path: "/universityProfile",
       element: <UniversityProfile />,
     },
     {
+      path: "/collegeview",
+      element: <Collegeview />,
+    },
+    {
       path: "/companyProfile",
       element: <CompanyProfile />,
+      loader: cProfileLoader,
     },
     {
-      path: "/uploadImage",
-      element: <ImageUpload />,
+      path: "/companyview",
+      element: <Companyview />,
     },
     {
-      path: "/downloadImage",
-      element: <ImageGallery />,
+      path: "/myapps",
+      element: <Myapps />,
     },
+    {
+      path: "/profile",
+      element: <Profile />,
+    },
+
+    {
+      path: "/add-scholar",
+      element: <AddScholarScreen />,
+      action: addScholarAction
+    },
+    {
+      path: "/add-intern",
+      element: <AddInterScreen />,
+      loader: addInternLoader,
+      action: addInternAction
+    },
+    {
+      path: "/add-job",
+      element: <AddJobScreen />,
+      loader: addJobLoader,
+      action: addJobAction
+    },
+
     {
       path: "/login",
       element: <LogInScreen />,
@@ -54,10 +83,6 @@ const MainRoute = () => {
     {
       path: "/preview",
       element: <PreviewScreen />,
-    },
-    {
-      path: "/profile",
-      element: <Profile />,
     },
     {
       path: "/details",
@@ -72,19 +97,16 @@ const MainRoute = () => {
       element: <DetailsScreenScholar />,
     },
     {
-      path: "/myapps",
-      element: <Myapps />,
+      path: "/uploadImage",
+      element: <ImageUpload />,
     },
     {
-      path: "/collegeview",
-      element: <Collegeview />,
-    },
-    {
-      path: "/companyview",
-      element: <Companyview />,
+      path: "/downloadImage",
+      element: <ImageGallery />,
     },
   ]);
   return <RouterProvider router={routes} />;
 };
 
 export default MainRoute;
+

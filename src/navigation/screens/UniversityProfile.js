@@ -2,23 +2,28 @@ import styles from "./profile.module.css"
 import { FaPenToSquare } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import DropDown from "../../components/DropDown";
 import "react-dropdown/style.css";
-import { getAllCountries, getAllCitiesInCountry } from "../../utilities/getCountriesAndCities";
+import {
+  getAllCountries,
+  getAllCitiesInCountry,
+} from "../../utilities/getCountriesAndCities";
 import defaultPP from "../../assets/defaultPP.jpeg";
 import Navbar from "../../components/Navbar";
 
 const UniversityProfile = () => {
+  const university = JSON.parse(localStorage.getItem("user")).user;
+
   const [loading, setLoading] = useState(true);
-  const [universityData, setUniversityData] = useState("");
+  const [universityData, setUniversityData] = useState([university]);
   const [Image, setImage] = useState({ file: null, url: null });
   const [dataImage, setDataImage] = useState({ file: null, url: null });
   const [profilePhoto, setProfilePhoto] = useState({ file: null, url: null });
   const [countries, setCountries] = useState([{}]);
   const [cities, setCities] = useState([{}]);
-  const [country, setCountry] = useState();
-  const [city, setCity] = useState();
+  const [country, setCountry] = useState(universityData[0].country);
+  const [city, setCity] = useState(universityData[0].city);
 
   useEffect(() => {
     fetchUniversity();
@@ -52,8 +57,7 @@ const UniversityProfile = () => {
         },
       });
       const json = await response.json();
-      await setUniversityData(json);
-      await setCountry(universityData[0].country);
+      setUniversityData(json);
     } catch (error) {
       console.error("Error fetching user data:", error);
     } finally {
@@ -82,7 +86,7 @@ const UniversityProfile = () => {
       localStrData.user = universityData[0];
       const updatedUserDataString = JSON.stringify(localStrData);
       localStorage.setItem("user", updatedUserDataString);
-      navigate("/preview");
+      navigate("/collegeview");
     } catch (error) {
       console.error("Error:", error);
     }
@@ -157,6 +161,7 @@ const UniversityProfile = () => {
     return <p>Loading...</p>;
   }
 
+  if (!university?.universityid) return <Navigate to="/preview" />;
   return (
     <div>
       <Navbar />
@@ -230,7 +235,7 @@ const UniversityProfile = () => {
           <span className={styles.text}>Name</span>
           <input
             type="text"
-            placeholder={universityData[0].universityname}
+            placeholder="University Name"
             value={universityData[0].universityname}
             onChange={(e) =>
               setUniversityData((prevUserData) => [
@@ -243,7 +248,7 @@ const UniversityProfile = () => {
           <span className={styles.text}>Contact email</span>
           <input
             type="text"
-            placeholder={universityData[0].contactemail}
+            placeholder="University Contact Email"
             value={universityData[0].contactemail}
             onChange={(e) =>
               setUniversityData((prevUserData) => [
@@ -256,7 +261,7 @@ const UniversityProfile = () => {
           <span className={styles.text}>university email</span>
           <input
             type="text"
-            placeholder={universityData[0].universityemail}
+            placeholder="University Email"
             value={universityData[0].universityemail}
             onChange={(e) =>
               setUniversityData((prevUserData) => [
@@ -267,11 +272,7 @@ const UniversityProfile = () => {
         </div>
         <div className={styles.pass}>
           <span className={styles.text}>Password</span>
-          <input
-            type="password"
-            placeholder="********"
-            // onChange={e => setUserData((prevUserData) => [{ ...prevUserData[0], password: e.target.value, },])}
-          />
+          <input type="password" placeholder="**********" disabled />
         </div>
         <div className={styles.address}>
           <span className={styles.text}>Address</span>
@@ -284,13 +285,6 @@ const UniversityProfile = () => {
               setState={setCountry}
             />
 
-            {/* <input type="text"
-                            placeholder={universityData[0].city}
-                            value={universityData[0].city}
-                            onChange={e => setUniversityData((prevUserData) => [{ ...prevUserData[0], city: e.target.value, },])}
-
-                        /> */}
-
             <DropDown
               data={cities}
               placeholder={universityData[0].city}
@@ -298,12 +292,6 @@ const UniversityProfile = () => {
               state={city}
               setState={setCity}
             />
-
-            {/* <input type="text"
-                            placeholder={universityData[0].country}
-                            value={universityData[0].country}
-                            onChange={e => setUniversityData((prevUserData) => [{ ...prevUserData[0], country: e.target.value, },])}
-                        /> */}
           </div>
         </div>
         <div className={styles.save}>

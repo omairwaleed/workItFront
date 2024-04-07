@@ -648,7 +648,12 @@ button{box-shadow: 2px 1px 0px 3px #00000008;}
   }
 }
 /*new styles*/
-/* fade in animation */
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
 
 @keyframes fadeIn {
   0% {opacity: 0;}

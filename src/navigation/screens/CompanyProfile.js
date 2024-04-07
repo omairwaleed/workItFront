@@ -1,7 +1,7 @@
 import styles from "./profile.module.css"
 import { FaPenToSquare } from "react-icons/fa6";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Suspense, useEffect, useState } from "react";
+import { Navigate, useLoaderData, useNavigate } from "react-router-dom";
 import DropDown from "../../components/DropDown";
 import "react-dropdown/style.css";
 import {
@@ -10,17 +10,31 @@ import {
 } from "../../utilities/getCountriesAndCities";
 import defaultPP from "../../assets/defaultPP.jpeg";
 import Navbar from "../../components/Navbar";
+import { CompanyCategories, CompanySizes } from "../../data/DropDownData";
+import Loader from "../../components/Loader";
+
+export const loader = async () => {
+  const countries = await getAllCountries();
+  const company = JSON.parse(localStorage.getItem("user")).user;
+
+  return { company, countries };
+};
 
 const CompanyProfile = () => {
+  const { company, countries } = useLoaderData();
+  console.log(company);
+
   const [loading, setLoading] = useState(true);
-  const [companyData, setCompanyData] = useState("");
+  const [companyData, setCompanyData] = useState(company);
   const [Image, setImage] = useState({ file: null, url: null });
   const [dataImage, setDataImage] = useState({ file: null, url: null });
   const [profilePhoto, setProfilePhoto] = useState({ file: null, url: null });
-  const [countries, setCountries] = useState([{}]);
   const [cities, setCities] = useState([{}]);
-  const [country, setCountry] = useState();
-  const [city, setCity] = useState();
+  const [country, setCountry] = useState(company?.companycountry);
+  const [city, setCity] = useState(company?.companycity);
+  const [companyCategory, setCompanyCategory] = useState(
+    CompanyCategories.filter((con) => con.index === company.categoryid)[0].value
+  );
 
   useEffect(() => {
     fetchCompany();
@@ -28,19 +42,18 @@ const CompanyProfile = () => {
   }, []);
 
   useEffect(() => {
-    refrechCountries();
-    refrechCities();
+    refrechCities(country);
   }, [country]);
 
   useEffect(() => {
-    if (!loading) {
-      setCompanyData((prevUserData) => [
-        { ...prevUserData[0], companycountry: country },
-      ]);
-      setCompanyData((prevUserData) => [
-        { ...prevUserData[0], companycity: city },
-      ]);
-    }
+    // if (!loading)
+    setCompanyData((prevUserData) => [
+      {
+        ...prevUserData[0],
+        companycountry: country,
+        companycity: city,
+      },
+    ]);
   }, [country, city]);
 
   const navigate = useNavigate();
@@ -59,7 +72,6 @@ const CompanyProfile = () => {
       });
       const json = await response.json();
       setCompanyData(json);
-      setCountry(companyData[0].companycountry);
     } catch (error) {
       console.error("Error fetching company data:", error);
     } finally {
@@ -86,7 +98,7 @@ const CompanyProfile = () => {
       localStrData.user = companyData[0];
       const updatedUserDataString = JSON.stringify(localStrData);
       localStorage.setItem("user", updatedUserDataString);
-      navigate("/preview");
+      navigate("/companyview");
     } catch (error) {
       console.error("Error:", error);
     }
@@ -150,19 +162,26 @@ const CompanyProfile = () => {
       console.error("Error:", error);
     }
   };
-  const refrechCountries = async () => {
-    setCountries(await getAllCountries());
-  };
-  const refrechCities = async () => {
+  const refrechCities = async (country) => {
     setCities(await getAllCitiesInCountry(country));
   };
+
+  useEffect(() => {
+    setCompanyData((prevCompanyData) => [
+      {
+        ...prevCompanyData[0],
+        categoryid: CompanyCategories.filter(
+          (con) => con.value === companyCategory
+        )[0].index,
+      },
+    ]);
+  }, [companyCategory]);
 
   if (loading) {
     return <p>Loading...</p>;
   }
 
-  console.log(companyData[0].companycountry);
-  console.log(companyData[0].companycity);
+  if (!company?.companyid) return <Navigate to="/preview" />;
 
   return (
     <div>
@@ -237,8 +256,8 @@ const CompanyProfile = () => {
           <span className={styles.text}>Name</span>
           <input
             type="text"
-            placeholder={companyData[0].companyname}
-            value={companyData[0].companyname}
+            placeholder="Company Name"
+            defaultValue={companyData[0]?.companyname}
             onChange={(e) =>
               setCompanyData((prevUserData) => [
                 { ...prevUserData[0], companyname: e.target.value },
@@ -248,23 +267,34 @@ const CompanyProfile = () => {
         </div>
         <div className={styles.last_name}>
           <span className={styles.text}>Company size</span>
-          <input
-            type="text"
-            placeholder={companyData[0].company_size}
-            value={companyData[0].company_size}
+          {/* [x] from sizes, do the same with categories */}
+          <select
+            placeholder="Company Size"
+            className="text_input"
+            style={{
+              border: "1px solid rgb(204, 204, 204)",
+              width: "fit-content",
+            }}
+            defaultValue={companyData[0]?.company_size}
             onChange={(e) =>
               setCompanyData((prevUserData) => [
                 { ...prevUserData[0], company_size: e.target.value },
               ])
             }
-          />
+          >
+            {CompanySizes?.map((s) => (
+              <option key={s.index} value={s.value}>
+                {s.value}
+              </option>
+            ))}
+          </select>
         </div>
         <div className={styles.email}>
           <span className={styles.text}>Email</span>
           <input
             type="text"
-            placeholder={companyData[0].companyemail}
-            value={companyData[0].companyemail}
+            placeholder="Company Email"
+            value={companyData[0]?.companyemail}
             onChange={(e) =>
               setCompanyData((prevUserData) => [
                 { ...prevUserData[0], companyemail: e.target.value },
@@ -274,34 +304,37 @@ const CompanyProfile = () => {
         </div>
         <div className={styles.pass}>
           <span className={styles.text}>Password</span>
-          <input type="password" placeholder="********" />
+          <input type="password" placeholder="**********" disabled />
         </div>
         <div className={styles.phone}>
           <span className={styles.text}>Company category</span>
-          <input
-            type="text"
-            placeholder={companyData[0].categoryname}
-            value={companyData[0].categoryname}
+          <DropDown
+            data={CompanyCategories}
+            state={companyCategory}
+            setState={setCompanyCategory}
+            placeholder="Company category"
+            className="text_input"
           />
         </div>
         <div className={styles.address}>
           <span className={styles.text}>Address</span>
           <div className={styles.address_inputs}>
-            <DropDown
-              data={countries}
-              placeholder={companyData[0].companycountry}
-              className="text_input"
-              state={country}
-              setState={setCountry}
-            />
-
-            <DropDown
-              data={cities}
-              placeholder={companyData[0].companycity}
-              className="text_input"
-              state={city}
-              setState={setCity}
-            />
+            <Suspense fallback={<Loader />}>
+              <DropDown
+                data={countries}
+                placeholder={company?.companycountry}
+                className="text_input"
+                state={country}
+                setState={setCountry}
+              />
+              <DropDown
+                data={cities}
+                placeholder={company?.companycountry}
+                className="text_input"
+                state={city}
+                setState={setCity}
+              />
+            </Suspense>
           </div>
         </div>
         <div className={styles.save}>

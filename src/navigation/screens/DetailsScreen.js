@@ -1,9 +1,7 @@
 import React from "react";
 import styles from "./detailsStyle.module.css";
 import scarab from "../../assets/scarab.png";
-import clock from "../../assets/clock.png";
 import pin from "../../assets/pin.png";
-import bag from "../../assets/bag.png";
 import { useLocation } from "react-router-dom";
 const DetailsScreen = () => {
   const { state } = useLocation();
@@ -12,7 +10,7 @@ const DetailsScreen = () => {
     <div className={styles.body}>
       <div className={styles.intro}>
         <div className={styles.img}>
-          <img className={styles.sora} src={scarab} alt="" />
+          <img className={styles.sora} src={state.logo ?? scarab} alt="" />
         </div>
         <div className={styles.portfolio}>
           <h1>{state?.jobtitle}</h1>
