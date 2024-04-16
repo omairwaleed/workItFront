@@ -105,8 +105,8 @@ export default function Collegeview() {
                 }}
               />
               <datalist id="location">
-                {countries.map((country, index) => (
-                  <option key={index} value={country.value} />
+                {countries.map((country) => (
+                  <option key={country.value} value={country.value} />
                 ))}
               </datalist>
             </div>
@@ -144,7 +144,7 @@ export default function Collegeview() {
         <ol>
           {filteredData?.map((d) => (
             <AppCard
-              key={d.scholarshiptitle}
+              key={d.scholarshipid}
               type={type}
               title={d.scholarshiptitle}
               country={d.country}

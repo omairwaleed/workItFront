@@ -38,9 +38,12 @@ const Navbar = () => {
   return (
     <header className={styles.header}>
       <Link
-        to={"/"}
+        to={type === "company" || type === "university" ? "" : "/"}
         style={{ textDecoration: "none" }}
         className={styles.header_left}
+        aria-disabled={
+          type === "company" || type === "university" ? true : false
+        }
       >
         <div className={styles.text}>WORK-IT!</div>
       </Link>

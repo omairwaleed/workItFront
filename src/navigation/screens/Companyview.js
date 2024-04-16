@@ -106,8 +106,8 @@ export default function Companyview() {
                 }}
               />
               <datalist id="location">
-                {countries.map((country, index) => (
-                  <option key={index} value={country.value} />
+                {countries.map((country) => (
+                  <option key={country.value} value={country.value} />
                 ))}
               </datalist>
             </div>

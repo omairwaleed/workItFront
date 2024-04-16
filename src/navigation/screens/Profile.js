@@ -29,7 +29,7 @@ const Profile = () => {
 
   useEffect(() => {
     refrechCountries();
-    refrechCities();
+    refrechCities(country);
   }, [country]);
 
   useEffect(() => {
@@ -180,8 +180,10 @@ const Profile = () => {
   const refrechCountries = async () => {
     setCountries(await getAllCountries());
   };
-  const refrechCities = async () => {
-    setCities(await getAllCitiesInCountry(country));
+  const refrechCities = async (country) => {
+    const newCities = await getAllCitiesInCountry(country);
+    setCities(newCities);
+    setCity(newCities[0]?.value);
   };
 
   if (loading) {

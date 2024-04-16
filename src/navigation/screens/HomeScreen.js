@@ -6,8 +6,9 @@ import Navbar from "../../components/Navbar";
 const HomeScreen = () => {
   const user = JSON.parse(localStorage?.getItem("user"))?.userType;
 
-  if (user === "company" || user === "university")
-    return <Navigate to="/preview" />;
+  if (user === "company") return <Navigate to="/companyview" />;
+
+  if (user === "university") return <Navigate to="/collegeview" />;
 
   return (
     <>

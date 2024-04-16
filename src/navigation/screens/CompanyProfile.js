@@ -163,7 +163,9 @@ const CompanyProfile = () => {
     }
   };
   const refrechCities = async (country) => {
-    setCities(await getAllCitiesInCountry(country));
+    const newCities = await getAllCitiesInCountry(country);
+    setCities(newCities);
+    setCity(newCities[0]?.value);
   };
 
   useEffect(() => {

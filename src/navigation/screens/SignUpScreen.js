@@ -19,16 +19,14 @@ const SignUpScreen = () => {
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState("user");
   const [error, setError] = useState();
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
-  const [country, setCountry] = useState("");
-  const [city, setCity] = useState("");
-  const [companySize, setCompanySize] = useState("");
+  const [country, setCountry] = useState("Afghanistan");
+  const [city, setCity] = useState("Herat");
+  const [companySize, setCompanySize] = useState("1-10");
   const [companyCategory, setCompanyCategory] = useState("software");
-
   const [cities, setCities] = useState([{}]);
   const [countries, setCountries] = useState([{}]);
 
@@ -92,10 +90,13 @@ const SignUpScreen = () => {
   };
 
   const refrechCities = async () => {
-    setCities(await getAllCitiesInCountry(country));
+    const newCities = await getAllCitiesInCountry(country);
+    setCities(newCities);
+    setCity(newCities[0]?.value);
   };
   const refrechCountries = async () => {
-    setCountries(await getAllCountries());
+    const newCountries = await getAllCountries();
+    setCountries(newCountries);
   };
 
   useEffect(() => {
@@ -109,17 +110,6 @@ const SignUpScreen = () => {
     }
   }, [navigate]);
 
-  useEffect(() => {
-    setError("");
-    setName("");
-    setEmail("");
-    setPassword("");
-    setMobileNumber("");
-    setCountry("");
-    setCity("");
-    setCompanySize("");
-    setCompanyCategory("");
-  }, [selectedOption]);
 
   return (
     <div className="body">

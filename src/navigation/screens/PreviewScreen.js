@@ -6,7 +6,7 @@ import JobCard from "../../components/JobCard";
 import InternCard from "../../components/InternCard";
 import Loader from "../../components/Loader";
 import Navbar from "../../components/Navbar";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 // 3ashan mohanned ya3rf ya8yr el styles
 
 const PreviewScreen = () => {
@@ -28,6 +28,7 @@ const PreviewScreen = () => {
       ? "scholarships"
       : "jobs"
   );
+  const navigate = useNavigate();
 
   const getData = async () => {
     setLoading(true);
@@ -117,6 +118,12 @@ const PreviewScreen = () => {
   useEffect(() => {
     setRenderedData(filteredData?.slice(0, currentIndex * 8));
   }, [filteredData, currentIndex]);
+
+  if (
+    !JSON.parse(localStorage?.getItem("user"))?.user?.universityid ||
+    !JSON.parse(localStorage?.getItem("user"))?.user?.companyid
+  )
+    return navigate(-1);
 
   return (
     <div className={styles.body}>

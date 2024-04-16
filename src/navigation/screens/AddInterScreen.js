@@ -39,12 +39,14 @@ export const action = async ({ request, params }) => {
 const AddInterScreen = () => {
   const { countries } = useLoaderData();
   const [cities, setCities] = useState([{}]);
-  const [country, setCountry] = useState("");
-  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("Afghanistan");
+  const [city, setCity] = useState("Herat");
 
   useEffect(() => {
     const refrechCities = async (country) => {
-      setCities(await getAllCitiesInCountry(country));
+      const newCities = await getAllCitiesInCountry(country);
+      setCities(newCities);
+      setCity(newCities[0]?.value);
     };
 
     refrechCities(country);
