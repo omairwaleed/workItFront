@@ -60,7 +60,7 @@ const Profile = () => {
         },
       });
       const json = await response.json();
-      await setUserData(json);
+      setUserData(json);
     } catch (error) {
       console.error("Error fetching user data:", error);
     } finally {
@@ -196,7 +196,7 @@ const Profile = () => {
   console.log(city);
 
   if (loading) return <Loader />;
-
+  if (!userData[0]) return navigate("/preview");
   return (
     <div>
       <Navbar />
