@@ -1,7 +1,7 @@
 import styles from "./profile.module.css";
 import { FaPenToSquare } from "react-icons/fa6";
 import { useEffect, useState, useRef } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   getAllCountries,
   getAllCitiesInCountry,
@@ -9,8 +9,11 @@ import {
 import DropDown from "../../components/DropDown";
 import defaultPP from "../../assets/defaultPP.jpeg";
 import Navbar from "../../components/Navbar";
+import Loader from "../../components/Loader";
 
 const Profile = () => {
+  const user = JSON.parse(localStorage?.getItem("user"));
+
   const [userData, setUserData] = useState("");
   const [loading, setLoading] = useState(true);
   const [Image, setImage] = useState({ file: null, url: null });
@@ -18,13 +21,19 @@ const Profile = () => {
   const [profilePhoto, setProfilePhoto] = useState({ file: null, url: null });
   const [countries, setCountries] = useState([{}]);
   const [cities, setCities] = useState([{}]);
-  const [country, setCountry] = useState();
-  const [city, setCity] = useState();
+  const [country, setCountry] = useState(user?.user.country);
+  const [city, setCity] = useState(user?.user.city);
   const cvRef = useRef();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (user?.userType !== "user") return navigate("/preview");
+
     fetchUser();
     fetchImage();
+
+    if (!user?.user.country) setCountry("Afghanistan");
+    if (!user?.user.city) setCity("Herat");
   }, []);
 
   useEffect(() => {
@@ -33,13 +42,10 @@ const Profile = () => {
   }, [country]);
 
   useEffect(() => {
-    if (!loading) {
-      setUserData((prevUserData) => [{ ...prevUserData[0], country: country }]);
-      setUserData((prevUserData) => [{ ...prevUserData[0], city: city }]);
-    }
+    setUserData((prevUserData) => [
+      { ...prevUserData[0], country: country, city: city },
+    ]);
   }, [country, city]);
-
-  const navigate = useNavigate();
 
   const fetchUser = async () => {
     try {
@@ -71,6 +77,9 @@ const Profile = () => {
       }
       const localStrData = JSON.parse(localStorage.getItem("user"));
       const type = localStrData.userType;
+      localStrData.user = userData[0];
+      localStrData.user.country = country;
+      localStrData.user.city = city;
 
       const response = await fetch("/api/user/editProfile", {
         method: "put",
@@ -79,18 +88,15 @@ const Profile = () => {
           authorization: "token: " + localStrData.token,
           type: type,
         },
-        body: JSON.stringify({ userData: userData[0] }),
+        body: JSON.stringify({ userData: localStrData.user }),
       });
       //update token
 
-      localStrData.user = userData[0];
       const updatedUserDataString = JSON.stringify(localStrData);
       localStorage.setItem("user", updatedUserDataString);
 
       //redirect to preview
-      if (response.ok) {
-        navigate("/preview");
-      }
+      if (response.ok) return navigate("/preview");
     } catch (error) {
       console.error("Error:", error);
     }
@@ -183,16 +189,13 @@ const Profile = () => {
   const refrechCities = async (country) => {
     const newCities = await getAllCitiesInCountry(country);
     setCities(newCities);
-    setCity(newCities[0]?.value);
+    if (!user?.user.city) setCity(newCities[0]?.value);
   };
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  console.log(user);
+  console.log(city);
 
-  const user = JSON.parse(localStorage?.getItem("user"))?.userType;
-
-  if (user !== "user") return <Navigate to="/preview" />;
+  if (loading) return <Loader />;
 
   return (
     <div>

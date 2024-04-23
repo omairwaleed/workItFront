@@ -1,8 +1,8 @@
 import styles from "./profile.module.css"
 import { FaPenToSquare } from "react-icons/fa6";
-import { FaUser } from "react-icons/fa";
+// import { FaUser } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import DropDown from "../../components/DropDown";
 import "react-dropdown/style.css";
 import {
@@ -11,10 +11,10 @@ import {
 } from "../../utilities/getCountriesAndCities";
 import defaultPP from "../../assets/defaultPP.jpeg";
 import Navbar from "../../components/Navbar";
+import Loader from "../../components/Loader";
 
 const UniversityProfile = () => {
-  const university = JSON.parse(localStorage.getItem("user")).user;
-
+  const university = JSON.parse(localStorage.getItem("user"))?.user;
   const [loading, setLoading] = useState(true);
   const [universityData, setUniversityData] = useState([university]);
   const [Image, setImage] = useState({ file: null, url: null });
@@ -22,10 +22,15 @@ const UniversityProfile = () => {
   const [profilePhoto, setProfilePhoto] = useState({ file: null, url: null });
   const [countries, setCountries] = useState([{}]);
   const [cities, setCities] = useState([{}]);
-  const [country, setCountry] = useState(universityData[0].country);
-  const [city, setCity] = useState(universityData[0].city);
+  const [country, setCountry] = useState(university?.country);
+  const [city, setCity] = useState(university?.city);
+  const navigate = useNavigate();
+
+
 
   useEffect(() => {
+    if (!university?.universityid) return navigate("/preview");
+
     fetchUniversity();
     fetchImage();
   }, []);
@@ -37,12 +42,9 @@ const UniversityProfile = () => {
 
   useEffect(() => {
     setUniversityData((prevUserData) => [
-      { ...prevUserData[0], country: country },
+      { ...prevUserData[0], country: country, city: city },
     ]);
-    setUniversityData((prevUserData) => [{ ...prevUserData[0], city: city }]);
   }, [country, city]);
-
-  const navigate = useNavigate();
 
   const fetchUniversity = async () => {
     try {
@@ -72,6 +74,9 @@ const UniversityProfile = () => {
       }
       const localStrData = JSON.parse(localStorage.getItem("user"));
       const type = localStrData.userType;
+      localStrData.user = universityData[0];
+      localStrData.user.country = country;
+      localStrData.user.city = city;
 
       const response = await fetch("/api/university/editProfile", {
         method: "put",
@@ -80,10 +85,10 @@ const UniversityProfile = () => {
           authorization: "token: " + localStrData.token,
           type: type,
         },
-        body: JSON.stringify({ universityData: universityData[0] }),
+        body: JSON.stringify({ universityData: localStrData.user }),
       });
 
-      localStrData.user = universityData[0];
+      
       const updatedUserDataString = JSON.stringify(localStrData);
       localStorage.setItem("user", updatedUserDataString);
       navigate("/collegeview");
@@ -156,14 +161,11 @@ const UniversityProfile = () => {
   const refrechCities = async (country) => {
     const newCities = await getAllCitiesInCountry(country);
     setCities(newCities);
-    setCity(newCities[0]?.value);
+   if(!university?.city) setCity(newCities[0]?.value);
   };
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  if (loading) return <Loader />;
 
-  if (!university?.universityid) return <Navigate to="/preview" />;
   return (
     <div>
       <Navbar />

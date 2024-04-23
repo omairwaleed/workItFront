@@ -1,7 +1,7 @@
 import styles from "./profile.module.css"
 import { FaPenToSquare } from "react-icons/fa6";
 import { Suspense, useEffect, useState } from "react";
-import { Navigate, useLoaderData, useNavigate } from "react-router-dom";
+import { redirect, useLoaderData, useNavigate } from "react-router-dom";
 import DropDown from "../../components/DropDown";
 import "react-dropdown/style.css";
 import {
@@ -15,13 +15,13 @@ import Loader from "../../components/Loader";
 
 export const loader = async () => {
   const countries = await getAllCountries();
-  const company = JSON.parse(localStorage.getItem("user")).user;
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  return { company, countries };
+  return { company: user?.user, uType: user?.userType, countries };
 };
 
 const CompanyProfile = () => {
-  const { company, countries } = useLoaderData();
+  const { company, uType, countries } = useLoaderData();
   console.log(company);
 
   const [loading, setLoading] = useState(true);
@@ -33,10 +33,14 @@ const CompanyProfile = () => {
   const [country, setCountry] = useState(company?.companycountry);
   const [city, setCity] = useState(company?.companycity);
   const [companyCategory, setCompanyCategory] = useState(
-    CompanyCategories.filter((con) => con.index === company.categoryid)[0].value
+    CompanyCategories.filter((con) => con.index === company?.categoryid)[0]
+      ?.value
   );
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (uType !== "company") return navigate("/preview");
+
     fetchCompany();
     fetchImage();
   }, []);
@@ -46,7 +50,6 @@ const CompanyProfile = () => {
   }, [country]);
 
   useEffect(() => {
-    // if (!loading)
     setCompanyData((prevUserData) => [
       {
         ...prevUserData[0],
@@ -55,8 +58,6 @@ const CompanyProfile = () => {
       },
     ]);
   }, [country, city]);
-
-  const navigate = useNavigate();
 
   const fetchCompany = async () => {
     try {
@@ -85,6 +86,9 @@ const CompanyProfile = () => {
 
       const localStrData = JSON.parse(localStorage.getItem("user"));
       const type = localStrData.userType;
+      localStrData.user = companyData[0];
+      localStrData.user.country = country;
+      localStrData.user.city = city;
 
       const response = await fetch("/api/company/editProfile", {
         method: "put",
@@ -93,9 +97,8 @@ const CompanyProfile = () => {
           authorization: "token: " + localStrData.token,
           type: type,
         },
-        body: JSON.stringify({ companyData: companyData[0] }),
+        body: JSON.stringify({ companyData: localStrData.user }),
       });
-      localStrData.user = companyData[0];
       const updatedUserDataString = JSON.stringify(localStrData);
       localStorage.setItem("user", updatedUserDataString);
       navigate("/companyview");
@@ -179,11 +182,7 @@ const CompanyProfile = () => {
     ]);
   }, [companyCategory]);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (!company?.companyid) return <Navigate to="/preview" />;
+  if (loading) return <Loader />;
 
   return (
     <div>

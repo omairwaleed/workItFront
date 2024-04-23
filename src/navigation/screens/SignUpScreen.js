@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import fbIcon from "../../assets/fb-icon.png";
 import LinkedinIcon from "../../assets/Linkedin-icon.png";
 import googleIcon from "../../assets/google-icon.png";
@@ -68,7 +68,7 @@ const SignUpScreen = () => {
         password,
         mobileNumber,
         country,
-        city,
+        city: city ?? "N/A",
         companySize,
         selectedOption,
         companyCategoryId,
@@ -109,7 +109,6 @@ const SignUpScreen = () => {
       navigate("/");
     }
   }, [navigate]);
-
 
   return (
     <div className="body">

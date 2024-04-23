@@ -2,10 +2,16 @@ import React from "react";
 import styles from "./detailsStyle.module.css";
 import scarab from "../../assets/scarab.png";
 import pin from "../../assets/pin.png";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 const DetailsScreenIntern = () => {
   const { state } = useLocation();
-  console.log("omair", useLocation());
+  if (!state) return <Navigate to={"/companyview"} />;
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log(state);
+
+  const handleApply = () => {};
+
   return (
     <div className={styles.body}>
       <div className={styles.intro}>
@@ -45,7 +51,7 @@ const DetailsScreenIntern = () => {
               <div className={styles.content}>
                 <h2>intern Location :</h2>
                 <br />
-                {state.country}
+                {state.city}, {state.country}
               </div>
             </li>
             <li
@@ -83,9 +89,7 @@ const DetailsScreenIntern = () => {
               <div className={styles.content}>
                 <h2>company location:</h2>
                 <br />
-                {state.companycountry}
-                {` , `}
-                {state.companycity}
+                {state.city}, {state.country}
               </div>
             </li>
             <li
@@ -147,11 +151,13 @@ const DetailsScreenIntern = () => {
             </li>
           </ol>
         </section>
-        <div className={styles.applybtn}>
-          <a href="url" className={styles.applyy}>
-            Apply!
-          </a>
-        </div>
+        <button
+          disabled={!user ? true : false}
+          className={styles.applybtn}
+          onClick={handleApply}
+        >
+          Apply!
+        </button>
       </div>
       <div className={styles.main}>
         <div className={styles.left}>
@@ -168,11 +174,13 @@ const DetailsScreenIntern = () => {
             {state.requiredskills}
           </div> */}
 
-          <div className={styles.applybtn}>
-            <a href="url" className={styles.applyy}>
-              Apply!
-            </a>
-          </div>
+          <button
+            disabled={!user ? true : false}
+            className={styles.applybtn}
+            onClick={handleApply}
+          >
+            Apply!
+          </button>
         </div>
         <div className={styles.right}>
           <strong>Company Name:</strong>
@@ -181,13 +189,15 @@ const DetailsScreenIntern = () => {
           <br />
           <strong> Company Location:</strong>
           <br />
-          &#x2022; {state.companycountry}
-          {` , `}
-          {state.companycity}
-          <br />
-          <strong>Number of employees:</strong>
-          <br />
-          &#x2022; {state.company_size}
+          &#x2022; {state.city}, {state.country}
+          {state.company_size && (
+            <>
+              <br />
+              <strong>Number of employees:</strong>
+              <br />
+              &#x2022; {state.company_size}
+            </>
+          )}
           <br />
           <strong>salary:</strong>
           <br />

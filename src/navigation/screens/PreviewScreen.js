@@ -11,7 +11,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 const PreviewScreen = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  let [searchParams, setSearchParams] = useSearchParams();
+  let [searchParams] = useSearchParams();
   const [countries, setCountries] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -101,6 +101,10 @@ const PreviewScreen = () => {
   };
 
   useEffect(() => {
+    if (user?.userType === "university") return navigate("/collegeview");
+
+    if (user?.userType === "company") return navigate("/companyview");
+
     refreshCountries();
   }, []);
 
@@ -118,12 +122,6 @@ const PreviewScreen = () => {
   useEffect(() => {
     setRenderedData(filteredData?.slice(0, currentIndex * 8));
   }, [filteredData, currentIndex]);
-
-  if (
-    !JSON.parse(localStorage?.getItem("user"))?.user?.universityid ||
-    !JSON.parse(localStorage?.getItem("user"))?.user?.companyid
-  )
-    return navigate(-1);
 
   return (
     <div className={styles.body}>

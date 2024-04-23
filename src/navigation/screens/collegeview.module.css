@@ -520,9 +520,9 @@ footer a {
         display: none;
     }
 
-    .box .search input {
+    /* .box .search input {
         width: 120px;
-    }
+    } */
 
     footer {
         position: relative;

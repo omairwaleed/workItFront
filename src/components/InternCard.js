@@ -4,6 +4,7 @@ import scarab from "../assets/scarab.png";
 import Button from "./Button";
 import { Link } from "react-router-dom";
 const InternCard = ({ data }) => {
+  console.log(data);
   return (
     <div>
       <span className={styles.my_card} style={{ width: "100%" }}>

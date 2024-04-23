@@ -1,6 +1,6 @@
 // post with  internshipTitle, country, city, salary, companyId, requiredSkills
 import styles from "./addnew.module.css";
-import { Form, redirect, useLoaderData, Navigate } from "react-router-dom";
+import { Form, redirect, useLoaderData } from "react-router-dom";
 import jobSvg from "../../assets/job.svg";
 import { useEffect, useState } from "react";
 import {
@@ -11,6 +11,9 @@ import DropDown from "../../components/DropDown";
 
 export const loader = async () => {
   const countries = await getAllCountries();
+
+  if (!JSON.parse(localStorage?.getItem("user"))?.user?.companyid)
+    return redirect("/preview");
 
   return { countries };
 };
@@ -51,9 +54,6 @@ const AddInterScreen = () => {
 
     refrechCities(country);
   }, [country]);
-
-  if (!JSON.parse(localStorage?.getItem("user"))?.user?.companyid)
-    return <Navigate to={"/preview"} />;
 
   return (
     <main className={styles.addPage}>
@@ -117,7 +117,7 @@ const AddInterScreen = () => {
           </div>
 
           <button className="my_button" type="submit">
-            Add Scholarship
+            Create Internship
           </button>
         </Form>
 

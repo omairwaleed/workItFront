@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import fbIcon from "../../assets/fb-icon.png";
 import LinkedinIcon from "../../assets/Linkedin-icon.png";
 import googleIcon from "../../assets/google-icon.png";
@@ -8,11 +8,16 @@ import Button from "../../components/Button";
 import { Link, useNavigate } from "react-router-dom";
 
 const LogInScreen = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState();
   const navigate = useNavigate();
-  // const [emptyFields, setEmptyFields] = useState([]);
+
+  useEffect(() => {
+    if (user) return navigate(-1);
+  }, []);
 
   const handelSubmit = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -34,11 +39,11 @@ const LogInScreen = () => {
     if (response.ok) {
       console.log("every thing is ok");
       setError();
-      console.log(json);
+      // console.log(json);
       localStorage.setItem("user", JSON.stringify(json));
       if (json.userType === "user") navigate("/preview");
-      if (json.userType === "company") navigate("/companyview");
-      if (json.userType === "university") navigate("/collegeview");
+      else if (json.userType === "company") navigate("/companyview");
+      else if (json.userType === "university") navigate("/collegeview");
     }
     if (!response.ok) {
       // console.log(json);
@@ -46,12 +51,6 @@ const LogInScreen = () => {
       // setEmptyFields(json.emptyFields);
     }
   };
-
-  useEffect(() => {
-    if (localStorage.getItem("user")) {
-      navigate("/");
-    }
-  }, [navigate]);
 
   return (
     <div className="body">

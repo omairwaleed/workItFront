@@ -10,7 +10,7 @@ export const action = async ({ request, params }) => {
   formData.append("universityId", id);
   formData.set(
     "fundingPercentage",
-    `${parseInt(formData.get("fundingPercentage"))} %`
+    parseInt(formData.get("fundingPercentage"))
   );
 
   try {
@@ -84,7 +84,7 @@ const AddScholarScreen = () => {
           </div>
 
           <button className="my_button" type="submit">
-            Add Scholarship
+            Create Scholarship
           </button>
         </Form>
 

@@ -4,7 +4,7 @@ import AppCard from "../../components/AppCard";
 import { getAllCountries } from "../../utilities/getCountriesAndCities";
 import Loader from "../../components/Loader";
 import Navbar from "../../components/Navbar";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Collegeview() {
   const [countries, setCountries] = useState([]);
@@ -16,9 +16,10 @@ export default function Collegeview() {
   const [loading, setLoading] = useState(false);
   const universityid = JSON.parse(localStorage?.getItem("user"))?.user
     .universityid;
+  const navigate = useNavigate();
 
   const filterByName = (data) => {
-    console.log(data);
+    // console.log(data);
     // scholarshiptitle
     if (type === "scholarships")
       return data.filter((d) =>
@@ -56,6 +57,8 @@ export default function Collegeview() {
   };
 
   useEffect(() => {
+    if (!universityid) return navigate("/preview");
+
     const refreshCountries = async () => {
       setCountries(await getAllCountries());
     };
@@ -72,7 +75,6 @@ export default function Collegeview() {
     else setFilteredData(data);
   }, [countrysearchQuery, namesearchQuery]);
 
-  if (!universityid) return <Navigate to="/preview" />;
   return (
     <div className={styles.parent}>
       <Navbar />
@@ -82,7 +84,7 @@ export default function Collegeview() {
             <div className={styles.search}>
               <input
                 type="text"
-                placeholder="Search For Scholarships"
+                placeholder="Search For a Scholarship"
                 value={namesearchQuery}
                 onChange={(e) => {
                   setnameSearchQuery(e.target.value);
@@ -96,7 +98,7 @@ export default function Collegeview() {
             <div className={styles.search}>
               <input
                 type="text"
-                placeholder="location"
+                placeholder="Search By Country"
                 list="location"
                 value={countrysearchQuery}
                 onChange={(e) => {

@@ -12,6 +12,9 @@ import DropDown from "../../components/DropDown";
 export const loader = async () => {
   const countries = await getAllCountries();
 
+  if (!JSON.parse(localStorage?.getItem("user"))?.user?.companyid)
+    return redirect("/preview");
+
   return { countries };
 };
 
@@ -42,6 +45,8 @@ const AddJobScreen = () => {
   const [country, setCountry] = useState("Afghanistan");
   const [city, setCity] = useState("Herat");
 
+  console.log("add job");
+
   useEffect(() => {
     const refrechCities = async (country) => {
       const newCities = await getAllCitiesInCountry(country);
@@ -51,9 +56,6 @@ const AddJobScreen = () => {
 
     refrechCities(country);
   }, [country]);
-
-  if (!JSON.parse(localStorage?.getItem("user"))?.user?.companyid)
-    return <Navigate to={"/preview"} />;
 
   return (
     <main className={styles.addPage}>
@@ -129,7 +131,7 @@ const AddJobScreen = () => {
           </div>
 
           <button className="my_button" type="submit">
-            Add Scholarship
+            Create Job
           </button>
         </Form>
 

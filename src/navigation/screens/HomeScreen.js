@@ -1,14 +1,18 @@
 // import Rectangle from "../../assets/Rectangle.png";
 import landingImage from "../../assets/landingImage.png";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
+import { useEffect } from "react";
 
 const HomeScreen = () => {
-  const user = JSON.parse(localStorage?.getItem("user"))?.userType;
+  const uType = JSON.parse(localStorage?.getItem("user"))?.userType;
+  const navigate = useNavigate();
 
-  if (user === "company") return <Navigate to="/companyview" />;
+  useEffect(() => {
+    if (uType === "company") return navigate("/companyview");
 
-  if (user === "university") return <Navigate to="/collegeview" />;
+    if (uType === "university") return navigate("/collegeview");
+  }, []);
 
   return (
     <>
@@ -51,12 +55,9 @@ const HomeScreen = () => {
               customize your search based on your skills, experience, and career
               preferences. Say goodbye to job-hunting stress and hello to your
               next exciting career move.
-              {JSON.parse(localStorage.getItem("user"))?.userType !==
-                "university" && (
-                <Link to={"/preview?type=jobs"} className="see_more">
-                  See More...
-                </Link>
-              )}
+              <Link to={"/preview?type=jobs"} className="see_more">
+                See More...
+              </Link>
             </div>
           </span>
 
@@ -68,12 +69,9 @@ const HomeScreen = () => {
               leading companies to provide you with diverse internship
               opportunities, allowing you to build a foundation for success in
               your chosen field.
-              {JSON.parse(localStorage.getItem("user"))?.userType !==
-              "university" ? (
-                <Link to={"/preview?type=interns"} className="see_more">
-                  See More...
-                </Link>
-              ) : null}
+              <Link to={"/preview?type=interns"} className="see_more">
+                See More...
+              </Link>
             </div>
           </span>
 
@@ -84,12 +82,9 @@ const HomeScreen = () => {
               scholarships tailored to your field of study. WORK-IT !
               understands the importance of education, and we're here to help
               you achieve your academic goals without the financial burden.
-              {JSON.parse(localStorage.getItem("user"))?.userType !==
-                "company" && (
-                <Link to={"/preview?type=scholarships"} className="see_more">
-                  See More...
-                </Link>
-              )}
+              <Link to={"/preview?type=scholarships"} className="see_more">
+                See More...
+              </Link>
             </div>
           </span>
         </div>

@@ -3,11 +3,11 @@ import styles from "./collegeview.module.css";
 import AppCard from "../../components/AppCard";
 import { getAllCountries } from "../../utilities/getCountriesAndCities";
 import Loader from "../../components/Loader";
-import { Link, Navigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 
 export default function Companyview() {
-  const companyid = JSON.parse(localStorage?.getItem("user")).user.companyid;
+  const companyid = JSON.parse(localStorage?.getItem("user"))?.user?.companyid;
   const [searchParams] = useSearchParams();
 
   const [countries, setCountries] = useState([]);
@@ -17,8 +17,9 @@ export default function Companyview() {
   const [countrysearchQuery, setCountrySearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [type, setType] = useState(
-    searchParams.get("type") ? searchParams.get("type") : "jobs"
+    searchParams.get("type") ? searchParams.get("type") : "internships"
   );
+  const navigate = useNavigate();
 
   const filterByName = (data) => {
     const title = type === "jobs" ? "jobtitle" : "internshiptitle";
@@ -57,6 +58,8 @@ export default function Companyview() {
   };
 
   useEffect(() => {
+    if (!companyid) return navigate("/preview");
+
     const refreshCountries = async () => {
       setCountries(await getAllCountries());
     };
@@ -73,7 +76,6 @@ export default function Companyview() {
     else setFilteredData(data);
   }, [countrysearchQuery, namesearchQuery]);
 
-  if (!companyid) return <Navigate to="/preview" />;
   return (
     <div className={styles.parent}>
       <Navbar />
@@ -83,7 +85,7 @@ export default function Companyview() {
             <div className={styles.search}>
               <input
                 type="text"
-                placeholder={`Search For ${type}`}
+                placeholder="Search By Title"
                 value={namesearchQuery}
                 onChange={(e) => {
                   setnameSearchQuery(e.target.value);
@@ -97,7 +99,7 @@ export default function Companyview() {
             <div className={styles.search}>
               <input
                 type="text"
-                placeholder="location"
+                placeholder="Search By Country"
                 list="location"
                 value={countrysearchQuery}
                 onChange={(e) => {

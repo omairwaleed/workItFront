@@ -22,7 +22,7 @@ const DropDown = ({ data, state, setState, placeholder, needIndex, name }) => {
               )
             : setState(e.target.value)
         }
-        required
+        required={placeholder !== "select City" ? true : false}
         name={name}
       >
         {data.map((element) => (

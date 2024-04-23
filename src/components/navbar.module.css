@@ -12,6 +12,7 @@
     @media (width < 450px) {
       justify-content: center;
       gap: .5rem;
+      flex-direction: column;
     }
 
     .header_left{
@@ -48,6 +49,7 @@
         gap: 25px;
         width: fit-content;
         z-index: 1;
+        align-items: center;
       }
 
       button {

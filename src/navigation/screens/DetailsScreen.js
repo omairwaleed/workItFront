@@ -1,11 +1,66 @@
-import React from "react";
+import { useState } from "react";
 import styles from "./detailsStyle.module.css";
 import scarab from "../../assets/scarab.png";
 import pin from "../../assets/pin.png";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import Modal from "../../components/Modal";
 const DetailsScreen = () => {
+  const [modal, setModal] = useState({ show: false });
+
+  const navigate = useNavigate();
+  const handleClose = () => {
+    setModal({ show: false });
+    navigate("/preview");
+  };
+
   const { state } = useLocation();
+  if (!state) return <Navigate to={"/preview"} />;
+
+  const user = JSON.parse(localStorage.getItem("user"));
   console.log(state);
+
+  const handleApply = async () => {
+    // requiredskills , jobid , userid, date
+    //   jobtitle, companyname, country, city
+    const { userid } = user?.user;
+    const { requiredskills, jobid, jobtitle, companyname, country, city } =
+      state;
+    const date = new Date().toISOString();
+
+    try {
+      const res = await fetch("/api/job/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          date,
+          userid,
+          jobid,
+          requiredskills,
+          jobtitle,
+          companyname,
+          country,
+          city,
+        }),
+      });
+
+      const json = await res.json();
+
+      setModal({
+        show: true,
+        title: "Success",
+        body: json.msg,
+      });
+    } catch (error) {
+      setModal({
+        show: true,
+        title: "Failure",
+        body: error.message.includes("duplicate")
+          ? "Can't Apply for the same job twice!"
+          : "Something went wrong.",
+      });
+    }
+  };
+
   return (
     <div className={styles.body}>
       <div className={styles.intro}>
@@ -141,11 +196,13 @@ const DetailsScreen = () => {
             </li>
           </ol>
         </section>
-        <div className={styles.applybtn}>
-          <a href="url" className={styles.applyy}>
-            Apply!
-          </a>
-        </div>
+        <button
+          disabled={!user ? true : false}
+          className={styles.applybtn}
+          onClick={handleApply}
+        >
+          Apply!
+        </button>
       </div>
       <div className={styles.main}>
         <div className={styles.left}>
@@ -162,11 +219,13 @@ const DetailsScreen = () => {
             {state?.'}
           </div> */}
 
-          <div className={styles.applybtn}>
-            <a href="url" className={styles.applyy}>
-              Apply!
-            </a>
-          </div>
+          <button
+            disabled={!user ? true : false}
+            className={styles.applybtn}
+            onClick={handleApply}
+          >
+            Apply!
+          </button>
         </div>
         <div className={styles.right}>
           <strong>Company Name:</strong>
@@ -200,6 +259,15 @@ const DetailsScreen = () => {
           career growth. */}
         </div>
       </div>
+
+      {modal?.show && (
+        <Modal
+          show={modal?.show}
+          title={modal?.title}
+          body={modal?.body}
+          handleClose={handleClose}
+        />
+      )}
     </div>
   );
 };

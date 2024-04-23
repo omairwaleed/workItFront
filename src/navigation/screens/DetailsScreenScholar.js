@@ -2,10 +2,16 @@ import React from "react";
 import styles from "./detailsStyle.module.css";
 import scarab from "../../assets/scarab.png";
 import pin from "../../assets/pin.png";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 const DetailsScreenScholar = () => {
   const { state } = useLocation();
+  if (!state) return <Navigate to={"/collegeview"} />;
+
+  const user = JSON.parse(localStorage.getItem("user"));
   console.log(state);
+
+  const handleApply = () => {};
+
   return (
     <div className={styles.body}>
       <div className={styles.intro}>
@@ -45,7 +51,7 @@ const DetailsScreenScholar = () => {
               <div className={styles.content}>
                 <h2>Country :</h2>
                 <br />
-                {state.country}
+                {state.city}, {state.country}
               </div>
             </li>
             <li
@@ -145,17 +151,19 @@ const DetailsScreenScholar = () => {
             </li> */}
           </ol>
         </section>
-        <div className={styles.applybtn}>
-          <a href="url" className={styles.applyy}>
-            Apply!
-          </a>
-        </div>
+        <button
+          disabled={!user ? true : false}
+          className={styles.applybtn}
+          onClick={handleApply}
+        >
+          Apply!
+        </button>
       </div>
       <div className={styles.main}>
         <div className={styles.left}>
           <div className={styles.place}>
             <img src={pin} alt="" />
-            {state.country}
+            {state.city}, {state.country}
           </div>
           {/* <div className={styles.place}>
             <img src={clock} alt="" />
@@ -166,11 +174,13 @@ const DetailsScreenScholar = () => {
             {state.requiredskills}
           </div> */}
 
-          <div className={styles.applybtn}>
-            <a href="url" className={styles.applyy}>
-              Apply!
-            </a>
-          </div>
+          <button
+            disabled={!user ? true : false}
+            className={styles.applybtn}
+            onClick={handleApply}
+          >
+            Apply!
+          </button>
         </div>
         <div className={styles.right}>
           <strong>University Name:</strong>
