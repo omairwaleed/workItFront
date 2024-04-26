@@ -8,7 +8,7 @@ import Navbar from "../../components/Navbar";
 
 export default function Companyview() {
   const companyid = JSON.parse(localStorage?.getItem("user"))?.user?.companyid;
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchQuery] = useSearchParams();
 
   const [countries, setCountries] = useState([]);
   const [data, setData] = useState();
@@ -47,6 +47,8 @@ export default function Companyview() {
       const json = await response.json();
 
       const myData = json.filter((d) => d.companyid === companyid);
+
+      console.log(myData);
 
       setData(myData);
       setFilteredData(myData);
@@ -137,6 +139,7 @@ export default function Companyview() {
               setType("internships");
               setnameSearchQuery("");
               setCountrySearchQuery("");
+              setSearchQuery({ type: "internships" });
             }}
           >
             Internships
@@ -149,6 +152,7 @@ export default function Companyview() {
               setType("jobs");
               setnameSearchQuery("");
               setCountrySearchQuery("");
+              setSearchQuery({ type: "jobs" });
             }}
           >
             Jobs
@@ -162,6 +166,7 @@ export default function Companyview() {
           {filteredData?.map((d) => (
             <AppCard
               key={d.jobid || d.internshipid}
+              id={d.jobid || d.internshipid}
               type={type}
               title={d.jobtitle || d.internshiptitle}
               country={d.country}

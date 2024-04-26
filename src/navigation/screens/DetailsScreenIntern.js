@@ -1,32 +1,73 @@
-import React from "react";
+import { useState } from "react";
 import styles from "./detailsStyle.module.css";
-import scarab from "../../assets/scarab.png";
 import pin from "../../assets/pin.png";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import Modal from "../../components/Modal";
+import ErrorImageHandler from "../../components/ErrorImageHandler";
 const DetailsScreenIntern = () => {
+  const [modal, setModal] = useState({ show: false });
+
+  const navigate = useNavigate();
+  const handleClose = () => {
+    setModal({ show: false });
+    navigate("/preview");
+  };
+
   const { state } = useLocation();
-  if (!state) return <Navigate to={"/companyview"} />;
+  if (!state) return <Navigate to={"/preview"} />;
 
   const user = JSON.parse(localStorage.getItem("user"));
   console.log(state);
 
-  const handleApply = () => {};
+  const handleApply = async () => {
+    // requiredskills , internshipid , userid, date
+    //   internshiptitle, companyname, country, city
+    const { userid } = user?.user;
+    const { internshipid, companyname } = state;
+
+    try {
+      const res = await fetch("/api/internship/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userid,
+          internshipid,
+          companyname,
+        }),
+      });
+
+      const json = await res.json();
+
+      setModal({
+        show: true,
+        title: "Success",
+        body: json.msg,
+      });
+    } catch (error) {
+      setModal({
+        show: true,
+        title: "Failure",
+        body: error.message.includes("duplicate")
+          ? "Can't Apply for the same job twice!"
+          : "Something went wrong.",
+      });
+    }
+  };
 
   return (
     <div className={styles.body}>
       <div className={styles.intro}>
         <div className={styles.img}>
-          <img
-            className={styles.sora}
-            src={state.logo ?? scarab}
+          <ErrorImageHandler
+            src={state.logo}
+            classN={styles.sora}
             width={200}
             height={200}
-            alt=""
           />
         </div>
         <div className={styles.portfolio}>
-          <h1>{state.internshiptitle}</h1>
-          {/* {state.jobdescription} */}
+          <h1>{state?.internshiptitle}</h1>
+          {state?.jobdescription}
         </div>
       </div>
       <div className={styles.Line}>
@@ -49,9 +90,9 @@ const DetailsScreenIntern = () => {
                 </a>
               </div>
               <div className={styles.content}>
-                <h2>intern Location :</h2>
+                <h2>Job Location :</h2>
                 <br />
-                {state.city}, {state.country}
+                {state?.country}
               </div>
             </li>
             <li
@@ -70,7 +111,7 @@ const DetailsScreenIntern = () => {
               <div className={styles.content}>
                 <h2>Company Name:</h2>
                 <br />
-                {state.companyname}
+                {state?.companyname}
               </div>
             </li>
             <li
@@ -89,7 +130,9 @@ const DetailsScreenIntern = () => {
               <div className={styles.content}>
                 <h2>company location:</h2>
                 <br />
-                {state.city}, {state.country}
+                {state?.companycountry}
+                {` , `}
+                {state?.companycity}
               </div>
             </li>
             <li
@@ -108,7 +151,7 @@ const DetailsScreenIntern = () => {
               <div className={styles.content}>
                 <h2>Number of employees:</h2>
                 <br />
-                {state.company_size}
+                {state?.company_size}
               </div>
             </li>
             <li
@@ -127,7 +170,7 @@ const DetailsScreenIntern = () => {
               <div className={styles.content}>
                 <h2>salary</h2>
                 <br />
-                {state.salary}
+                {state?.salary}
               </div>
             </li>
             <li
@@ -146,7 +189,7 @@ const DetailsScreenIntern = () => {
               <div className={styles.content}>
                 <h2>Required skills</h2>
                 <br />
-                {state.requiredskills}
+                {state?.requiredskills}
               </div>
             </li>
           </ol>
@@ -163,7 +206,7 @@ const DetailsScreenIntern = () => {
         <div className={styles.left}>
           <div className={styles.place}>
             <img src={pin} alt="" />
-            {state.country}
+            {state?.country}
           </div>
           {/* <div className={styles.place}>
             <img src={clock} alt="" />
@@ -171,7 +214,7 @@ const DetailsScreenIntern = () => {
           </div> */}
           {/* <div className={styles.place}>
             <img src={bag} alt="" />
-            {state.requiredskills}
+            {state?.'}
           </div> */}
 
           <button
@@ -185,27 +228,25 @@ const DetailsScreenIntern = () => {
         <div className={styles.right}>
           <strong>Company Name:</strong>
           <br />
-          &#x2022; {state.companyname}
+          &#x2022; {state?.companyname}
           <br />
           <strong> Company Location:</strong>
           <br />
-          &#x2022; {state.city}, {state.country}
-          {state.company_size && (
-            <>
-              <br />
-              <strong>Number of employees:</strong>
-              <br />
-              &#x2022; {state.company_size}
-            </>
-          )}
+          &#x2022; {state?.companycountry}
+          {` , `}
+          {state?.companycity}
+          <br />
+          <strong>Number of employees:</strong>
+          <br />
+          &#x2022; {state?.company_size}
           <br />
           <strong>salary:</strong>
           <br />
-          &#x2022; {state.salary}
+          &#x2022; {state?.salary}
           <br />
           <strong>Required Skills :</strong>
           <br />
-          &#x2022; {state.requiredskills}
+          &#x2022; {state?.requiredskills}
           {/* <strong>Join Us!:</strong>
           <br />
           eing part of our team, you will join: - one of the largest global
@@ -216,6 +257,15 @@ const DetailsScreenIntern = () => {
           career growth. */}
         </div>
       </div>
+
+      {modal?.show && (
+        <Modal
+          show={modal?.show}
+          title={modal?.title}
+          body={modal?.body}
+          handleClose={handleClose}
+        />
+      )}
     </div>
   );
 };

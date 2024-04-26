@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
 import styles from "../navigation/screens/collegeview.module.css";
 
 const AppCard = ({
+  id,
   type,
   title,
   country,
@@ -34,6 +36,19 @@ const AppCard = ({
           </span>
         )}
       </div>
+
+      <Link
+        to={`/applicants/${type.slice(0, -1)}/${id}`}
+        state={{
+          id,
+          title,
+          type: type.slice(0, -1),
+          skills: requiredskills,
+        }}
+        className={styles.seeAppsButton}
+      >
+        see Applicants
+      </Link>
     </li>
   );
 };

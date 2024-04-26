@@ -1,9 +1,9 @@
 import { useState } from "react";
 import styles from "./detailsStyle.module.css";
-import scarab from "../../assets/scarab.png";
 import pin from "../../assets/pin.png";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal";
+import ErrorImageHandler from "../../components/ErrorImageHandler";
 const DetailsScreen = () => {
   const [modal, setModal] = useState({ show: false });
 
@@ -25,14 +25,12 @@ const DetailsScreen = () => {
     const { userid } = user?.user;
     const { requiredskills, jobid, jobtitle, companyname, country, city } =
       state;
-    const date = new Date().toISOString();
 
     try {
       const res = await fetch("/api/job/apply", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          date,
           userid,
           jobid,
           requiredskills,
@@ -65,7 +63,12 @@ const DetailsScreen = () => {
     <div className={styles.body}>
       <div className={styles.intro}>
         <div className={styles.img}>
-          <img className={styles.sora} src={state.logo ?? scarab} alt="" />
+          <ErrorImageHandler
+            src={state.logo}
+            classN={styles.sora}
+            width={200}
+            height={200}
+          />
         </div>
         <div className={styles.portfolio}>
           <h1>{state?.jobtitle}</h1>

@@ -147,6 +147,7 @@ export default function Collegeview() {
           {filteredData?.map((d) => (
             <AppCard
               key={d.scholarshipid}
+              id={d.scholarshipid}
               type={type}
               title={d.scholarshiptitle}
               country={d.country}

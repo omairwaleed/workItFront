@@ -1,27 +1,68 @@
-import React from "react";
+import { useState } from "react";
 import styles from "./detailsStyle.module.css";
-import scarab from "../../assets/scarab.png";
 import pin from "../../assets/pin.png";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import Modal from "../../components/Modal";
+import ErrorImageHandler from "../../components/ErrorImageHandler";
+
 const DetailsScreenScholar = () => {
+  const [modal, setModal] = useState({ show: false });
+
+  const navigate = useNavigate();
+  const handleClose = () => {
+    setModal({ show: false });
+    navigate("/preview");
+  };
+
   const { state } = useLocation();
-  if (!state) return <Navigate to={"/collegeview"} />;
+  if (!state) return <Navigate to={"/preview"} />;
 
   const user = JSON.parse(localStorage.getItem("user"));
   console.log(state);
 
-  const handleApply = () => {};
+  const handleApply = async () => {
+    // fundingpercentage, scholarshiptitle, universityname, country, city
+    const { userid } = user?.user;
+    const { scholarshipid, universityname } = state;
+
+    try {
+      const res = await fetch("/api/scholarship/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userid,
+          scholarshipid,
+          universityname,
+        }),
+      });
+
+      const json = await res.json();
+
+      setModal({
+        show: true,
+        title: "Success",
+        body: json.msg,
+      });
+    } catch (error) {
+      setModal({
+        show: true,
+        title: "Failure",
+        body: error.message.includes("duplicate")
+          ? "Can't Apply for the same job twice!"
+          : "Something went wrong.",
+      });
+    }
+  };
 
   return (
     <div className={styles.body}>
       <div className={styles.intro}>
         <div className={styles.img}>
-          <img
-            className={styles.sora}
-            src={state.logo ?? scarab}
+          <ErrorImageHandler
+            src={state.logo}
+            classN={styles.sora}
             width={200}
             height={200}
-            alt=""
           />
         </div>
         <div className={styles.portfolio}>
@@ -212,6 +253,15 @@ const DetailsScreenScholar = () => {
           career growth. */}
         </div>
       </div>
+
+      {modal?.show && (
+        <Modal
+          show={modal?.show}
+          title={modal?.title}
+          body={modal?.body}
+          handleClose={handleClose}
+        />
+      )}
     </div>
   );
 };

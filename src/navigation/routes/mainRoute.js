@@ -29,6 +29,7 @@ import AddJobScreen, {
 import AddScholarScreen, {
   action as addScholarAction,
 } from "../screens/AddScholarScreen";
+import Applicants, { loader as applicantsLoader } from "../screens/Applicants";
 
 // [x] test logged out user senarnio
 // [x] test user senarnio
@@ -84,6 +85,12 @@ const MainRoute = () => {
       element: <AddJobScreen />,
       loader: addJobLoader,
       action: addJobAction,
+    },
+
+    {
+      path: "/applicants/:type/:id",
+      element: <Applicants />,
+      loader: applicantsLoader,
     },
 
     {

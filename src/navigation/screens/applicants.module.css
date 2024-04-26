@@ -1,0 +1,45 @@
+.main{
+    color: black;
+    padding-top: 3rem;
+    text-align: left;
+
+    h1{
+        text-align: center;
+        margin-bottom: 1.6rem;
+    }
+    .skills{
+        font-weight: bold;
+    }
+    section{
+        margin-top: 2rem;
+        min-height: 60dvh;
+        h2{text-align: center;text-transform: capitalize;}
+    }
+
+    .users{
+        margin-top: 3rem;
+        display: flex;
+        gap: 1rem;
+
+        @media screen and (max-width: 640px) {
+            flex-direction: column;
+            justify-content: center;
+        }
+    }
+}
+
+.accordion{
+    margin-top: 2rem;
+    .accordionItemAccept button {
+        color: white;
+        background-color: #198754;
+    }
+    .accordionItemReject button {
+        color: white;
+        background-color: #dc3545;
+    }
+    a{
+        color: initial;
+        text-decoration: none;
+    }
+}

@@ -207,7 +207,7 @@ body {
     --brandColor: hsl(var(--h), 71%, var(--l));
     font-family: Montserrat, sans-serif;
     margin: 0;
-    background-color: whitesmoke;
+    /* background-color: whitesmoke; */
 }
 
 p {
@@ -267,19 +267,19 @@ h3 {
     text-transform: capitalize;
 }
 
-h3::before {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 0 0 auto;
-    margin-right: 1rem;
-    width: 3rem;
-    height: 3rem;
-    content: counter(list);
-    padding: 1rem;
-    border-radius: 50%;
-    background-color: #163043;
-    color: white;
+.seeAppsButton{
+    margin-top: 1rem;
+    background-color: #3b5060;
+    width: fit-content;
+    border-radius: 8px;
+    padding: .5rem 2rem;
+    color: var(--body_bg);
+    text-decoration: none;
+    text-transform: capitalize;
+
+    &:hover{
+        background-color: #163043;
+    }
 }
 
 @media (min-width: 40em) {
@@ -291,9 +291,19 @@ h3::before {
         font-size: 2.25rem;
         margin: 0 0 2rem;
     }
-
     h3::before {
-        margin-right: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 0 0 auto;
+        margin-right: 1rem;
+        width: 3rem;
+        height: 3rem;
+        content: counter(list);
+        padding: 1rem;
+        border-radius: 50%;
+        background-color: #163043;
+        color: white;
     }
 }
 
