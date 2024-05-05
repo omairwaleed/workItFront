@@ -168,7 +168,7 @@ const CompanyProfile = () => {
   const refrechCities = async (country) => {
     const newCities = await getAllCitiesInCountry(country);
     setCities(newCities);
-    setCity(newCities[0]?.value);
+    if (!company?.companycity) setCity(newCities[0]?.value);
   };
 
   useEffect(() => {
@@ -330,7 +330,7 @@ const CompanyProfile = () => {
               />
               <DropDown
                 data={cities}
-                placeholder={company?.companycountry}
+                placeholder={company?.companycity}
                 className="text_input"
                 state={city}
                 setState={setCity}
