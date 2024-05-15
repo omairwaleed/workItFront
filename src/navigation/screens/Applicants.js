@@ -1,6 +1,5 @@
 import { redirect, useLoaderData, useLocation } from "react-router-dom";
 import styles from "./applicants.module.css";
-import UserCard from "../../components/UserCard";
 import { useState } from "react";
 import Modal from "../../components/Modal";
 import ApplicantsList from "../../components/ApplicantsList";

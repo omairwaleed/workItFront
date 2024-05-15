@@ -5,8 +5,10 @@ import SignUpScreen from "../screens/SignUpScreen";
 import HomeScreen from "../screens/HomeScreen";
 // import TestPage from "../screens/TestPage";
 import PreviewScreen from "../screens/PreviewScreen";
-import Profile from "../screens/Profile";
-import DetailsScreen from "../screens/DetailsScreen";
+import Profile, { loader as profileLoader } from "../screens/Profile";
+import DetailsScreen, {
+  loader as detailsLoader,
+} from "../screens/DetailsScreen";
 import ImageUpload from "../screens/ImageUpload";
 import ImageGallery from "../screens/ImageDownload";
 import Myapps, { loader as myAppsLoader } from "../screens/Myapps";
@@ -67,6 +69,7 @@ const MainRoute = () => {
     {
       path: "/profile",
       element: <Profile />,
+      loader: profileLoader,
     },
 
     {
@@ -108,6 +111,7 @@ const MainRoute = () => {
     {
       path: "/details",
       element: <DetailsScreen />,
+      loader: detailsLoader,
     },
     {
       path: "/detailsIntern",

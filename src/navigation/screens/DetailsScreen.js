@@ -1,28 +1,53 @@
 import { useState } from "react";
 import styles from "./detailsStyle.module.css";
 import pin from "../../assets/pin.png";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import {
+  Navigate,
+  useLoaderData,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import Modal from "../../components/Modal";
 import ErrorImageHandler from "../../components/ErrorImageHandler";
+import { fetchUser } from "../../actions";
+
+export const loader = async ({ request, params }) => {
+  const [userData] = await fetchUser();
+
+  return userData;
+};
+
 const DetailsScreen = () => {
+  const userData = useLoaderData();
   const [modal, setModal] = useState({ show: false });
+  const [isDisabled, setisDisabled] = useState(false);
 
   const navigate = useNavigate();
-  const handleClose = () => {
-    setModal({ show: false });
-    navigate("/preview");
-  };
 
   const { state } = useLocation();
   if (!state) return <Navigate to={"/preview"} />;
 
-  const user = JSON.parse(localStorage.getItem("user"));
   console.log(state);
+  console.log(userData?.cv);
+
+  const handleClose = () => {
+    setModal({ show: false });
+    navigate(`/${isDisabled ? "profile" : "myapps"}`);
+  };
 
   const handleApply = async () => {
+    if (!userData?.cv) {
+      setisDisabled(true);
+      return setModal({
+        show: true,
+        title: "Error",
+        body: "Please upload your CV first! You have to complete your profile.",
+      });
+    }
+
     // requiredskills , jobid , userid, date
     //   jobtitle, companyname, country, city
-    const { userid } = user?.user;
+    const { userid } = userData;
     const { requiredskills, jobid, jobtitle, companyname, country, city } =
       state;
 
@@ -200,7 +225,7 @@ const DetailsScreen = () => {
           </ol>
         </section>
         <button
-          disabled={!user ? true : false}
+          disabled={isDisabled}
           className={styles.applybtn}
           onClick={handleApply}
         >
@@ -223,7 +248,7 @@ const DetailsScreen = () => {
           </div> */}
 
           <button
-            disabled={!user ? true : false}
+            disabled={isDisabled}
             className={styles.applybtn}
             onClick={handleApply}
           >

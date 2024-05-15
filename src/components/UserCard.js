@@ -1,5 +1,4 @@
 import { Button, Card } from "react-bootstrap";
-import OverlayComp from "./OverlayComp";
 import styles from "./userCard.module.css";
 import defaultPP from "../assets/defaultPP.jpeg";
 import { useRevalidator } from "react-router-dom";
@@ -37,7 +36,7 @@ const UserCard = ({
   };
 
   return (
-    <Card style={{ width: "18rem", boxShadow: "-1px 3px 18px #80808080" }}>
+    <Card style={{ boxShadow: "-1px 3px 18px #80808080" }}>
       <Card.Img variant="top" src={photo ?? defaultPP} className={styles.img} />
       <Card.Body className={styles.body}>
         <Card.Title className={styles.title}>
@@ -50,7 +49,19 @@ const UserCard = ({
         </Card.Text>
         <div className={styles.footer}>
           {cv ? (
-            <OverlayComp cv={cv} />
+            <Button
+              style={{
+                backgroundColor: "#d0dbe8",
+                borderColor: "#d0dbe8",
+                color: "black",
+                fontWeight: "bold",
+                textTransform: "capitalize",
+              }}
+              href={cv}
+              target="_blank"
+            >
+              Click to show CV
+            </Button>
           ) : (
             <Card.Text className="text-danger">No CV</Card.Text>
           )}
