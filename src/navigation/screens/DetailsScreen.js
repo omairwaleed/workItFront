@@ -12,7 +12,7 @@ import ErrorImageHandler from "../../components/ErrorImageHandler";
 import { fetchUser } from "../../actions";
 
 export const loader = async ({ request, params }) => {
-  const [userData] = await fetchUser();
+  const userData = await fetchUser();
 
   return userData;
 };
@@ -20,15 +20,16 @@ export const loader = async ({ request, params }) => {
 const DetailsScreen = () => {
   const userData = useLoaderData();
   const [modal, setModal] = useState({ show: false });
-  const [isDisabled, setisDisabled] = useState(false);
+  const [isDisabled, setisDisabled] = useState(!userData[0]?.cv);
 
   const navigate = useNavigate();
 
   const { state } = useLocation();
   if (!state) return <Navigate to={"/preview"} />;
 
+  console.log(userData);
   console.log(state);
-  console.log(userData?.cv);
+  console.log(userData[0]?.cv);
 
   const handleClose = () => {
     setModal({ show: false });
@@ -36,7 +37,7 @@ const DetailsScreen = () => {
   };
 
   const handleApply = async () => {
-    if (!userData?.cv) {
+    if (!userData[0]?.cv) {
       setisDisabled(true);
       return setModal({
         show: true,
@@ -47,7 +48,7 @@ const DetailsScreen = () => {
 
     // requiredskills , jobid , userid, date
     //   jobtitle, companyname, country, city
-    const { userid } = userData;
+    const { userid } = userData[0];
     const { requiredskills, jobid, jobtitle, companyname, country, city } =
       state;
 

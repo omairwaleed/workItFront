@@ -20,7 +20,7 @@ export const loader = async ({ request, params }) => {
 
 const Profile = () => {
   const { userData: user, profilePhoto } = useLoaderData();
-  // console.log(user);
+  console.log(user);
 
   const [userData, setUserData] = useState(user);
   const [loading, setLoading] = useState(false);
@@ -35,11 +35,6 @@ const Profile = () => {
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("user"))?.userType !== "user")
       return navigate("/preview");
-
-    // fetchUser();
-    // fetchImage();
-    // if (!userData.country) setCountry("Afghanistan");
-    // if (!userData.city) setCity("Herat");
   }, []);
 
   useEffect(() => {
@@ -61,12 +56,10 @@ const Profile = () => {
       user: { userid },
     } = localStrData;
 
-    console.log(formData);
-
     try {
       if (Image.url !== null) await handleFileChange();
 
-      if (formData.cv) await uploadCv({ userid, cv: formData.cv });
+      if (formData.cv.size) await uploadCv({ userid, cv: formData.cv });
 
       const response = await fetch("/api/user/editProfile", {
         method: "put",
@@ -75,7 +68,12 @@ const Profile = () => {
           authorization: "token: " + localStrData.token,
           type: "user",
         },
-        body: JSON.stringify({ userData: formData }),
+        body: JSON.stringify({
+          userData: {
+            ...formData,
+            userid: userid,
+          },
+        }),
       });
       // //update token
 
