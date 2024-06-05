@@ -20,7 +20,7 @@ export const loader = async ({ request, params }) => {
 const DetailsScreen = () => {
   const userData = useLoaderData();
   const [modal, setModal] = useState({ show: false });
-  const [isDisabled, setisDisabled] = useState(!userData[0]?.cv);
+  const [isDisabled, setisDisabled] = useState(false);
 
   const navigate = useNavigate();
 

@@ -154,7 +154,7 @@ const Profile = () => {
   const refrechCities = async (country) => {
     const newCities = await getAllCitiesInCountry(country);
     setCities(newCities);
-    if (!userData.city) setCity(newCities[0]?.value);
+    if (!userData[0].city) setCity(newCities[0]?.value);
   };
 
   return (

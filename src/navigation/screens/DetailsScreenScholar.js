@@ -7,11 +7,12 @@ import ErrorImageHandler from "../../components/ErrorImageHandler";
 
 const DetailsScreenScholar = () => {
   const [modal, setModal] = useState({ show: false });
+  const [isDisabled, setisDisabled] = useState(false);
 
   const navigate = useNavigate();
   const handleClose = () => {
     setModal({ show: false });
-    navigate("/preview");
+    navigate(`/${isDisabled ? "profile" : "myapps"}`);
   };
 
   const { state } = useLocation();
@@ -21,6 +22,15 @@ const DetailsScreenScholar = () => {
   console.log(state);
 
   const handleApply = async () => {
+    if (!user?.user?.cv) {
+      setisDisabled(true);
+      return setModal({
+        show: true,
+        title: "Error",
+        body: "Please upload your CV first! You have to complete your profile.",
+      });
+    }
+
     // fundingpercentage, scholarshiptitle, universityname, country, city
     const { userid } = user?.user;
     const { scholarshipid, universityname } = state;
@@ -48,7 +58,7 @@ const DetailsScreenScholar = () => {
         show: true,
         title: "Failure",
         body: error.message.includes("duplicate")
-          ? "Can't Apply for the same job twice!"
+          ? "Can't Apply for the same scholarship twice!"
           : "Something went wrong.",
       });
     }
@@ -193,7 +203,7 @@ const DetailsScreenScholar = () => {
           </ol>
         </section>
         <button
-          disabled={!user ? true : false}
+          disabled={isDisabled}
           className={styles.applybtn}
           onClick={handleApply}
         >
@@ -216,7 +226,7 @@ const DetailsScreenScholar = () => {
           </div> */}
 
           <button
-            disabled={!user ? true : false}
+            disabled={isDisabled}
             className={styles.applybtn}
             onClick={handleApply}
           >
