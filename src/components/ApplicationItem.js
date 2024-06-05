@@ -37,7 +37,7 @@ const ApplicationItem = ({
             {status}
           </div>
         </span>
-        <p className={styles.applydate}>{applydate.slice(0, 10)}</p>
+        <p className={styles.applydate}>{applydate?.slice(0, 10)}</p>
       </div>
     </li>
   );
