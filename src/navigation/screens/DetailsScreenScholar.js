@@ -1,13 +1,19 @@
 import { useState } from "react";
 import styles from "./detailsStyle.module.css";
 import pin from "../../assets/pin.png";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import {
+  Navigate,
+  useLoaderData,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import Modal from "../../components/Modal";
 import ErrorImageHandler from "../../components/ErrorImageHandler";
 
 const DetailsScreenScholar = () => {
   const [modal, setModal] = useState({ show: false });
   const [isDisabled, setisDisabled] = useState(false);
+  const user = useLoaderData();
 
   const navigate = useNavigate();
   const handleClose = () => {
@@ -18,11 +24,10 @@ const DetailsScreenScholar = () => {
   const { state } = useLocation();
   if (!state) return <Navigate to={"/preview"} />;
 
-  const user = JSON.parse(localStorage.getItem("user"));
   console.log(state);
 
   const handleApply = async () => {
-    if (!user?.user?.cv) {
+    if (!user[0]?.cv) {
       setisDisabled(true);
       return setModal({
         show: true,
@@ -32,7 +37,7 @@ const DetailsScreenScholar = () => {
     }
 
     // fundingpercentage, scholarshiptitle, universityname, country, city
-    const { userid } = user?.user;
+    const { userid } = user[0];
     const { scholarshipid, universityname } = state;
 
     try {

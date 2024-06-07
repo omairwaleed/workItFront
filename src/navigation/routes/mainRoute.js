@@ -116,10 +116,12 @@ const MainRoute = () => {
     {
       path: "/detailsIntern",
       element: <DetailsScreenIntern />,
+      loader: detailsLoader,
     },
     {
       path: "/detailsScholar",
       element: <DetailsScreenScholar />,
+      loader: detailsLoader,
     },
     {
       path: "/uploadImage",

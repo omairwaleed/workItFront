@@ -19,7 +19,7 @@ const ApplicationItem = ({
       <div className={styles.content}>
         <span className={styles.content_body}>{companyname}</span>
         <span className={styles.content_body}>
-          {city}, {country} {type ? `(${type})` : null}
+          {city && city + ","} {country} {type ? `(${type})` : null}
         </span>
         <span className={styles.content_body}>
           Applicant review time is typically {avgReplyTime} days
