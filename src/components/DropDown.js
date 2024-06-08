@@ -1,5 +1,5 @@
 import React from "react";
-const DropDown = ({ data, state, setState, placeholder, needIndex }) => {
+const DropDown = ({ data, state, setState, placeholder, needIndex, name }) => {
   return (
     <div>
       <select
@@ -12,6 +12,7 @@ const DropDown = ({ data, state, setState, placeholder, needIndex }) => {
           outline: "none",
         }}
         value={state}
+        defaultValue={placeholder}
         onChange={(e) =>
           needIndex
             ? setState(
@@ -21,15 +22,13 @@ const DropDown = ({ data, state, setState, placeholder, needIndex }) => {
               )
             : setState(e.target.value)
         }
+        required={placeholder !== "select City" ? true : false}
+        name={name}
       >
-        <option value="" disabled selected hidden>
-          {placeholder}
-        </option>
-
         {data.map((element) => (
           <option
             value={element.value}
-            key={element.index}
+            key={element.value + element.index}
             data-key={element.index}
           >
             {element.value}

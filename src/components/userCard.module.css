@@ -1,0 +1,23 @@
+.flex{
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-top: 1rem;
+}
+
+
+.title{
+    text-transform: capitalize;
+}
+
+.img{
+    height: 10rem;
+    object-fit: contain;
+}
+
+.body{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: .5rem;
+}

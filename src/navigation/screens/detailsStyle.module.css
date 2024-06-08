@@ -70,6 +70,7 @@
 }
 .sora {
   border-radius: 30px;
+  max-width: 100%;
 }
 
 .portfolio {
@@ -92,7 +93,7 @@
 
 .main {
   display: flex;
-  padding-top: 10px;
+  padding-block:1rem;
 }
 
 .right {
@@ -129,7 +130,6 @@
   display: flex;
   justify-content: center;
   width: 40%;
-  /* border-radius: 5px; */
   padding: 5px;
   border: 7px #2e363e;
   border-style: solid;
@@ -137,6 +137,10 @@
   text-decoration: none;
   background-color: #2e363e;
   border-radius: 50px;
+  text-decoration: none;
+  color: white;
+  font-size: large;
+  font-weight: bold;
 }
 
 @media (max-width: 500px) {
@@ -750,9 +754,9 @@
 
   .mobileview {
     align-items: center;
-
     display: flex;
     flex-direction: column;
+    padding-bottom: 2rem;
   }
 }
 
