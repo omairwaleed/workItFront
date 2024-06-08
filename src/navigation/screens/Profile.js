@@ -61,20 +61,23 @@ const Profile = () => {
 
       if (formData.cv.size) await uploadCv({ userid, cv: formData.cv });
 
-      const response = await fetch("/api/user/editProfile", {
-        method: "put",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: "token: " + localStrData.token,
-          type: "user",
-        },
-        body: JSON.stringify({
-          userData: {
-            ...formData,
-            userid: userid,
+      const response = await fetch(
+        "https://work-it-back.vercel.app/api/user/editProfile",
+        {
+          method: "put",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: "token: " + localStrData.token,
+            type: "user",
           },
-        }),
-      });
+          body: JSON.stringify({
+            userData: {
+              ...formData,
+              userid: userid,
+            },
+          }),
+        }
+      );
       // //update token
 
       localStrData.user = { userid, ...formData };
@@ -103,14 +106,17 @@ const Profile = () => {
       const formData = new FormData();
       formData.append("image", dataImage);
 
-      const response = await fetch("/api/user/uploadImage", {
-        method: "POST",
-        headers: {
-          authorization: "token: " + localStrData.token,
-          type: type,
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        "https://work-it-back.vercel.app/api/user/uploadImage",
+        {
+          method: "POST",
+          headers: {
+            authorization: "token: " + localStrData.token,
+            type: type,
+          },
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         console.log("Image uploaded successfully:");
@@ -128,13 +134,16 @@ const Profile = () => {
       formData.set("cv", cv);
       formData.set("id", userid);
       setLoading(true);
-      const response = await fetch("/api/user/uploadCv", {
-        method: "POST",
-        headers: {
-          authorization: "token: " + localStrData.token,
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        "https://work-it-back.vercel.app/api/user/uploadCv",
+        {
+          method: "POST",
+          headers: {
+            authorization: "token: " + localStrData.token,
+          },
+          body: formData,
+        }
+      );
 
       setLoading(false);
       if (response.ok) {

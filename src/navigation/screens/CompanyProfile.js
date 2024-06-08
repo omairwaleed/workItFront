@@ -1,4 +1,4 @@
-import styles from "./profile.module.css"
+import styles from "./profile.module.css";
 import { FaPenToSquare } from "react-icons/fa6";
 import { Suspense, useEffect, useState } from "react";
 import { redirect, useLoaderData, useNavigate } from "react-router-dom";
@@ -63,14 +63,17 @@ const CompanyProfile = () => {
     try {
       const localStrData = JSON.parse(localStorage.getItem("user"));
       const type = localStrData.userType;
-      const response = await fetch("api/company/companyDetails", {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStrData.token,
-          type: type,
-        },
-      });
+      const response = await fetch(
+        "https://work-it-back.vercel.app/api/company/companyDetails",
+        {
+          method: "get",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStrData.token,
+            type: type,
+          },
+        }
+      );
       const json = await response.json();
       setCompanyData(json);
     } catch (error) {
@@ -90,15 +93,18 @@ const CompanyProfile = () => {
       localStrData.user.country = country;
       localStrData.user.city = city;
 
-      const response = await fetch("/api/company/editProfile", {
-        method: "put",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: "token: " + localStrData.token,
-          type: type,
-        },
-        body: JSON.stringify({ companyData: localStrData.user }),
-      });
+      const response = await fetch(
+        "https://work-it-back.vercel.app/api/company/editProfile",
+        {
+          method: "put",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: "token: " + localStrData.token,
+            type: type,
+          },
+          body: JSON.stringify({ companyData: localStrData.user }),
+        }
+      );
       const updatedUserDataString = JSON.stringify(localStrData);
       localStorage.setItem("user", updatedUserDataString);
       navigate("/companyview");
@@ -111,12 +117,15 @@ const CompanyProfile = () => {
     const localStrData = JSON.parse(localStorage.getItem("user"));
     const type = localStrData.userType;
     try {
-      const response = await fetch("/api/company/gallery", {
-        headers: {
-          authorization: "token: " + localStrData.token,
-          type: type,
-        },
-      });
+      const response = await fetch(
+        "https://work-it-back.vercel.app/api/company/gallery",
+        {
+          headers: {
+            authorization: "token: " + localStrData.token,
+            type: type,
+          },
+        }
+      );
       const data = await response.json();
 
       if (data.success) {
@@ -146,14 +155,17 @@ const CompanyProfile = () => {
       const formData = new FormData();
       formData.append("image", dataImage);
 
-      const response = await fetch("/api/company/uploadImage", {
-        method: "POST",
-        headers: {
-          authorization: "token: " + localStrData.token,
-          type: type,
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        "https://work-it-back.vercel.app/api/company/uploadImage",
+        {
+          method: "POST",
+          headers: {
+            authorization: "token: " + localStrData.token,
+            type: type,
+          },
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         const result = await response.json();

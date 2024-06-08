@@ -21,11 +21,14 @@ const UserCard = ({
 
   const handleVerdict = async (verdict) => {
     try {
-      const res = await fetch(`/api/${type}/applyVerdict/`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userid, id, verdict }),
-      });
+      const res = await fetch(
+        `https://work-it-back.vercel.app/api/${type}/applyVerdict/`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userid, id, verdict }),
+        }
+      );
       const msg = await res.json();
       setAlert(msg);
       revalidator.revalidate();

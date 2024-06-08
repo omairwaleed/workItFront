@@ -1,8 +1,8 @@
-import styles from "./profile.module.css"
+import styles from "./profile.module.css";
 import { FaPenToSquare } from "react-icons/fa6";
 // import { FaUser } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DropDown from "../../components/DropDown";
 import "react-dropdown/style.css";
 import {
@@ -26,8 +26,6 @@ const UniversityProfile = () => {
   const [city, setCity] = useState(university?.city);
   const navigate = useNavigate();
 
-
-
   useEffect(() => {
     if (!university?.universityid) return navigate("/preview");
 
@@ -50,14 +48,17 @@ const UniversityProfile = () => {
     try {
       const localStrData = JSON.parse(localStorage.getItem("user"));
       const type = localStrData.userType;
-      const response = await fetch("api/university/universityDetails", {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStrData.token,
-          type: type,
-        },
-      });
+      const response = await fetch(
+        "https://work-it-back.vercel.app/api/university/universityDetails",
+        {
+          method: "get",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStrData.token,
+            type: type,
+          },
+        }
+      );
       const json = await response.json();
       setUniversityData(json);
     } catch (error) {
@@ -78,17 +79,19 @@ const UniversityProfile = () => {
       localStrData.user.country = country;
       localStrData.user.city = city;
 
-      const response = await fetch("/api/university/editProfile", {
-        method: "put",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: "token: " + localStrData.token,
-          type: type,
-        },
-        body: JSON.stringify({ universityData: localStrData.user }),
-      });
+      const response = await fetch(
+        "https://work-it-back.vercel.app/api/university/editProfile",
+        {
+          method: "put",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: "token: " + localStrData.token,
+            type: type,
+          },
+          body: JSON.stringify({ universityData: localStrData.user }),
+        }
+      );
 
-      
       const updatedUserDataString = JSON.stringify(localStrData);
       localStorage.setItem("user", updatedUserDataString);
       navigate("/collegeview");
@@ -101,12 +104,15 @@ const UniversityProfile = () => {
     const localStrData = JSON.parse(localStorage.getItem("user"));
     const type = localStrData.userType;
     try {
-      const response = await fetch("/api/university/gallery", {
-        headers: {
-          authorization: "token: " + localStrData.token,
-          type: type,
-        },
-      });
+      const response = await fetch(
+        "https://work-it-back.vercel.app/api/university/gallery",
+        {
+          headers: {
+            authorization: "token: " + localStrData.token,
+            type: type,
+          },
+        }
+      );
       const data = await response.json();
 
       if (data.success) {
@@ -136,14 +142,17 @@ const UniversityProfile = () => {
       const formData = new FormData();
       formData.append("image", dataImage);
 
-      const response = await fetch("/api/university/uploadImage", {
-        method: "POST",
-        headers: {
-          authorization: "token: " + localStrData.token,
-          type: type,
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        "https://work-it-back.vercel.app/api/university/uploadImage",
+        {
+          method: "POST",
+          headers: {
+            authorization: "token: " + localStrData.token,
+            type: type,
+          },
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         const result = await response.json();
@@ -161,7 +170,7 @@ const UniversityProfile = () => {
   const refrechCities = async (country) => {
     const newCities = await getAllCitiesInCountry(country);
     setCities(newCities);
-   if(!university?.city) setCity(newCities[0]?.value);
+    if (!university?.city) setCity(newCities[0]?.value);
   };
 
   if (loading) return <Loader />;

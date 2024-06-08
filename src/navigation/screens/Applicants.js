@@ -9,7 +9,9 @@ export const loader = async ({ request, params }) => {
   if (!token) return redirect("/login");
 
   try {
-    const res = await fetch(`/api/${params.type}/${params.id}/getApplicaints/`);
+    const res = await fetch(
+      `https://work-it-back.vercel.app/api/${params.type}/${params.id}/getApplicaints/`
+    );
 
     const json = await res.json();
 

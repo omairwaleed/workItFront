@@ -41,15 +41,18 @@ const DetailsScreenScholar = () => {
     const { scholarshipid, universityname } = state;
 
     try {
-      const res = await fetch("/api/scholarship/apply", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userid,
-          scholarshipid,
-          universityname,
-        }),
-      });
+      const res = await fetch(
+        "https://work-it-back.vercel.app/api/scholarship/apply",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userid,
+            scholarshipid,
+            universityname,
+          }),
+        }
+      );
 
       const json = await res.json();
 

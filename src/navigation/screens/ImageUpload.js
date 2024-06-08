@@ -12,10 +12,13 @@ const ImageUpload = () => {
       const formData = new FormData();
       formData.append("image", image);
 
-      const response = await fetch("/api/user/uploadImage", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "https://work-it-back.vercel.app/api/user/uploadImage",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         const result = await response.json();

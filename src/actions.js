@@ -4,14 +4,17 @@ export const fetchUser = async () => {
   try {
     const localStrData = JSON.parse(localStorage.getItem("user"));
 
-    const response = await fetch("api/user/userDetails", {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStrData.token,
-        type: localStrData.userType,
-      },
-    });
+    const response = await fetch(
+      "https://work-it-back.vercel.app/api/user/userDetails",
+      {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStrData.token,
+          type: localStrData.userType,
+        },
+      }
+    );
 
     if (!response.ok) return { error: "Network response was not ok" };
 
@@ -26,12 +29,15 @@ export const fetchImage = async () => {
   const localStrData = JSON.parse(localStorage.getItem("user"));
   const type = localStrData.userType;
   try {
-    const response = await fetch("/api/user/gallery", {
-      headers: {
-        authorization: "token: " + localStrData.token,
-        type: type,
-      },
-    });
+    const response = await fetch(
+      "https://work-it-back.vercel.app/api/user/gallery",
+      {
+        headers: {
+          authorization: "token: " + localStrData.token,
+          type: type,
+        },
+      }
+    );
     const data = await response.json();
 
     if (data.success) {

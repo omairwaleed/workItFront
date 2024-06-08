@@ -53,7 +53,7 @@ const DetailsScreen = () => {
       state;
 
     try {
-      const res = await fetch("/api/job/apply", {
+      const res = await fetch("https://work-it-back.vercel.app/api/job/apply", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

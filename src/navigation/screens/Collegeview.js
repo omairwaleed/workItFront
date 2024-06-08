@@ -35,7 +35,8 @@ export default function Collegeview() {
 
   const getData = async () => {
     let url;
-    if (type === "scholarships") url = "api/scholarship/allScholarships/";
+    if (type === "scholarships")
+      url = "https://work-it-back.vercel.app/api/scholarship/allScholarships/";
     else url = "";
 
     try {
