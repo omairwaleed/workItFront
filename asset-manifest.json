@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/workItFront/static/css/main.9731886a.css",
+    "main.js": "/workItFront/static/js/main.d1fec0b2.js",
+    "static/media/Rectangle.png": "/workItFront/static/media/Rectangle.cbb7cce3c06de0f2df30.png",
+    "static/media/landingImage.png": "/workItFront/static/media/landingImage.7ec9d6427e6181f6fff2.png",
+    "static/media/mypoly.png": "/workItFront/static/media/mypoly.d9ca6f4db6afd746f5e7.png",
+    "static/media/scarab.png": "/workItFront/static/media/scarab.e98fd8c432b2369e1929.png",
+    "index.html": "/workItFront/index.html",
+    "main.9731886a.css.map": "/workItFront/static/css/main.9731886a.css.map",
+    "main.d1fec0b2.js.map": "/workItFront/static/js/main.d1fec0b2.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9731886a.css",
+    "static/js/main.d1fec0b2.js"
+  ]
+}
