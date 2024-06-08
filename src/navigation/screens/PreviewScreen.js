@@ -36,9 +36,15 @@ const PreviewScreen = () => {
 
   const getData = async () => {
     let url;
-    if (type === "jobs") url = "api/job/allJobs/";
-    else if (type === "scholarships") url = "api/scholarship/allScholarships/";
-    else url = "api/internship/allInternships/";
+    if (type === "jobs")
+      url =
+        "https://work-it-back-iua05b5k5-omair-waleeds-projects.vercel.app/api/job/allJobs/";
+    else if (type === "scholarships")
+      url =
+        "https://work-it-back-iua05b5k5-omair-waleeds-projects.vercel.app/api/scholarship/allScholarships/";
+    else
+      url =
+        "https://work-it-back-iua05b5k5-omair-waleeds-projects.vercel.app/api/internship/allInternships/";
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -91,8 +97,8 @@ const PreviewScreen = () => {
       type === "jobs"
         ? "jobtitle"
         : type === "interns"
-          ? "internshiptitle"
-          : "scholarshiptitle";
+        ? "internshiptitle"
+        : "scholarshiptitle";
     if (namesearchQuery && countrysearchQuery) {
       filtered = data.filter(
         (el) =>
@@ -167,10 +173,28 @@ const PreviewScreen = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  {JSON.parse(localStorage.getItem('user')).userType == "user" && <p>Hello, {myUser.user.name}</p>}
-                  {JSON.parse(localStorage.getItem('user')).userType == "company" && <p>Hello, {JSON.parse(localStorage.getItem('user')).user.companyname}</p>}
-                  {JSON.parse(localStorage.getItem('user')).userType == "university" && <p>Hello, {JSON.parse(localStorage.getItem('user')).user.universityname}</p>}
-
+                  {JSON.parse(localStorage.getItem("user")).userType ==
+                    "user" && <p>Hello, {myUser.user.name}</p>}
+                  {JSON.parse(localStorage.getItem("user")).userType ==
+                    "company" && (
+                    <p>
+                      Hello,{" "}
+                      {
+                        JSON.parse(localStorage.getItem("user")).user
+                          .companyname
+                      }
+                    </p>
+                  )}
+                  {JSON.parse(localStorage.getItem("user")).userType ==
+                    "university" && (
+                    <p>
+                      Hello,{" "}
+                      {
+                        JSON.parse(localStorage.getItem("user")).user
+                          .universityname
+                      }
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -184,33 +208,41 @@ const PreviewScreen = () => {
                   ></Dropdown.Toggle>
 
                   <Dropdown.Menu>
+                    {JSON.parse(localStorage.getItem("user")).userType ==
+                      "user" && (
+                      <Dropdown.Item>
+                        <Link
+                          style={{ textDecoration: "none", color: "black" }}
+                          to={"/profile"}
+                        >
+                          profile
+                        </Link>
+                      </Dropdown.Item>
+                    )}
 
-                    {JSON.parse(localStorage.getItem('user')).userType == "user" && <Dropdown.Item>
-                      <Link
-                        style={{ textDecoration: "none", color: "black" }}
-                        to={"/profile"}
-                      >
-                        profile
-                      </Link>
-                    </Dropdown.Item>}
+                    {JSON.parse(localStorage.getItem("user")).userType ==
+                      "company" && (
+                      <Dropdown.Item>
+                        <Link
+                          style={{ textDecoration: "none", color: "black" }}
+                          to={"/companyProfile"}
+                        >
+                          profile
+                        </Link>
+                      </Dropdown.Item>
+                    )}
 
-                    {JSON.parse(localStorage.getItem('user')).userType == "company" && <Dropdown.Item>
-                      <Link
-                        style={{ textDecoration: "none", color: "black" }}
-                        to={"/companyProfile"}
-                      >
-                        profile
-                      </Link>
-                    </Dropdown.Item>}
-
-                    {JSON.parse(localStorage.getItem('user')).userType == "university" && <Dropdown.Item>
-                      <Link
-                        style={{ textDecoration: "none", color: "black" }}
-                        to={"/universityProfile"}
-                      >
-                        profile
-                      </Link>
-                    </Dropdown.Item>}
+                    {JSON.parse(localStorage.getItem("user")).userType ==
+                      "university" && (
+                      <Dropdown.Item>
+                        <Link
+                          style={{ textDecoration: "none", color: "black" }}
+                          to={"/universityProfile"}
+                        >
+                          profile
+                        </Link>
+                      </Dropdown.Item>
+                    )}
 
                     <Dropdown.Item>
                       <Link
@@ -275,20 +307,23 @@ const PreviewScreen = () => {
         <div className={styles.Jobs_int_sch}>
           <div className={styles.title}>
             <span
-              className={`${styles.job_text} ${type === "jobs" && styles.selectedJobText
-                }`}
+              className={`${styles.job_text} ${
+                type === "jobs" && styles.selectedJobText
+              }`}
             >
               <p onClick={() => setType("jobs")}>JOBS</p>
             </span>
             <span
-              className={`${styles.job_text} ${type === "interns" && styles.selectedJobText
-                }`}
+              className={`${styles.job_text} ${
+                type === "interns" && styles.selectedJobText
+              }`}
             >
               <p onClick={() => setType("interns")}>INTERNSHIPS</p>
             </span>
             <span
-              className={`${styles.job_text} ${type === "scholarships" && styles.selectedJobText
-                }`}
+              className={`${styles.job_text} ${
+                type === "scholarships" && styles.selectedJobText
+              }`}
             >
               <p onClick={() => setType("scholarships")}>SCHOLARSIHPS</p>
             </span>
