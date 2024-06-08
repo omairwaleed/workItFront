@@ -35,14 +35,10 @@ const PreviewScreen = () => {
 
     let url;
     if (type === "jobs")
-      url =
-        "https://work-it-back-iua05b5k5-omair-waleeds-projects.vercel.app/api/job/allJobs/";
+      url = "https://work-it-back.vercel.app/api/job/allJobs/";
     else if (type === "scholarships")
-      url =
-        "https://work-it-back-iua05b5k5-omair-waleeds-projects.vercel.app/api/scholarship/allScholarships/";
-    else
-      url =
-        "https://work-it-back-iua05b5k5-omair-waleeds-projects.vercel.app/api/internship/allInternships/";
+      url = "https://work-it-back.vercel.app/api/scholarship/allScholarships/";
+    else url = "https://work-it-back.vercel.app/api/internship/allInternships/";
     try {
       const response = await fetch(url);
       if (!response.ok) {
