@@ -1,0 +1,9 @@
+.wrapper{
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+}
+
+.img{
+    width: 15dvw;
+}

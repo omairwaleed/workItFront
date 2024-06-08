@@ -1,14 +1,13 @@
-import React from "react";
 import styles from "../navigation/screens/previewStyle.module.css";
-import scarab from "../assets/scarab.png";
 import Button from "./Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import ErrorImageHandler from "./ErrorImageHandler";
 const ScholarshipCard = ({ data }) => {
   return (
-    <div style={{ width: "500px", marginBottom: 20 }}>
-      <a className={styles.my_card} style={{ width: "100%" }}>
+    <div>
+      <span className={styles.my_card} style={{ width: "100%" }}>
         <div className="d-flex justify-content-center align-items-center ">
-          <img src={scarab} width="78" height="80" alt="" />
+          <ErrorImageHandler src={data?.logo} />
         </div>
         <div className={styles.content} style={{ width: "100%" }}>
           <span className={styles.content_title}>{data.scholarshiptitle}</span>
@@ -26,7 +25,7 @@ const ScholarshipCard = ({ data }) => {
            Applicant review time is typically 4 days
          </span> */}
         </div>
-      </a>
+      </span>
     </div>
   );
 };

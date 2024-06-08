@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import fbIcon from "../../assets/fb-icon.png";
 import LinkedinIcon from "../../assets/Linkedin-icon.png";
 import googleIcon from "../../assets/google-icon.png";
@@ -9,23 +9,24 @@ import TextBox from "../../components/TextBox";
 import DropDown from "../../components/DropDown";
 import { useNavigate } from "react-router-dom";
 import { CompanySizes, CompanyCategories } from "../../data/DropDownData";
-import { getAllCountries, getAllCitiesInCountry } from "../../utilities/getCountriesAndCities";
+import {
+  getAllCountries,
+  getAllCitiesInCountry,
+} from "../../utilities/getCountriesAndCities";
 import "react-dropdown/style.css";
 
 const SignUpScreen = () => {
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState("user");
   const [error, setError] = useState();
-
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [mobileNumber, setMobileNumber] = useState();
-  const [country, setCountry] = useState();
-  const [city, setCity] = useState();
-  const [companySize, setCompanySize] = useState();
-  const [companyCategory, setCompanyCategory] = useState();
-
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [country, setCountry] = useState("Afghanistan");
+  const [city, setCity] = useState("Herat");
+  const [companySize, setCompanySize] = useState("1-10");
+  const [companyCategory, setCompanyCategory] = useState("software");
   const [cities, setCities] = useState([{}]);
   const [countries, setCountries] = useState([{}]);
 
@@ -34,6 +35,7 @@ const SignUpScreen = () => {
   };
 
   const handelSubmit = async (e) => {
+    e.preventDefault();
     if (!name) {
       setError("Please Enter your " + selectedOption + " name");
       return;
@@ -48,6 +50,15 @@ const SignUpScreen = () => {
       setError("Please Enter Valid password");
       return;
     }
+    if (selectedOption === "user" && !mobileNumber) {
+      setError("Please Enter Valid mobile number");
+      return;
+    }
+
+    const companyCategoryId =
+      CompanyCategories.filter((con) => con.value === companyCategory)[0]
+        ?.index || 0;
+
     const response = await fetch("/api/user/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -57,17 +68,17 @@ const SignUpScreen = () => {
         password,
         mobileNumber,
         country,
-        city,
+        city: city ?? "N/A",
         companySize,
         selectedOption,
-        companyCategory,
+        companyCategoryId,
       }),
     });
     const json = await response.json();
 
     if (response.ok) {
       console.log("every thing is ok");
-      setError();
+      setError("");
       navigate("/login");
       //redirected to the login page
     }
@@ -79,11 +90,14 @@ const SignUpScreen = () => {
   };
 
   const refrechCities = async () => {
-    setCities(await getAllCitiesInCountry(country))
-  }
+    const newCities = await getAllCitiesInCountry(country);
+    setCities(newCities);
+    setCity(newCities[0]?.value);
+  };
   const refrechCountries = async () => {
-    setCountries(await getAllCountries())
-  }
+    const newCountries = await getAllCountries();
+    setCountries(newCountries);
+  };
 
   useEffect(() => {
     refrechCountries();
@@ -96,22 +110,13 @@ const SignUpScreen = () => {
     }
   }, [navigate]);
 
-  useEffect(() => {
-    setError("");
-    setName("");
-    setEmail("");
-    setPassword("");
-    setMobileNumber("");
-    setCountry("");
-    setCity("");
-    setCompanySize("");
-    setCompanyCategory("");
-  }, [selectedOption]);
-
   return (
     <div className="body">
       <div className="parent d-flex ">
-        <div className="left d-flex justify-content-center flex-column p-5 gap-4 mt-4 ">
+        <form
+          className="left d-flex justify-content-center flex-column p-5 gap-4 mt-4"
+          onSubmit={handelSubmit}
+        >
           <div className="my_h1_size">Create Account</div>
           <div className="logos d-flex justify-content-center align-items-center gap-2  ">
             <a href="./" className="facebook ">
@@ -181,7 +186,7 @@ const SignUpScreen = () => {
             />
             {selectedOption === "user" && (
               <TextBox
-                type="text"
+                type="number"
                 placeholder="Mobile Number"
                 className="text_input"
                 onChange={(e) => setMobileNumber(e.target.value)}
@@ -210,7 +215,7 @@ const SignUpScreen = () => {
                 data={CompanySizes}
                 state={companySize}
                 setState={setCompanySize}
-                placeholder="company size"
+                placeholder="Company size"
                 className="text_input"
               />
             )}
@@ -221,23 +226,25 @@ const SignUpScreen = () => {
                 state={companyCategory}
                 setState={setCompanyCategory}
                 placeholder="Company category"
-                needIndex={true}
+                className="text_input"
               />
             )}
 
-            {error && <p style={{ maxWidth: '480px' }} className="error">{error}</p>}
+            <p className="error">{error}</p>
           </div>
 
           <div className="button_box d-flex justify-content-center align-items-center mt-4">
-            <Button buttonContent="JOIN NOW" onClick={handelSubmit} />
+            <Button buttonContent="JOIN NOW" />
           </div>
 
           {/* LOGIN */}
 
-          <Link className="having_acc" to={"/login"}>  {/*having_acc */}
+          <Link className="having_acc" to={"/login"}>
+            {" "}
+            {/*having_acc */}
             already have an account?
           </Link>
-        </div>
+        </form>
 
         <div className="right">
           <div className="col-md-10">

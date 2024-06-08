@@ -3,28 +3,29 @@ import styles from "./collegeview.module.css";
 import AppCard from "../../components/AppCard";
 import { getAllCountries } from "../../utilities/getCountriesAndCities";
 import Loader from "../../components/Loader";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "../../components/Navbar";
-import { Link, useNavigate } from "react-router-dom";
 
-export default function Collegeview() {
+export default function Companyview() {
+  const companyid = JSON.parse(localStorage?.getItem("user"))?.user?.companyid;
+  const [searchParams, setSearchQuery] = useSearchParams();
+
   const [countries, setCountries] = useState([]);
   const [data, setData] = useState();
   const [filteredData, setFilteredData] = useState(data);
   const [namesearchQuery, setnameSearchQuery] = useState("");
   const [countrysearchQuery, setCountrySearchQuery] = useState("");
-  const [type, setType] = useState("scholarships");
   const [loading, setLoading] = useState(false);
-  const universityid = JSON.parse(localStorage?.getItem("user"))?.user
-    .universityid;
+  const [type, setType] = useState(
+    searchParams.get("type") ? searchParams.get("type") : "internships"
+  );
   const navigate = useNavigate();
 
   const filterByName = (data) => {
-    // console.log(data);
-    // scholarshiptitle
-    if (type === "scholarships")
-      return data.filter((d) =>
-        d.scholarshiptitle.toLowerCase().includes(namesearchQuery.toLowerCase())
-      );
+    const title = type === "jobs" ? "jobtitle" : "internshiptitle";
+    return data?.filter((d) =>
+      d[title]?.toLowerCase().includes(namesearchQuery.toLowerCase())
+    );
   };
 
   const filterByCountry = (data) => {
@@ -35,8 +36,8 @@ export default function Collegeview() {
 
   const getData = async () => {
     let url;
-    if (type === "scholarships") url = "api/scholarship/allScholarships/";
-    else url = "";
+    if (type === "jobs") url = "api/job/allJobs/";
+    else url = "api/internship/allInternships/";
 
     try {
       setLoading(true);
@@ -45,7 +46,9 @@ export default function Collegeview() {
 
       const json = await response.json();
 
-      const myData = json.filter((d) => d.universityid === universityid);
+      const myData = json.filter((d) => d.companyid === companyid);
+
+      console.log(myData);
 
       setData(myData);
       setFilteredData(myData);
@@ -57,7 +60,7 @@ export default function Collegeview() {
   };
 
   useEffect(() => {
-    if (!universityid) return navigate("/preview");
+    if (!companyid) return navigate("/preview");
 
     const refreshCountries = async () => {
       setCountries(await getAllCountries());
@@ -84,7 +87,7 @@ export default function Collegeview() {
             <div className={styles.search}>
               <input
                 type="text"
-                placeholder="Search For a Scholarship"
+                placeholder="Search By Title"
                 value={namesearchQuery}
                 onChange={(e) => {
                   setnameSearchQuery(e.target.value);
@@ -116,8 +119,11 @@ export default function Collegeview() {
         </div>
 
         <div className={styles.rightbar}>
-          <Link to="/add-scholar" className="button-68 my_button" role="button">
-            Add Scholarship
+          <Link to="/add-intern" className="button-68 my_button" role="button">
+            Add Intern
+          </Link>
+          <Link to="/add-job" className="button-68 my_button" role="button">
+            Add Job
           </Link>
         </div>
       </div>
@@ -127,34 +133,46 @@ export default function Collegeview() {
         <div className={styles.checkbox}>
           <button
             className={`${styles.btnXX} ${
-              type === "scholarships" && styles.active
+              type === "internships" && styles.active
             }`}
             onClick={() => {
-              setType("scholarships");
+              setType("internships");
               setnameSearchQuery("");
               setCountrySearchQuery("");
+              setSearchQuery({ type: "internships" });
             }}
           >
-            Scholarships
+            Internships
+          </button>
+        </div>
+        <div className={styles.checkbox}>
+          <button
+            className={`${styles.btnXX} ${type === "jobs" && styles.active}`}
+            onClick={() => {
+              setType("jobs");
+              setnameSearchQuery("");
+              setCountrySearchQuery("");
+              setSearchQuery({ type: "jobs" });
+            }}
+          >
+            Jobs
           </button>
         </div>
       </div>
-
       {loading && <Loader />}
 
       {!loading && (
         <ol>
           {filteredData?.map((d) => (
             <AppCard
-              key={d.scholarshipid}
-              id={d.scholarshipid}
+              key={d.jobid || d.internshipid}
+              id={d.jobid || d.internshipid}
               type={type}
-              title={d.scholarshiptitle}
+              title={d.jobtitle || d.internshiptitle}
               country={d.country}
               city={d.city}
-              jobdescription={d.description}
+              jobdescription={d.jobdescription}
               requiredskills={d.requiredskills}
-              fundingpercentage={d.fundingpercentage}
             />
           ))}
         </ol>

@@ -53,4 +53,16 @@ const getAllCitiesInCountry = async (coutnry) => {
   }
 };
 
-export { getAllCountries, getAllCitiesInCountry };
+const getAllCategories = async () => {
+  try {
+    const res = await fetch("api/company/getCategories/");
+    const data = await res.json();
+
+    return data;
+  } catch (error) {
+    console.log(error);
+    return error.message;
+  }
+};
+
+export { getAllCountries, getAllCitiesInCountry, getAllCategories };

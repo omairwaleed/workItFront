@@ -1,0 +1,14 @@
+.filterBtn{
+    cursor: pointer;
+    border: none;
+    background-color: white;
+    padding: .65rem 1rem;
+    border-radius: .5rem;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    text-transform: capitalize;
+
+    &.selected{
+        background-color: #163043;
+        color: white;
+    }
+}

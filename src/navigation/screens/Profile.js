@@ -1,99 +1,91 @@
 import styles from "./profile.module.css";
 import { FaPenToSquare } from "react-icons/fa6";
-import { FaUser } from "react-icons/fa";
-import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { getAllCountries, getAllCitiesInCountry } from "../../utilities/getCountriesAndCities";
+import { useEffect, useState } from "react";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import {
+  getAllCountries,
+  getAllCitiesInCountry,
+} from "../../utilities/getCountriesAndCities";
 import DropDown from "../../components/DropDown";
-import defaultPP from "../../assets/defaultPP.jpeg";
+import Navbar from "../../components/Navbar";
+import Loader from "../../components/Loader";
+import { fetchImage, fetchUser } from "../../actions";
 
+export const loader = async ({ request, params }) => {
+  const userData = await fetchUser();
+  const profilePhoto = await fetchImage();
+
+  return { userData, profilePhoto };
+};
 
 const Profile = () => {
-  const [userData, setUserData] = useState("");
-  const [loading, setLoading] = useState(true);
+  const { userData: user, profilePhoto } = useLoaderData();
+  console.log(user);
+
+  const [userData, setUserData] = useState(user);
+  const [loading, setLoading] = useState(false);
   const [Image, setImage] = useState({ file: null, url: null });
   const [dataImage, setDataImage] = useState({ file: null, url: null });
-  const [profilePhoto, setProfilePhoto] = useState({ file: null, url: null });
-
   const [countries, setCountries] = useState([{}]);
   const [cities, setCities] = useState([{}]);
-
-  const [country, setCountry] = useState();
-  const [city, setCity] = useState();
-
-  const cvRef = useRef();
+  const [country, setCountry] = useState(user[0]?.country || "Afghanistan");
+  const [city, setCity] = useState(user[0]?.city || "Herat");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchUser();
-    fetchImage();
+    if (JSON.parse(localStorage.getItem("user"))?.userType !== "user")
+      return navigate("/preview");
   }, []);
 
   useEffect(() => {
     refrechCountries();
-    refrechCities();
+    refrechCities(country);
   }, [country]);
 
   useEffect(() => {
-    if (!loading) {
-      setUserData((prevUserData) => [{ ...prevUserData[0], country: country, },])
-      setUserData((prevUserData) => [{ ...prevUserData[0], city: city, },])
-    }
+    setUserData((prevUserData) => [
+      { ...prevUserData[0], country: country, city: city },
+    ]);
   }, [country, city]);
 
-  const navigate = useNavigate();
+  const handelSubmit = async (e) => {
+    e.preventDefault();
+    const localStrData = JSON.parse(localStorage.getItem("user"));
+    const formData = Object.fromEntries(new FormData(e.target));
+    const {
+      user: { userid },
+    } = localStrData;
 
-  const fetchUser = async () => {
     try {
-      const localStrData = JSON.parse(localStorage.getItem("user"));
-      const type = localStrData.userType;
-      const response = await fetch("api/user/userDetails", {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStrData.token,
-          type: type,
-        },
-      });
-      const json = await response.json();
-      await setUserData(json);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const handelSubmit = async () => {
-    try {
-      if (Image.url != null) {
-        handleFileChange();
-      }
-      if (cvRef.current?.files.length) {
-        uploadCv();
-      }
-      const localStrData = JSON.parse(localStorage.getItem("user"));
-      const type = localStrData.userType;
+      if (Image.url !== null) await handleFileChange();
+
+      if (formData.cv.size) await uploadCv({ userid, cv: formData.cv });
 
       const response = await fetch("/api/user/editProfile", {
         method: "put",
         headers: {
           "Content-Type": "application/json",
           authorization: "token: " + localStrData.token,
-          type: type,
+          type: "user",
         },
-        body: JSON.stringify({ userData: userData[0] }),
+        body: JSON.stringify({
+          userData: {
+            ...formData,
+            userid: userid,
+          },
+        }),
       });
-      //update token
+      // //update token
 
-      localStrData.user = userData[0];
+      localStrData.user = { userid, ...formData };
       const updatedUserDataString = JSON.stringify(localStrData);
       localStorage.setItem("user", updatedUserDataString);
 
-      //redirect to preview
-      if(response.ok){
-      navigate("/preview");
-      }
+      // //redirect to preview
+      if (response.ok) return navigate("/preview");
     } catch (error) {
-      console.error("Error:", error);    }
+      console.error("Error:", error);
+    }
   };
 
   const handleImageChange = (event) => {
@@ -129,37 +121,13 @@ const Profile = () => {
       console.error("Error:", error);
     }
   };
-  const fetchImage = async () => {
-    const localStrData = JSON.parse(localStorage.getItem("user"));
-    const type = localStrData.userType;
-    try {
-      const response = await fetch("/api/user/gallery", {
-        headers: {
-          authorization: "token: " + localStrData.token,
-          type: type,
-        },
-      });
-      const data = await response.json();
-
-      if (data.success) {
-        if (data.images[0].photo)
-          setProfilePhoto(data.images[0]);
-        else
-          setProfilePhoto({ photo: defaultPP });
-      } else {
-        console.error("Failed to fetch images");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  const uploadCv = async () => {
+  const uploadCv = async ({ userid, cv }) => {
     try {
       const localStrData = JSON.parse(localStorage.getItem("user"));
       const formData = new FormData();
-      formData.set("cv", cvRef.current?.files[0]);
-      formData.set("id", localStrData.user.userid);
+      formData.set("cv", cv);
+      formData.set("id", userid);
+      setLoading(true);
       const response = await fetch("/api/user/uploadCv", {
         method: "POST",
         headers: {
@@ -168,6 +136,7 @@ const Profile = () => {
         body: formData,
       });
 
+      setLoading(false);
       if (response.ok) {
         return true;
       } else {
@@ -175,27 +144,26 @@ const Profile = () => {
       }
     } catch (error) {
       console.log("error while uploading cv ", error);
+      setLoading(false);
       return false;
     }
   };
-
   const refrechCountries = async () => {
-    setCountries(await getAllCountries())
-  }
-  const refrechCities = async () => {
-    setCities(await getAllCitiesInCountry(country))
-  }
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+    setCountries(await getAllCountries());
+  };
+  const refrechCities = async (country) => {
+    const newCities = await getAllCitiesInCountry(country);
+    setCities(newCities);
+    if (!userData[0].city) setCity(newCities[0]?.value);
+  };
 
   return (
     <div>
-      <header className={styles.header}>
-        <span className={styles.text}>EDIT YOUR PROFILE</span>
-      </header>
-      <div className={styles.main}>
+      <Navbar />
+      <h2 className={styles.text} style={{ textAlign: "center" }}>
+        EDIT YOUR PROFILE
+      </h2>
+      <form onSubmit={handelSubmit} className={styles.main}>
         <div className={styles.user}>
           <div
             style={{
@@ -230,7 +198,6 @@ const Profile = () => {
                 }}
               />
             )}
-
           </div>
           <label
             htmlFor="fileInput"
@@ -246,6 +213,7 @@ const Profile = () => {
               type="file"
               id="fileInput"
               className="file-input"
+              name="photo"
               style={{
                 position: "absolute",
                 opacity: 0,
@@ -266,6 +234,7 @@ const Profile = () => {
               type="text"
               placeholder={userData[0].name}
               value={userData[0].name}
+              name="name"
               onChange={(e) =>
                 setUserData((prevUserData) => [
                   { ...prevUserData[0], name: e.target.value },
@@ -279,6 +248,7 @@ const Profile = () => {
               type="text"
               placeholder={userData[0].lastname}
               value={userData[0].lastname}
+              name="lastname"
               onChange={(e) =>
                 setUserData((prevUserData) => [
                   { ...prevUserData[0], lastname: e.target.value },
@@ -287,23 +257,28 @@ const Profile = () => {
             />
           </div>
         </div>
-        <div className={styles.email}>
-          <span className={styles.text}>
-            CV{" "}
-            {userData[0].cv ? (
-              <span style={{ fontSize: 16, fontWeight: 400, marginLeft: 5 }}>
-                your uploaded cv is {userData[0].cv.split("_").slice(1)}{" "}
-              </span>
-            ) : null}
-          </span>
-          <input type="file" ref={cvRef} />
-        </div>
+        {loading ? (
+          <Loader />
+        ) : (
+          <div className={styles.email}>
+            <span className={styles.text}>
+              CV{" "}
+              {userData[0].cv ? (
+                <span style={{ fontSize: 16, fontWeight: 400, marginLeft: 5 }}>
+                  your uploaded cv is {userData[0]?.cv?.split("_").slice(1)}{" "}
+                </span>
+              ) : null}
+            </span>
+            <input type="file" accept="application/pdf" name="cv" />
+          </div>
+        )}
         <div className={styles.email}>
           <span className={styles.text}>Email</span>
           <input
             type="text"
             placeholder={userData[0].email}
             value={userData[0].email}
+            name="email"
             onChange={(e) =>
               setUserData((prevUserData) => [
                 { ...prevUserData[0], email: e.target.value },
@@ -316,6 +291,7 @@ const Profile = () => {
           <input
             type="password"
             placeholder="********"
+            name="password"
             onChange={(e) =>
               setUserData((prevUserData) => [
                 { ...prevUserData[0], password: e.target.value },
@@ -329,6 +305,7 @@ const Profile = () => {
             type="text"
             placeholder={userData[0].mobilenumber}
             value={userData[0].mobilenumber}
+            name="mobilenumber"
             onChange={(e) =>
               setUserData((prevUserData) => [
                 { ...prevUserData[0], mobilenumber: e.target.value },
@@ -339,13 +316,13 @@ const Profile = () => {
         <div className={styles.address}>
           <span className={styles.text}>Address</span>
           <div className={styles.address_inputs}>
-
             <DropDown
               data={countries}
               placeholder={userData[0].country}
               className="text_input"
               state={country}
               setState={setCountry}
+              name={"country"}
             />
 
             {/* <input
@@ -365,6 +342,7 @@ const Profile = () => {
               className="text_input"
               state={city}
               setState={setCity}
+              name={"city"}
             />
 
             {/* <input
@@ -381,9 +359,9 @@ const Profile = () => {
           </div>
         </div>
         <div className={styles.save}>
-          <button onClick={handelSubmit}>Save</button>
+          <button>Save</button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
