@@ -7,3 +7,14 @@
 .img{
     width: 15dvw;
 }
+
+@media screen and (max-width: 768px) {
+    .wrapper{
+        flex-direction: column;
+        gap: 1.5rem;
+    }    
+    .info{
+        width: 90%;
+        margin-inline: auto;
+    }
+}
