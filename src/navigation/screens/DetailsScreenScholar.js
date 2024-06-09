@@ -211,7 +211,7 @@ const DetailsScreenScholar = () => {
           </ol>
         </section>
         <button
-          disabled={isDisabled}
+          disabled={user?.error ? true : isDisabled}
           className={styles.applybtn}
           onClick={handleApply}
         >
@@ -234,7 +234,7 @@ const DetailsScreenScholar = () => {
           </div> */}
 
           <button
-            disabled={isDisabled}
+            disabled={user?.error ? true : isDisabled}
             className={styles.applybtn}
             onClick={handleApply}
           >

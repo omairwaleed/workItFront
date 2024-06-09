@@ -1,7 +1,7 @@
 import styles from "./profile.module.css";
 import { FaPenToSquare } from "react-icons/fa6";
 import { useEffect, useState } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { Navigate, useLoaderData, useNavigate } from "react-router-dom";
 import {
   getAllCountries,
   getAllCitiesInCountry,
@@ -10,6 +10,7 @@ import DropDown from "../../components/DropDown";
 import Navbar from "../../components/Navbar";
 import Loader from "../../components/Loader";
 import { fetchImage, fetchUser } from "../../actions";
+import Modal from "../../components/Modal";
 
 export const loader = async ({ request, params }) => {
   const userData = await fetchUser();
@@ -31,6 +32,7 @@ const Profile = () => {
   const [country, setCountry] = useState(user[0]?.country || "Afghanistan");
   const [city, setCity] = useState(user[0]?.city || "Herat");
   const navigate = useNavigate();
+  const [modal, setModal] = useState({ show: true });
 
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("user"))?.userType !== "user")
@@ -163,8 +165,23 @@ const Profile = () => {
   const refrechCities = async (country) => {
     const newCities = await getAllCitiesInCountry(country);
     setCities(newCities);
-    if (!userData[0].city) setCity(newCities[0]?.value);
+    if (!userData[0]?.city) setCity(newCities[0]?.value);
   };
+
+  const handleClose = () => {
+    setModal({ show: false });
+    navigate(`/`);
+  };
+
+  if (user?.error)
+    return (
+      <Modal
+        show={modal}
+        title={"Error"}
+        body={"Your login session has been expired. Please login again."}
+        handleClose={handleClose}
+      />
+    );
 
   return (
     <div>
@@ -241,8 +258,8 @@ const Profile = () => {
             <span className={styles.text}>First Name</span>
             <input
               type="text"
-              placeholder={userData[0].name}
-              value={userData[0].name}
+              placeholder={userData[0]?.name}
+              value={userData[0]?.name}
               name="name"
               onChange={(e) =>
                 setUserData((prevUserData) => [
@@ -255,8 +272,8 @@ const Profile = () => {
             <span className={styles.text}>Last Name</span>
             <input
               type="text"
-              placeholder={userData[0].lastname}
-              value={userData[0].lastname}
+              placeholder={userData[0]?.lastname}
+              value={userData[0]?.lastname}
               name="lastname"
               onChange={(e) =>
                 setUserData((prevUserData) => [
@@ -272,7 +289,7 @@ const Profile = () => {
           <div className={styles.email}>
             <span className={styles.text}>
               CV{" "}
-              {userData[0].cv ? (
+              {userData[0]?.cv ? (
                 <span style={{ fontSize: 16, fontWeight: 400, marginLeft: 5 }}>
                   your uploaded cv is {userData[0]?.cv?.split("_").slice(1)}{" "}
                 </span>
@@ -285,8 +302,8 @@ const Profile = () => {
           <span className={styles.text}>Email</span>
           <input
             type="text"
-            placeholder={userData[0].email}
-            value={userData[0].email}
+            placeholder={userData[0]?.email}
+            value={userData[0]?.email}
             name="email"
             onChange={(e) =>
               setUserData((prevUserData) => [
@@ -312,8 +329,8 @@ const Profile = () => {
           <span className={styles.text}>Phone Number</span>
           <input
             type="text"
-            placeholder={userData[0].mobilenumber}
-            value={userData[0].mobilenumber}
+            placeholder={userData[0]?.mobilenumber}
+            value={userData[0]?.mobilenumber}
             name="mobilenumber"
             onChange={(e) =>
               setUserData((prevUserData) => [
@@ -327,7 +344,7 @@ const Profile = () => {
           <div className={styles.address_inputs}>
             <DropDown
               data={countries}
-              placeholder={userData[0].country}
+              placeholder={userData[0]?.country}
               className="text_input"
               state={country}
               setState={setCountry}
@@ -347,7 +364,7 @@ const Profile = () => {
 
             <DropDown
               data={cities}
-              placeholder={userData[0].city}
+              placeholder={userData[0]?.city}
               className="text_input"
               state={city}
               setState={setCity}

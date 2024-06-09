@@ -18,7 +18,7 @@ const ApplicantStatus = ({
         <div className={styles.wrapper}>
           <Card.Img src={photo ?? defaultPP} className={styles.img} />
 
-          <div>
+          <div className={styles.info}>
             <Card.Title>{name}</Card.Title>
             <Card.Subtitle className="mb-2 text-muted">
               {city}, {country}

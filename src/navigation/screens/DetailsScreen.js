@@ -226,7 +226,7 @@ const DetailsScreen = () => {
           </ol>
         </section>
         <button
-          disabled={isDisabled}
+          disabled={userData?.error ? true : isDisabled}
           className={styles.applybtn}
           onClick={handleApply}
         >
@@ -249,7 +249,7 @@ const DetailsScreen = () => {
           </div> */}
 
           <button
-            disabled={isDisabled}
+            disabled={userData?.error ? true : isDisabled}
             className={styles.applybtn}
             onClick={handleApply}
           >
