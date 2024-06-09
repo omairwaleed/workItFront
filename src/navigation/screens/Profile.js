@@ -21,12 +21,11 @@ export const loader = async ({ request, params }) => {
 
 const Profile = () => {
   const { userData: user, profilePhoto } = useLoaderData();
-  console.log(user);
 
   const [userData, setUserData] = useState(user);
   const [loading, setLoading] = useState(false);
   const [Image, setImage] = useState({ file: null, url: null });
-  const [dataImage, setDataImage] = useState({ file: null, url: null });
+  const [dataImage, setDataImage] = useState();
   const [countries, setCountries] = useState([{}]);
   const [cities, setCities] = useState([{}]);
   const [country, setCountry] = useState(user[0]?.country || "Afghanistan");
@@ -59,9 +58,15 @@ const Profile = () => {
     } = localStrData;
 
     try {
-      if (Image.url !== null) await handleFileChange();
+      if (Image.url !== null) {
+        const imageURL = await handleFileChange();
+        formData.imageURL = imageURL;
+      }
 
-      if (formData.cv.size) await uploadCv({ userid, cv: formData.cv });
+      if (formData.cv.size) {
+        const cvURl = await uploadCv({ cv: formData.cv });
+        formData.cvURl = cvURl;
+      }
 
       const response = await fetch(
         "https://work-it-back.vercel.app/api/user/editProfile",
@@ -103,60 +108,58 @@ const Profile = () => {
   };
   const handleFileChange = async () => {
     try {
-      const localStrData = JSON.parse(localStorage.getItem("user"));
-      const type = localStrData.userType;
-      const formData = new FormData();
-      formData.append("image", dataImage);
-
-      const response = await fetch(
-        "https://work-it-back.vercel.app/api/user/uploadImage",
-        {
-          method: "POST",
-          headers: {
-            authorization: "token: " + localStrData.token,
-            type: type,
-          },
-          body: formData,
-        }
-      );
-
-      if (response.ok) {
-        console.log("Image uploaded successfully:");
+      let imageURL;
+      if (
+        dataImage &&
+        (dataImage.type === "image/png" ||
+          dataImage.type === "image/jpg" ||
+          dataImage.type === "image/jpeg")
+      ) {
+        const image = new FormData();
+        image.append("file", dataImage);
+        image.append("cloud_name", "dapnyieo6");
+        image.append("upload_preset", "gyeiwufc");
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/dapnyieo6/image/upload",
+          {
+            method: "post",
+            body: image,
+          }
+        );
+        const imgData = await response.json();
+        imageURL = imgData.url.toString();
+        return imageURL;
       } else {
-        console.error("Failed to upload image");
+        alert("type should be png or jpg or jpeg ");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error while uploading image: ", error);
     }
   };
-  const uploadCv = async ({ userid, cv }) => {
+  const uploadCv = async ({ cv }) => {
     try {
-      const localStrData = JSON.parse(localStorage.getItem("user"));
-      const formData = new FormData();
-      formData.set("cv", cv);
-      formData.set("id", userid);
-      setLoading(true);
-      const response = await fetch(
-        "https://work-it-back.vercel.app/api/user/uploadCv",
-        {
-          method: "POST",
-          headers: {
-            authorization: "token: " + localStrData.token,
-          },
-          body: formData,
-        }
-      );
-
-      setLoading(false);
-      if (response.ok) {
-        return true;
+      let cvURL;
+      if (cv && cv.type === "application/pdf") {
+        const file = new FormData();
+        file.append("file", cv);
+        file.append("cloud_name", "dapnyieo6");
+        file.append("upload_preset", "swjjtdpv");
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/dapnyieo6/auto/upload",
+          {
+            method: "post",
+            mode: "cors",
+            body: file,
+          }
+        );
+        const cvData = await response.json();
+        cvURL = cvData.url.toString();
+        return cvURL;
       } else {
-        return false;
+        alert("type should be PDF ");
       }
     } catch (error) {
-      console.log("error while uploading cv ", error);
-      setLoading(false);
-      return false;
+      console.error("Error while uploading image: ", error);
     }
   };
   const refrechCountries = async () => {
@@ -237,6 +240,7 @@ const Profile = () => {
             <FaPenToSquare className="pen-icon" style={{ cursor: "pointer" }} />
             <input
               type="file"
+              accept="image/png, image/jpeg"
               id="fileInput"
               className="file-input"
               name="photo"

@@ -70,14 +70,16 @@ const UniversityProfile = () => {
 
   const handelSubmit = async () => {
     try {
+      let imageUrl;
       if (Image.url != null) {
-        handleFileChange();
+        imageUrl = await handleFileChange();
       }
       const localStrData = JSON.parse(localStorage.getItem("user"));
       const type = localStrData.userType;
       localStrData.user = universityData[0];
       localStrData.user.country = country;
       localStrData.user.city = city;
+      localStrData.user.imageUrl = imageUrl;
 
       const response = await fetch(
         "https://work-it-back.vercel.app/api/university/editProfile",
@@ -137,30 +139,32 @@ const UniversityProfile = () => {
 
   const handleFileChange = async () => {
     try {
-      const localStrData = JSON.parse(localStorage.getItem("user"));
-      const type = localStrData.userType;
-      const formData = new FormData();
-      formData.append("image", dataImage);
-
-      const response = await fetch(
-        "https://work-it-back.vercel.app/api/university/uploadImage",
-        {
-          method: "POST",
-          headers: {
-            authorization: "token: " + localStrData.token,
-            type: type,
-          },
-          body: formData,
-        }
-      );
-
-      if (response.ok) {
-        const result = await response.json();
+      let imageURL;
+      if (
+        dataImage &&
+        (dataImage.type === "image/png" ||
+          dataImage.type === "image/jpg" ||
+          dataImage.type === "image/jpeg")
+      ) {
+        const image = new FormData();
+        image.append("file", dataImage);
+        image.append("cloud_name", "dapnyieo6");
+        image.append("upload_preset", "gyeiwufc");
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/dapnyieo6/image/upload",
+          {
+            method: "post",
+            body: image,
+          }
+        );
+        const imgData = await response.json();
+        imageURL = imgData.url.toString();
+        return imageURL;
       } else {
-        console.error("Failed to upload image");
+        alert("type should be png or jpg or jpeg ");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error while uploading image:", error);
     }
   };
 
@@ -228,6 +232,7 @@ const UniversityProfile = () => {
           >
             <FaPenToSquare className="pen-icon" style={{ cursor: "pointer" }} />
             <input
+              accept="image/png, image/jpeg"
               type="file"
               id="fileInput"
               className="file-input"

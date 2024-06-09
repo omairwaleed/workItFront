@@ -84,14 +84,18 @@ const CompanyProfile = () => {
   };
 
   const handelSubmit = async () => {
+    let imageUrl;
     try {
-      if (Image.url != null) handleFileChange();
+      if (Image.url != null) {
+        imageUrl = await handleFileChange();
+      }
 
       const localStrData = JSON.parse(localStorage.getItem("user"));
       const type = localStrData.userType;
       localStrData.user = companyData[0];
       localStrData.user.country = country;
       localStrData.user.city = city;
+      localStrData.user.imageUrl = imageUrl;
 
       const response = await fetch(
         "https://work-it-back.vercel.app/api/company/editProfile",
@@ -150,31 +154,32 @@ const CompanyProfile = () => {
 
   const handleFileChange = async () => {
     try {
-      const localStrData = JSON.parse(localStorage.getItem("user"));
-      const type = localStrData.userType;
-      const formData = new FormData();
-      formData.append("image", dataImage);
-
-      const response = await fetch(
-        "https://work-it-back.vercel.app/api/company/uploadImage",
-        {
-          method: "POST",
-          headers: {
-            authorization: "token: " + localStrData.token,
-            type: type,
-          },
-          body: formData,
-        }
-      );
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log("Image uploaded successfully:", result.imageUrl);
+      let imageURL;
+      if (
+        dataImage &&
+        (dataImage.type === "image/png" ||
+          dataImage.type === "image/jpg" ||
+          dataImage.type === "image/jpeg")
+      ) {
+        const image = new FormData();
+        image.append("file", dataImage);
+        image.append("cloud_name", "dapnyieo6");
+        image.append("upload_preset", "gyeiwufc");
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/dapnyieo6/image/upload",
+          {
+            method: "post",
+            body: image,
+          }
+        );
+        const imgData = await response.json();
+        imageURL = imgData.url.toString();
+        return imageURL;
       } else {
-        console.error("Failed to upload image");
+        alert("type should be png or jpg or jpeg ");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error while uploading image:", error);
     }
   };
   const refrechCities = async (country) => {
@@ -251,6 +256,7 @@ const CompanyProfile = () => {
             <input
               type="file"
               id="fileInput"
+              accept="image/png, image/jpeg"
               className="file-input"
               style={{
                 position: "absolute",
