@@ -15,6 +15,7 @@ import Modal from "../../components/Modal";
 export const loader = async ({ request, params }) => {
   const userData = await fetchUser();
   const profilePhoto = await fetchImage();
+  console.log("here we are ", userData);
 
   return { userData, profilePhoto };
 };
@@ -56,16 +57,21 @@ const Profile = () => {
     const {
       user: { userid },
     } = localStrData;
-
     try {
       if (Image.url !== null) {
         const imageURL = await handleFileChange();
         formData.imageURL = imageURL;
+      } else {
+        formData.imageURL = userData[0].photo;
       }
 
       if (formData.cv.size) {
         const cvURl = await uploadCv({ cv: formData.cv });
         formData.cvURl = cvURl;
+        formData.cvName = formData.cv.name;
+      } else {
+        formData.cvURl = userData[0].cv;
+        formData.cvName = userData[0].cvName;
       }
 
       const response = await fetch(
@@ -295,7 +301,7 @@ const Profile = () => {
               CV{" "}
               {userData[0]?.cv ? (
                 <span style={{ fontSize: 16, fontWeight: 400, marginLeft: 5 }}>
-                  your uploaded cv is {userData[0]?.cv?.split("_").slice(1)}{" "}
+                  your uploaded cv is {userData[0]?.cvname}
                 </span>
               ) : null}
             </span>
