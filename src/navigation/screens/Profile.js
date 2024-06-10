@@ -51,6 +51,7 @@ const Profile = () => {
 
   const handelSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     const localStrData = JSON.parse(localStorage.getItem("user"));
     const formData = Object.fromEntries(new FormData(e.target));
     const {
@@ -95,9 +96,10 @@ const Profile = () => {
       if (response.ok) return navigate("/preview");
     } catch (error) {
       console.error("Error:", error);
+    }finally{
+      setLoading(false)
     }
   };
-
   const handleImageChange = (event) => {
     if (event.target.files[0]) {
       const file = event.target.files[0];
@@ -192,6 +194,7 @@ const Profile = () => {
       <h2 className={styles.text} style={{ textAlign: "center" }}>
         EDIT YOUR PROFILE
       </h2>
+      {loading ? <Loader/> :
       <form onSubmit={handelSubmit} className={styles.main}>
         <div className={styles.user}>
           <div
@@ -353,19 +356,7 @@ const Profile = () => {
               state={country}
               setState={setCountry}
               name={"country"}
-            />
-
-            {/* <input
-              type="text"
-              placeholder={userData[0].city}
-              value={userData[0].city}
-              onChange={(e) =>
-                setUserData((prevUserData) => [
-                  { ...prevUserData[0], city: e.target.value },
-                ])
-              }
-            /> */}
-
+            /> 
             <DropDown
               data={cities}
               placeholder={userData[0]?.city}
@@ -374,24 +365,12 @@ const Profile = () => {
               setState={setCity}
               name={"city"}
             />
-
-            {/* <input
-              type="text"
-              placeholder={userData[0].country}
-              value={userData[0].country}
-              onChange={(e) =>
-                setUserData((prevUserData) => [
-                  { ...prevUserData[0], country: e.target.value },
-                ])
-              }
-            /> */}
-            {/* <input type="text" placeholder="ZIP Code (Optional)" /> */}
           </div>
         </div>
         <div className={styles.save}>
           <button>Save</button>
         </div>
-      </form>
+      </form>}
     </div>
   );
 };
