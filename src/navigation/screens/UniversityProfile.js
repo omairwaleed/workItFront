@@ -79,7 +79,7 @@ const UniversityProfile = () => {
       localStrData.user = universityData[0];
       localStrData.user.country = country;
       localStrData.user.city = city;
-      localStrData.user.imageUrl = imageUrl;
+      localStrData.user.imageUrl = imageUrl ? imageUrl : universityData[0].logo;
 
       const response = await fetch(
         "https://work-it-back.vercel.app/api/university/editProfile",

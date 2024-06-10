@@ -52,7 +52,7 @@ const Profile = () => {
 
   const handelSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
     const localStrData = JSON.parse(localStorage.getItem("user"));
     const formData = Object.fromEntries(new FormData(e.target));
     const {
@@ -72,7 +72,7 @@ const Profile = () => {
         formData.cvName = formData.cv.name;
       } else {
         formData.cvURl = userData[0].cv;
-        formData.cvName = userData[0].cvName;
+        formData.cvName = userData[0].cvname;
       }
 
       const response = await fetch(
@@ -102,8 +102,8 @@ const Profile = () => {
       if (response.ok) return navigate("/preview");
     } catch (error) {
       console.error("Error:", error);
-    }finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
   const handleImageChange = (event) => {
@@ -200,183 +200,191 @@ const Profile = () => {
       <h2 className={styles.text} style={{ textAlign: "center" }}>
         EDIT YOUR PROFILE
       </h2>
-      {loading ? <Loader/> :
-      <form onSubmit={handelSubmit} className={styles.main}>
-        <div className={styles.user}>
-          <div
-            style={{
-              width: "150px",
-              height: "150px",
-              overflow: "hidden",
-              borderRadius: "50%",
-            }}
-            className={styles.photo}
-          >
-            {Image.url && (
-              <img
-                src={Image.url}
-                alt="imagep"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "50%",
-                }}
-              />
-            )}
-            {!Image.url && (
-              <img
-                src={profilePhoto.photo}
-                alt="Profile"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "50%",
-                }}
-              />
-            )}
-          </div>
-          <label
-            htmlFor="fileInput"
-            className="file-input-label"
-            style={{
-              position: "relative",
-              overflow: "hidden",
-              width: "fit-content",
-            }}
-          >
-            <FaPenToSquare className="pen-icon" style={{ cursor: "pointer" }} />
-            <input
-              type="file"
-              accept="image/png, image/jpeg"
-              id="fileInput"
-              className="file-input"
-              name="photo"
+      {loading ? (
+        <Loader />
+      ) : (
+        <form onSubmit={handelSubmit} className={styles.main}>
+          <div className={styles.user}>
+            <div
               style={{
-                position: "absolute",
-                opacity: 0,
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                cursor: "pointer",
+                width: "150px",
+                height: "150px",
+                overflow: "hidden",
+                borderRadius: "50%",
               }}
-              onChange={(e) => handleImageChange(e)}
-            />
-          </label>
-        </div>
-        <div className={styles.name}>
-          <div className={styles.first_name}>
-            <span className={styles.text}>First Name</span>
-            <input
-              type="text"
-              placeholder={userData[0]?.name}
-              value={userData[0]?.name}
-              name="name"
-              onChange={(e) =>
-                setUserData((prevUserData) => [
-                  { ...prevUserData[0], name: e.target.value },
-                ])
-              }
-            />
+              className={styles.photo}
+            >
+              {Image.url && (
+                <img
+                  src={Image.url}
+                  alt="imagep"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: "50%",
+                  }}
+                />
+              )}
+              {!Image.url && (
+                <img
+                  src={profilePhoto.photo}
+                  alt="Profile"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: "50%",
+                  }}
+                />
+              )}
+            </div>
+            <label
+              htmlFor="fileInput"
+              className="file-input-label"
+              style={{
+                position: "relative",
+                overflow: "hidden",
+                width: "fit-content",
+              }}
+            >
+              <FaPenToSquare
+                className="pen-icon"
+                style={{ cursor: "pointer" }}
+              />
+              <input
+                type="file"
+                accept="image/png, image/jpeg"
+                id="fileInput"
+                className="file-input"
+                name="photo"
+                style={{
+                  position: "absolute",
+                  opacity: 0,
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  cursor: "pointer",
+                }}
+                onChange={(e) => handleImageChange(e)}
+              />
+            </label>
           </div>
-          <div className={styles.last_name}>
-            <span className={styles.text}>Last Name</span>
-            <input
-              type="text"
-              placeholder={userData[0]?.lastname}
-              value={userData[0]?.lastname}
-              name="lastname"
-              onChange={(e) =>
-                setUserData((prevUserData) => [
-                  { ...prevUserData[0], lastname: e.target.value },
-                ])
-              }
-            />
+          <div className={styles.name}>
+            <div className={styles.first_name}>
+              <span className={styles.text}>First Name</span>
+              <input
+                type="text"
+                placeholder={userData[0]?.name}
+                value={userData[0]?.name}
+                name="name"
+                onChange={(e) =>
+                  setUserData((prevUserData) => [
+                    { ...prevUserData[0], name: e.target.value },
+                  ])
+                }
+              />
+            </div>
+            <div className={styles.last_name}>
+              <span className={styles.text}>Last Name</span>
+              <input
+                type="text"
+                placeholder={userData[0]?.lastname}
+                value={userData[0]?.lastname}
+                name="lastname"
+                onChange={(e) =>
+                  setUserData((prevUserData) => [
+                    { ...prevUserData[0], lastname: e.target.value },
+                  ])
+                }
+              />
+            </div>
           </div>
-        </div>
-        {loading ? (
-          <Loader />
-        ) : (
+          {loading ? (
+            <Loader />
+          ) : (
+            <div className={styles.email}>
+              <span className={styles.text}>
+                CV{" "}
+                {userData[0]?.cv ? (
+                  <span
+                    style={{ fontSize: 16, fontWeight: 400, marginLeft: 5 }}
+                  >
+                    your uploaded cv is {userData[0]?.cvname}
+                  </span>
+                ) : null}
+              </span>
+              <input type="file" accept="application/pdf" name="cv" />
+            </div>
+          )}
           <div className={styles.email}>
-            <span className={styles.text}>
-              CV{" "}
-              {userData[0]?.cv ? (
-                <span style={{ fontSize: 16, fontWeight: 400, marginLeft: 5 }}>
-                  your uploaded cv is {userData[0]?.cvname}
-                </span>
-              ) : null}
-            </span>
-            <input type="file" accept="application/pdf" name="cv" />
-          </div>
-        )}
-        <div className={styles.email}>
-          <span className={styles.text}>Email</span>
-          <input
-            type="text"
-            placeholder={userData[0]?.email}
-            value={userData[0]?.email}
-            name="email"
-            onChange={(e) =>
-              setUserData((prevUserData) => [
-                { ...prevUserData[0], email: e.target.value },
-              ])
-            }
-          />
-        </div>
-        <div className={styles.pass}>
-          <span className={styles.text}>Password</span>
-          <input
-            type="password"
-            placeholder="********"
-            name="password"
-            onChange={(e) =>
-              setUserData((prevUserData) => [
-                { ...prevUserData[0], password: e.target.value },
-              ])
-            }
-          />
-        </div>
-        <div className={styles.phone}>
-          <span className={styles.text}>Phone Number</span>
-          <input
-            type="text"
-            placeholder={userData[0]?.mobilenumber}
-            value={userData[0]?.mobilenumber}
-            name="mobilenumber"
-            onChange={(e) =>
-              setUserData((prevUserData) => [
-                { ...prevUserData[0], mobilenumber: e.target.value },
-              ])
-            }
-          />
-        </div>
-        <div className={styles.address}>
-          <span className={styles.text}>Address</span>
-          <div className={styles.address_inputs}>
-            <DropDown
-              data={countries}
-              placeholder={userData[0]?.country}
-              className="text_input"
-              state={country}
-              setState={setCountry}
-              name={"country"}
-            /> 
-            <DropDown
-              data={cities}
-              placeholder={userData[0]?.city}
-              className="text_input"
-              state={city}
-              setState={setCity}
-              name={"city"}
+            <span className={styles.text}>Email</span>
+            <input
+              type="text"
+              placeholder={userData[0]?.email}
+              value={userData[0]?.email}
+              name="email"
+              onChange={(e) =>
+                setUserData((prevUserData) => [
+                  { ...prevUserData[0], email: e.target.value },
+                ])
+              }
             />
           </div>
-        </div>
-        <div className={styles.save}>
-          <button>Save</button>
-        </div>
-      </form>}
+          <div className={styles.pass}>
+            <span className={styles.text}>Password</span>
+            <input
+              type="password"
+              placeholder="********"
+              name="password"
+              onChange={(e) =>
+                setUserData((prevUserData) => [
+                  { ...prevUserData[0], password: e.target.value },
+                ])
+              }
+            />
+          </div>
+          <div className={styles.phone}>
+            <span className={styles.text}>Phone Number</span>
+            <input
+              type="text"
+              placeholder={userData[0]?.mobilenumber}
+              value={userData[0]?.mobilenumber}
+              name="mobilenumber"
+              onChange={(e) =>
+                setUserData((prevUserData) => [
+                  { ...prevUserData[0], mobilenumber: e.target.value },
+                ])
+              }
+            />
+          </div>
+          <div className={styles.address}>
+            <span className={styles.text}>Address</span>
+            <div className={styles.address_inputs}>
+              <DropDown
+                data={countries}
+                placeholder={userData[0]?.country}
+                className="text_input"
+                state={country}
+                setState={setCountry}
+                name={"country"}
+              />
+              <DropDown
+                data={cities}
+                placeholder={userData[0]?.city}
+                className="text_input"
+                state={city}
+                setState={setCity}
+                name={"city"}
+              />
+            </div>
+          </div>
+          <div className={styles.save}>
+            <button>Save</button>
+          </div>
+        </form>
+      )}
     </div>
   );
 };

@@ -95,7 +95,7 @@ const CompanyProfile = () => {
       localStrData.user = companyData[0];
       localStrData.user.country = country;
       localStrData.user.city = city;
-      localStrData.user.imageUrl = imageUrl;
+      localStrData.user.imageUrl = imageUrl ? imageUrl : companyData[0].logo;
 
       const response = await fetch(
         "https://work-it-back.vercel.app/api/company/editProfile",
