@@ -23,7 +23,7 @@ export const loader = async () => {
 
 const CompanyProfile = () => {
   const { company, uType, countries } = useLoaderData();
-  console.log(company);
+  // console.log(company);
 
   const [loading, setLoading] = useState(false);
   const [companyData, setCompanyData] = useState(company);
@@ -33,6 +33,7 @@ const CompanyProfile = () => {
   const [cities, setCities] = useState([{}]);
   const [country, setCountry] = useState(company?.companycountry);
   const [city, setCity] = useState(company?.companycity);
+  const [emailExist, setEmailExist] = useState(false);
   const [companyCategory, setCompanyCategory] = useState(
     CompanyCategories.filter((con) => con.index === company?.categoryid)[0]
       ?.value
@@ -98,7 +99,9 @@ const CompanyProfile = () => {
       localStrData.user.imageUrl = imageUrl ? imageUrl : companyData[0].logo;
 
       const response = await fetch(
-        "https://work-it-back.vercel.app/api/company/editProfile",
+        // "https://work-it-back.vercel.app/api/company/editProfile",
+        "http://localhost:5002/api/company/editProfile",
+
         {
           method: "put",
           headers: {
@@ -109,9 +112,19 @@ const CompanyProfile = () => {
           body: JSON.stringify({ companyData: localStrData.user }),
         }
       );
-      const updatedUserDataString = JSON.stringify(localStrData);
+
+
+      const json = await response.json();
+
+      if(json.error == "Email already exists"){
+        setEmailExist(true)
+      }else{
+        setEmailExist(false)
+        const updatedUserDataString = JSON.stringify(localStrData);
       localStorage.setItem("user", updatedUserDataString);
       navigate("/companyview");
+      }
+
     } catch (error) {
       console.error("Error:", error);
     }finally {
@@ -325,6 +338,7 @@ const CompanyProfile = () => {
               ])
             }
           />
+           {emailExist? (<p className="error">Email already exists</p>) : <></>}
         </div>
         <div className={styles.pass}>
           <span className={styles.text}>Password</span>

@@ -33,6 +33,8 @@ const Profile = () => {
   const [city, setCity] = useState(user[0]?.city || "Herat");
   const navigate = useNavigate();
   const [modal, setModal] = useState({ show: true });
+  const [emailExist, setEmailExist] = useState(false);
+
 
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("user"))?.userType !== "user")
@@ -73,10 +75,11 @@ const Profile = () => {
       } else {
         formData.cvURl = userData[0].cv;
         formData.cvName = userData[0].cvname;
-      }
-      
+      } 
+
       const response = await fetch(
-        "https://work-it-back.vercel.app/api/user/editProfile",
+        // "https://work-it-back.vercel.app/api/user/editProfile",
+        "http://localhost:5002/api/user/editProfile",
         {
           method: "put",
           headers: {
@@ -92,6 +95,13 @@ const Profile = () => {
           }),
         }
       );
+      const json = await response.json();
+
+      if(json.error == "Email already exists"){
+        setEmailExist(true)
+      }else{
+        setEmailExist(false)
+      }
       // //update token
 
       localStrData.user = { userid, ...formData };
@@ -101,8 +111,10 @@ const Profile = () => {
       // //redirect to preview
       if (response.ok) return navigate("/preview");
     } catch (error) {
-      console.error("Error:", error);
+      console.log("erorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+      console.error("Errorrr:", error);
     } finally {
+      console.log("++++++++++++++++++++++++++++++++")
       setLoading(false);
     }
   };
@@ -331,7 +343,10 @@ const Profile = () => {
                 ])
               }
             />
+            {emailExist? (<p className="error">Email already exists</p>) : <></>}
           </div>
+          
+          
           <div className={styles.pass}>
             <span className={styles.text}>Password</span>
             <input
