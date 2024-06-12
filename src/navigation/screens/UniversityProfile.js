@@ -15,7 +15,7 @@ import Loader from "../../components/Loader";
 
 const UniversityProfile = () => {
   const university = JSON.parse(localStorage.getItem("user"))?.user;
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [universityData, setUniversityData] = useState([university]);
   const [Image, setImage] = useState({ file: null, url: null });
   const [dataImage, setDataImage] = useState({ file: null, url: null });
@@ -25,6 +25,8 @@ const UniversityProfile = () => {
   const [country, setCountry] = useState(university?.country);
   const [city, setCity] = useState(university?.city);
   const navigate = useNavigate();
+  const [emailExist, setEmailExist] = useState(false);
+
 
   useEffect(() => {
     if (!university?.universityid) return navigate("/preview");
@@ -63,12 +65,11 @@ const UniversityProfile = () => {
       setUniversityData(json);
     } catch (error) {
       console.error("Error fetching user data:", error);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   const handelSubmit = async () => {
+    setLoading(true)
     try {
       let imageUrl;
       if (Image.url != null) {
@@ -82,7 +83,9 @@ const UniversityProfile = () => {
       localStrData.user.imageUrl = imageUrl ? imageUrl : universityData[0].logo;
 
       const response = await fetch(
-        "https://work-it-back.vercel.app/api/university/editProfile",
+        // "https://work-it-back.vercel.app/api/university/editProfile",
+        "http://localhost:5002/api/university/editProfile",
+
         {
           method: "put",
           headers: {
@@ -94,11 +97,21 @@ const UniversityProfile = () => {
         }
       );
 
-      const updatedUserDataString = JSON.stringify(localStrData);
+      const json = await response.json();
+
+      if(json.error == "Email already exists"){
+        setEmailExist(true)
+      }else{
+        setEmailExist(false)
+        const updatedUserDataString = JSON.stringify(localStrData);
       localStorage.setItem("user", updatedUserDataString);
       navigate("/collegeview");
+      }
+
     } catch (error) {
       console.error("Error:", error);
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -152,6 +165,7 @@ const UniversityProfile = () => {
         image.append("upload_preset", "gyeiwufc");
         const response = await fetch(
           "https://api.cloudinary.com/v1_1/dapnyieo6/image/upload",
+          
           {
             method: "post",
             body: image,
@@ -177,7 +191,7 @@ const UniversityProfile = () => {
     if (!university?.city) setCity(newCities[0]?.value);
   };
 
-  if (loading) return <Loader />;
+  // if (loading) return <Loader />;
 
   return (
     <div>
@@ -185,6 +199,9 @@ const UniversityProfile = () => {
       <h2 className={styles.text} style={{ textAlign: "center" }}>
         EDIT YOUR UNIVERSITY PROFILE
       </h2>
+      {loading ? (
+        <Loader />
+      ) : (
       <div className={styles.main}>
         <div className={styles.user}>
           <div
@@ -287,6 +304,7 @@ const UniversityProfile = () => {
               ])
             }
           />
+           {emailExist? (<p className="error">Email already exists</p>) : <></>}
         </div>
         <div className={styles.pass}>
           <span className={styles.text}>Password</span>
@@ -315,7 +333,7 @@ const UniversityProfile = () => {
         <div className={styles.save}>
           <button onClick={handelSubmit}>Save</button>
         </div>
-      </div>
+      </div>)}
     </div>
   );
 };

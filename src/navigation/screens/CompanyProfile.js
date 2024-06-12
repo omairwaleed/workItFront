@@ -1,3 +1,4 @@
+
 import styles from "./profile.module.css";
 import { FaPenToSquare } from "react-icons/fa6";
 import { Suspense, useEffect, useState } from "react";
@@ -22,9 +23,9 @@ export const loader = async () => {
 
 const CompanyProfile = () => {
   const { company, uType, countries } = useLoaderData();
-  console.log(company);
+  // console.log(company);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [companyData, setCompanyData] = useState(company);
   const [Image, setImage] = useState({ file: null, url: null });
   const [dataImage, setDataImage] = useState({ file: null, url: null });
@@ -32,6 +33,7 @@ const CompanyProfile = () => {
   const [cities, setCities] = useState([{}]);
   const [country, setCountry] = useState(company?.companycountry);
   const [city, setCity] = useState(company?.companycity);
+  const [emailExist, setEmailExist] = useState(false);
   const [companyCategory, setCompanyCategory] = useState(
     CompanyCategories.filter((con) => con.index === company?.categoryid)[0]
       ?.value
@@ -78,12 +80,11 @@ const CompanyProfile = () => {
       setCompanyData(json);
     } catch (error) {
       console.error("Error fetching company data:", error);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   const handelSubmit = async () => {
+    setLoading(true);
     let imageUrl;
     try {
       if (Image.url != null) {
@@ -98,7 +99,9 @@ const CompanyProfile = () => {
       localStrData.user.imageUrl = imageUrl ? imageUrl : companyData[0].logo;
 
       const response = await fetch(
-        "https://work-it-back.vercel.app/api/company/editProfile",
+        // "https://work-it-back.vercel.app/api/company/editProfile",
+        "http://localhost:5002/api/company/editProfile",
+
         {
           method: "put",
           headers: {
@@ -109,11 +112,23 @@ const CompanyProfile = () => {
           body: JSON.stringify({ companyData: localStrData.user }),
         }
       );
-      const updatedUserDataString = JSON.stringify(localStrData);
+
+
+      const json = await response.json();
+
+      if(json.error == "Email already exists"){
+        setEmailExist(true)
+      }else{
+        setEmailExist(false)
+        const updatedUserDataString = JSON.stringify(localStrData);
       localStorage.setItem("user", updatedUserDataString);
       navigate("/companyview");
+      }
+
     } catch (error) {
       console.error("Error:", error);
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -199,7 +214,7 @@ const CompanyProfile = () => {
     ]);
   }, [companyCategory]);
 
-  if (loading) return <Loader />;
+  // if (loading) return <Loader />;
 
   return (
     <div>
@@ -207,6 +222,9 @@ const CompanyProfile = () => {
       <h2 className={styles.text} style={{ textAlign: "center" }}>
         EDIT YOUR COMPANY PROFILE
       </h2>
+      {loading ? (
+        <Loader />
+      ) : (
       <div className={styles.main}>
         <div className={styles.user}>
           <div
@@ -320,6 +338,7 @@ const CompanyProfile = () => {
               ])
             }
           />
+           {emailExist? (<p className="error">Email already exists</p>) : <></>}
         </div>
         <div className={styles.pass}>
           <span className={styles.text}>Password</span>
@@ -360,6 +379,7 @@ const CompanyProfile = () => {
           <button onClick={handelSubmit}>Save</button>
         </div>
       </div>
+      )}
     </div>
   );
 };
