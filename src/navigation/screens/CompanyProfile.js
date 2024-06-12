@@ -99,8 +99,8 @@ const CompanyProfile = () => {
       localStrData.user.imageUrl = imageUrl ? imageUrl : companyData[0].logo;
 
       const response = await fetch(
-        // "https://work-it-back.vercel.app/api/company/editProfile",
-        "http://localhost:5002/api/company/editProfile",
+        "https://work-it-back.vercel.app/api/company/editProfile",
+        // "http://localhost:5002/api/company/editProfile",
 
         {
           method: "put",
