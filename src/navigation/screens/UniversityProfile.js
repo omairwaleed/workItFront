@@ -83,8 +83,8 @@ const UniversityProfile = () => {
       localStrData.user.imageUrl = imageUrl ? imageUrl : universityData[0].logo;
 
       const response = await fetch(
-        // "https://work-it-back.vercel.app/api/university/editProfile",
-        "http://localhost:5002/api/university/editProfile",
+        "https://work-it-back.vercel.app/api/university/editProfile",
+        // "http://localhost:5002/api/university/editProfile",
 
         {
           method: "put",
