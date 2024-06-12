@@ -15,7 +15,7 @@ import Loader from "../../components/Loader";
 
 const UniversityProfile = () => {
   const university = JSON.parse(localStorage.getItem("user"))?.user;
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [universityData, setUniversityData] = useState([university]);
   const [Image, setImage] = useState({ file: null, url: null });
   const [dataImage, setDataImage] = useState({ file: null, url: null });
@@ -63,12 +63,11 @@ const UniversityProfile = () => {
       setUniversityData(json);
     } catch (error) {
       console.error("Error fetching user data:", error);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   const handelSubmit = async () => {
+    setLoading(true)
     try {
       let imageUrl;
       if (Image.url != null) {
@@ -99,6 +98,8 @@ const UniversityProfile = () => {
       navigate("/collegeview");
     } catch (error) {
       console.error("Error:", error);
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -177,7 +178,7 @@ const UniversityProfile = () => {
     if (!university?.city) setCity(newCities[0]?.value);
   };
 
-  if (loading) return <Loader />;
+  // if (loading) return <Loader />;
 
   return (
     <div>
@@ -185,6 +186,9 @@ const UniversityProfile = () => {
       <h2 className={styles.text} style={{ textAlign: "center" }}>
         EDIT YOUR UNIVERSITY PROFILE
       </h2>
+      {loading ? (
+        <Loader />
+      ) : (
       <div className={styles.main}>
         <div className={styles.user}>
           <div
@@ -315,7 +319,7 @@ const UniversityProfile = () => {
         <div className={styles.save}>
           <button onClick={handelSubmit}>Save</button>
         </div>
-      </div>
+      </div>)}
     </div>
   );
 };

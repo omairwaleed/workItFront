@@ -74,7 +74,7 @@ const Profile = () => {
         formData.cvURl = userData[0].cv;
         formData.cvName = userData[0].cvname;
       }
-
+      
       const response = await fetch(
         "https://work-it-back.vercel.app/api/user/editProfile",
         {

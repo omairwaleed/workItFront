@@ -1,3 +1,4 @@
+
 import styles from "./profile.module.css";
 import { FaPenToSquare } from "react-icons/fa6";
 import { Suspense, useEffect, useState } from "react";
@@ -24,7 +25,7 @@ const CompanyProfile = () => {
   const { company, uType, countries } = useLoaderData();
   console.log(company);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [companyData, setCompanyData] = useState(company);
   const [Image, setImage] = useState({ file: null, url: null });
   const [dataImage, setDataImage] = useState({ file: null, url: null });
@@ -78,12 +79,11 @@ const CompanyProfile = () => {
       setCompanyData(json);
     } catch (error) {
       console.error("Error fetching company data:", error);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   const handelSubmit = async () => {
+    setLoading(true);
     let imageUrl;
     try {
       if (Image.url != null) {
@@ -114,6 +114,8 @@ const CompanyProfile = () => {
       navigate("/companyview");
     } catch (error) {
       console.error("Error:", error);
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -199,7 +201,7 @@ const CompanyProfile = () => {
     ]);
   }, [companyCategory]);
 
-  if (loading) return <Loader />;
+  // if (loading) return <Loader />;
 
   return (
     <div>
@@ -207,6 +209,9 @@ const CompanyProfile = () => {
       <h2 className={styles.text} style={{ textAlign: "center" }}>
         EDIT YOUR COMPANY PROFILE
       </h2>
+      {loading ? (
+        <Loader />
+      ) : (
       <div className={styles.main}>
         <div className={styles.user}>
           <div
@@ -360,6 +365,7 @@ const CompanyProfile = () => {
           <button onClick={handelSubmit}>Save</button>
         </div>
       </div>
+      )}
     </div>
   );
 };
