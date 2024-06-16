@@ -17,8 +17,8 @@ const ChangePassword = () => {
     console.log(localStrData);
     try {
       const response = await fetch(
-        // "https://work-it-back.vercel.app/api/user/editProfile",
-        `http://localhost:5002/api/${type}/editPassword`,
+        `https://work-it-back.vercel.app/api/${type}/editPassword`,
+        // `http://localhost:5002/api/${type}/editPassword`,
         {
           method: "put",
           headers: {
