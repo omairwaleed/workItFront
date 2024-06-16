@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/workItFront/static/css/main.bc6b36cb.css",
-    "main.js": "/workItFront/static/js/main.b9f9f070.js",
+    "main.css": "/workItFront/static/css/main.d614801c.css",
+    "main.js": "/workItFront/static/js/main.99e348ff.js",
     "static/media/landingImage.png": "/workItFront/static/media/landingImage.7ec9d6427e6181f6fff2.png",
     "static/media/mypoly.png": "/workItFront/static/media/mypoly.d9ca6f4db6afd746f5e7.png",
     "static/media/scarab.png": "/workItFront/static/media/scarab.e98fd8c432b2369e1929.png",
     "static/media/job.svg": "/workItFront/static/media/job.2843b0f8cec2f43ed819b0a5560b14e2.svg",
     "index.html": "/workItFront/index.html",
-    "main.bc6b36cb.css.map": "/workItFront/static/css/main.bc6b36cb.css.map",
-    "main.b9f9f070.js.map": "/workItFront/static/js/main.b9f9f070.js.map"
+    "main.d614801c.css.map": "/workItFront/static/css/main.d614801c.css.map",
+    "main.99e348ff.js.map": "/workItFront/static/js/main.99e348ff.js.map"
   },
   "entrypoints": [
-    "static/css/main.bc6b36cb.css",
-    "static/js/main.b9f9f070.js"
+    "static/css/main.d614801c.css",
+    "static/js/main.99e348ff.js"
   ]
 }
