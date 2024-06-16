@@ -1,7 +1,7 @@
 import styles from "./profile.module.css";
 import { FaPenToSquare } from "react-icons/fa6";
 import { useEffect, useState } from "react";
-import { Navigate, useLoaderData, useNavigate } from "react-router-dom";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import {
   getAllCountries,
   getAllCitiesInCountry,
@@ -34,7 +34,6 @@ const Profile = () => {
   const navigate = useNavigate();
   const [modal, setModal] = useState({ show: true });
   const [emailExist, setEmailExist] = useState(false);
-
 
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("user"))?.userType !== "user")
@@ -75,7 +74,7 @@ const Profile = () => {
       } else {
         formData.cvURl = userData[0].cv;
         formData.cvName = userData[0].cvname;
-      } 
+      }
 
       const response = await fetch(
         "https://work-it-back.vercel.app/api/user/editProfile",
@@ -97,10 +96,10 @@ const Profile = () => {
       );
       const json = await response.json();
 
-      if(json.error == "Email already exists"){
-        setEmailExist(true)
-      }else{
-        setEmailExist(false)
+      if (json.error == "Email already exists") {
+        setEmailExist(true);
+      } else {
+        setEmailExist(false);
       }
       // //update token
 
@@ -111,10 +110,10 @@ const Profile = () => {
       // //redirect to preview
       if (response.ok) return navigate("/preview");
     } catch (error) {
-      console.log("erorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+      console.log("erorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
       console.error("Errorrr:", error);
     } finally {
-      console.log("++++++++++++++++++++++++++++++++")
+      console.log("++++++++++++++++++++++++++++++++");
       setLoading(false);
     }
   };
@@ -285,7 +284,7 @@ const Profile = () => {
           </div>
           <div className={styles.name}>
             <div className={styles.first_name}>
-              <span className={styles.text}>First Name</span>
+              <span className={styles.text}>Name</span>
               <input
                 type="text"
                 placeholder={userData[0]?.name}
@@ -294,20 +293,6 @@ const Profile = () => {
                 onChange={(e) =>
                   setUserData((prevUserData) => [
                     { ...prevUserData[0], name: e.target.value },
-                  ])
-                }
-              />
-            </div>
-            <div className={styles.last_name}>
-              <span className={styles.text}>Last Name</span>
-              <input
-                type="text"
-                placeholder={userData[0]?.lastname}
-                value={userData[0]?.lastname}
-                name="lastname"
-                onChange={(e) =>
-                  setUserData((prevUserData) => [
-                    { ...prevUserData[0], lastname: e.target.value },
                   ])
                 }
               />
@@ -343,22 +328,23 @@ const Profile = () => {
                 ])
               }
             />
-            {emailExist? (<p className="error">Email already exists</p>) : <></>}
+            {emailExist ? <p className="error">Email already exists</p> : <></>}
           </div>
-          
-          
+
           <div className={styles.pass}>
             <span className={styles.text}>Password</span>
-            <input
-              type="password"
-              placeholder="********"
-              name="password"
-              onChange={(e) =>
-                setUserData((prevUserData) => [
-                  { ...prevUserData[0], password: e.target.value },
-                ])
-              }
-            />
+            <Link
+              to="/changePassword"
+              state={{ oldPassword: user[0].password, type: "user" }}
+              className={styles.save}
+              style={{
+                justifyContent: "normal",
+                marginBottom: 0,
+                textDecoration: "none",
+              }}
+            >
+              <button>Change</button>
+            </Link>
           </div>
           <div className={styles.phone}>
             <span className={styles.text}>Phone Number</span>
@@ -395,7 +381,7 @@ const Profile = () => {
               />
             </div>
           </div>
-          <div className={styles.save}>
+          <div className={styles.save} style={{ marginBottom: 30 }}>
             <button>Save</button>
           </div>
         </form>

@@ -32,6 +32,7 @@ import AddScholarScreen, {
   action as addScholarAction,
 } from "../screens/AddScholarScreen";
 import Applicants, { loader as applicantsLoader } from "../screens/Applicants";
+import ChangePassword from "../screens/ChangePassword";
 
 // [x] test logged out user senarnio
 // [x] test user senarnio
@@ -131,9 +132,12 @@ const MainRoute = () => {
       path: "/downloadImage",
       element: <ImageGallery />,
     },
+    {
+      path: "/changePassword",
+      element: <ChangePassword />,
+    },
   ]);
   return <RouterProvider router={routes} />;
 };
 
 export default MainRoute;
-

@@ -2,7 +2,7 @@ import styles from "./profile.module.css";
 import { FaPenToSquare } from "react-icons/fa6";
 // import { FaUser } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DropDown from "../../components/DropDown";
 import "react-dropdown/style.css";
 import {
@@ -26,7 +26,6 @@ const UniversityProfile = () => {
   const [city, setCity] = useState(university?.city);
   const navigate = useNavigate();
   const [emailExist, setEmailExist] = useState(false);
-
 
   useEffect(() => {
     if (!university?.universityid) return navigate("/preview");
@@ -65,11 +64,11 @@ const UniversityProfile = () => {
       setUniversityData(json);
     } catch (error) {
       console.error("Error fetching user data:", error);
-    } 
+    }
   };
 
   const handelSubmit = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       let imageUrl;
       if (Image.url != null) {
@@ -99,18 +98,17 @@ const UniversityProfile = () => {
 
       const json = await response.json();
 
-      if(json.error == "Email already exists"){
-        setEmailExist(true)
-      }else{
-        setEmailExist(false)
+      if (json.error == "Email already exists") {
+        setEmailExist(true);
+      } else {
+        setEmailExist(false);
         const updatedUserDataString = JSON.stringify(localStrData);
-      localStorage.setItem("user", updatedUserDataString);
-      navigate("/collegeview");
+        localStorage.setItem("user", updatedUserDataString);
+        navigate("/collegeview");
       }
-
     } catch (error) {
       console.error("Error:", error);
-    }finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -165,7 +163,7 @@ const UniversityProfile = () => {
         image.append("upload_preset", "gyeiwufc");
         const response = await fetch(
           "https://api.cloudinary.com/v1_1/dapnyieo6/image/upload",
-          
+
           {
             method: "post",
             body: image,
@@ -202,138 +200,156 @@ const UniversityProfile = () => {
       {loading ? (
         <Loader />
       ) : (
-      <div className={styles.main}>
-        <div className={styles.user}>
-          <div
-            style={{
-              width: "150px",
-              height: "150px",
-              overflow: "hidden",
-              borderRadius: "50%",
-            }}
-            className={styles.photo}
-          >
-            {Image.url && (
-              <img
-                src={Image.url}
-                alt="Profile"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "50%",
-                }}
-              />
-            )}
-            {!Image.url && (
-              <img
-                src={profilePhoto.logo}
-                alt="Profile"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "50%",
-                }}
-              />
-            )}
-          </div>
-          <label
-            htmlFor="fileInput"
-            className="file-input-label"
-            style={{
-              position: "relative",
-              overflow: "hidden",
-              width: "fit-content",
-            }}
-          >
-            <FaPenToSquare className="pen-icon" style={{ cursor: "pointer" }} />
-            <input
-              accept="image/png, image/jpeg"
-              type="file"
-              id="fileInput"
-              className="file-input"
+        <div className={styles.main}>
+          <div className={styles.user}>
+            <div
               style={{
-                position: "absolute",
-                opacity: 0,
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                cursor: "pointer",
+                width: "150px",
+                height: "150px",
+                overflow: "hidden",
+                borderRadius: "50%",
               }}
-              onChange={(e) => handleImageChange(e)}
-            />
-          </label>
-        </div>
-        <div className={styles.first_name}>
-          <span className={styles.text}>Name</span>
-          <input
-            type="text"
-            placeholder="University Name"
-            value={universityData[0].universityname}
-            onChange={(e) =>
-              setUniversityData((prevUserData) => [
-                { ...prevUserData[0], universityname: e.target.value },
-              ])
-            }
-          />
-        </div>
-        <div className={styles.last_name}>
-          <span className={styles.text}>Contact email</span>
-          <input
-            type="text"
-            placeholder="University Contact Email"
-            value={universityData[0].contactemail}
-            onChange={(e) =>
-              setUniversityData((prevUserData) => [
-                { ...prevUserData[0], contactemail: e.target.value },
-              ])
-            }
-          />
-        </div>
-        <div className={styles.email}>
-          <span className={styles.text}>university email</span>
-          <input
-            type="text"
-            placeholder="University Email"
-            value={universityData[0].universityemail}
-            onChange={(e) =>
-              setUniversityData((prevUserData) => [
-                { ...prevUserData[0], universityemail: e.target.value },
-              ])
-            }
-          />
-           {emailExist? (<p className="error">Email already exists</p>) : <></>}
-        </div>
-        <div className={styles.pass}>
-          <span className={styles.text}>Password</span>
-          <input type="password" placeholder="**********" disabled />
-        </div>
-        <div className={styles.address}>
-          <span className={styles.text}>Address</span>
-          <div className={styles.address_inputs}>
-            <DropDown
-              data={countries}
-              placeholder={universityData[0].country}
-              className="text_input"
-              state={country}
-              setState={setCountry}
-            />
-
-            <DropDown
-              data={cities}
-              placeholder={universityData[0].city}
-              className="text_input"
-              state={city}
-              setState={setCity}
+              className={styles.photo}
+            >
+              {Image.url && (
+                <img
+                  src={Image.url}
+                  alt="Profile"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: "50%",
+                  }}
+                />
+              )}
+              {!Image.url && (
+                <img
+                  src={profilePhoto.logo}
+                  alt="Profile"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: "50%",
+                  }}
+                />
+              )}
+            </div>
+            <label
+              htmlFor="fileInput"
+              className="file-input-label"
+              style={{
+                position: "relative",
+                overflow: "hidden",
+                width: "fit-content",
+              }}
+            >
+              <FaPenToSquare
+                className="pen-icon"
+                style={{ cursor: "pointer" }}
+              />
+              <input
+                accept="image/png, image/jpeg"
+                type="file"
+                id="fileInput"
+                className="file-input"
+                style={{
+                  position: "absolute",
+                  opacity: 0,
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  cursor: "pointer",
+                }}
+                onChange={(e) => handleImageChange(e)}
+              />
+            </label>
+          </div>
+          <div className={styles.first_name}>
+            <span className={styles.text}>Name</span>
+            <input
+              type="text"
+              placeholder="University Name"
+              value={universityData[0].universityname}
+              onChange={(e) =>
+                setUniversityData((prevUserData) => [
+                  { ...prevUserData[0], universityname: e.target.value },
+                ])
+              }
             />
           </div>
+          <div className={styles.last_name}>
+            <span className={styles.text}>Contact email</span>
+            <input
+              type="text"
+              placeholder="University Contact Email"
+              value={universityData[0].contactemail}
+              onChange={(e) =>
+                setUniversityData((prevUserData) => [
+                  { ...prevUserData[0], contactemail: e.target.value },
+                ])
+              }
+            />
+          </div>
+          <div className={styles.email}>
+            <span className={styles.text}>university email</span>
+            <input
+              type="text"
+              placeholder="University Email"
+              value={universityData[0].universityemail}
+              onChange={(e) =>
+                setUniversityData((prevUserData) => [
+                  { ...prevUserData[0], universityemail: e.target.value },
+                ])
+              }
+            />
+            {emailExist ? <p className="error">Email already exists</p> : <></>}
+          </div>
+          <div className={styles.pass}>
+            <span className={styles.text}>Password</span>
+            <Link
+              to="/changePassword"
+              state={{
+                oldPassword: universityData[0]?.password,
+                type: "university",
+              }}
+              className={styles.save}
+              style={{
+                justifyContent: "normal",
+                marginBottom: 0,
+                textDecoration: "none",
+              }}
+            >
+              <button>Change</button>
+            </Link>
+          </div>
+          <div className={styles.address}>
+            <span className={styles.text}>Address</span>
+            <div className={styles.address_inputs}>
+              <DropDown
+                data={countries}
+                placeholder={universityData[0].country}
+                className="text_input"
+                state={country}
+                setState={setCountry}
+              />
+
+              <DropDown
+                data={cities}
+                placeholder={universityData[0].city}
+                className="text_input"
+                state={city}
+                setState={setCity}
+              />
+            </div>
+          </div>
+          <div className={styles.save}>
+            <button onClick={handelSubmit}>Save</button>
+          </div>
         </div>
-        <div className={styles.save}>
-          <button onClick={handelSubmit}>Save</button>
-        </div>
-      </div>)}
+      )}
     </div>
   );
 };
