@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styles from "../navigation/screens/collegeview.module.css";
-
+import { MdDelete } from "react-icons/md";
 const AppCard = ({
   id,
   type,
@@ -10,10 +10,71 @@ const AppCard = ({
   jobdescription,
   requiredskills,
   fundingpercentage,
+  setLoading,
+  setData,
 }) => {
+  console.log(id, type);
+  const deleteItem = async () => {
+    setLoading(true);
+    if (type === "scholarships") type = "scholarship";
+    else if (type === "internships") type = "internship";
+    else type = "job";
+    try {
+      const response = await fetch(
+        `https://work-it-back.vercel.app/api/${type}/${id}`,
+        {
+          method: "Delete",
+        }
+      );
+      if (!response.ok) {
+        throw new Error();
+      } else {
+        const filter =
+          type === "scholarship"
+            ? "scholarshipid"
+            : type === "internship"
+            ? "internshipid"
+            : "jobid";
+        setData((prev) => prev.filter((el) => el[filter] !== id));
+      }
+    } catch (error) {
+      alert(`error while deleting  ${type} please try agaian`);
+    }
+    setLoading(false);
+  };
   return (
     <li>
-      <h3>{title}</h3>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <h3>{title}</h3>
+
+        <MdDelete
+          onClick={() => {
+            if (
+              window.confirm(
+                `are you sure to delete this ${
+                  type === "scholarships"
+                    ? "scholarship"
+                    : type === "internships"
+                    ? "internship"
+                    : type
+                } `
+              )
+            ) {
+              deleteItem();
+            }
+          }}
+          size={30}
+          color="red"
+          style={{ cursor: "pointer" }}
+        />
+      </div>
+
       <div className={styles.content}>
         {jobdescription && (
           <span className={styles.content_body}>

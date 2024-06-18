@@ -156,6 +156,8 @@ export default function Collegeview() {
               jobdescription={d.description}
               requiredskills={d.requiredskills}
               fundingpercentage={d.fundingpercentage}
+              setLoading={setLoading}
+              setData={setFilteredData}
             />
           ))}
         </ol>

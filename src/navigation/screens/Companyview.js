@@ -174,6 +174,8 @@ export default function Companyview() {
               city={d.city}
               jobdescription={d.jobdescription}
               requiredskills={d.requiredskills}
+              setLoading={setLoading}
+              setData={setFilteredData}
             />
           ))}
         </ol>
