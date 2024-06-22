@@ -9,7 +9,6 @@ import Profile, { loader as profileLoader } from "../screens/Profile";
 import DetailsScreen, {
   loader as detailsLoader,
 } from "../screens/DetailsScreen";
-import ImageUpload from "../screens/ImageUpload";
 import ImageGallery from "../screens/ImageDownload";
 import Myapps, { loader as myAppsLoader } from "../screens/Myapps";
 import DetailsScreenIntern from "../screens/DetailsScreenIntern";
@@ -123,10 +122,6 @@ const MainRoute = () => {
       path: "/detailsScholar",
       element: <DetailsScreenScholar />,
       loader: detailsLoader,
-    },
-    {
-      path: "/uploadImage",
-      element: <ImageUpload />,
     },
     {
       path: "/downloadImage",
