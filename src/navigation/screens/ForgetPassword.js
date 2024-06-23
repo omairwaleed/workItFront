@@ -6,7 +6,7 @@ import Modal from "../../components/Modal";
 const ForgetPassword = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
-  const [alert, setAlert] = useState(false);
+  const [alertt, setAlert] = useState(false);
   const handelSubmit = async (e) => {
     setLoading(true);
     const formData = Object.fromEntries(new FormData(e.target));
@@ -68,9 +68,9 @@ const ForgetPassword = () => {
         </form>
       )}
       <Modal
-        show={alert}
+        show={alertt}
         handleClose={() => setAlert(false)}
-        body={alert}
+        body={alertt}
         title={"Please check Your email to reset password"}
       />
     </div>
