@@ -1,8 +1,7 @@
 .double_ringed{
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   height: 175px;
   width: 100%;
 }
@@ -13,7 +12,7 @@
     border-radius: 100%;
     display: block;
     content: '';
-    position: absolute; }
+    position: fixed; }
   
   .double_ringed:after {
     height: 15px;
@@ -27,6 +26,13 @@
     height: 40px;
     width: 40px;
     border: 2px solid var(--primary); }
+
+  .fullPage{    
+    position: fixed;
+    height: 100dvh;
+    background-color: #d0dbe8;
+    z-index: 99999;
+  }
   
   @-webkit-keyframes spin {
     to {
