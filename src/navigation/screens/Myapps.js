@@ -14,7 +14,9 @@ export const loader = async ({ request, params }) => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   try {
-    const res = await fetch(`/api/${type}/apply/${user?.user?.userid}`);
+    const res = await fetch(
+      `https://work-it-back.vercel.app/api/${type}/apply/${user?.user?.userid}`
+    );
 
     const json = await res.json();
 
@@ -77,7 +79,9 @@ export default function Myapps() {
   useEffect(() => {
     (async () => {
       const id = JSON.parse(localStorage.getItem("user"))?.user?.userid;
-      const res = await fetch(`/api/${type}/apply/${id}`);
+      const res = await fetch(
+        `https://work-it-back.vercel.app/api/${type}/apply/${id}`
+      );
 
       const json = await res.json();
       setApps(json);

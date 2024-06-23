@@ -34,9 +34,11 @@ const PreviewScreen = () => {
     setLoading(true);
 
     let url;
-    if (type === "jobs") url = "api/job/allJobs/";
-    else if (type === "scholarships") url = "api/scholarship/allScholarships/";
-    else url = "api/internship/allInternships/";
+    if (type === "jobs")
+      url = "https://work-it-back.vercel.app/api/job/allJobs/";
+    else if (type === "scholarships")
+      url = "https://work-it-back.vercel.app/api/scholarship/allScholarships/";
+    else url = "https://work-it-back.vercel.app/api/internship/allInternships/";
     try {
       const response = await fetch(url);
       if (!response.ok) {

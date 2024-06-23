@@ -36,8 +36,9 @@ export default function Companyview() {
 
   const getData = async () => {
     let url;
-    if (type === "jobs") url = "api/job/allJobs/";
-    else url = "api/internship/allInternships/";
+    if (type === "jobs")
+      url = "https://work-it-back.vercel.app/api/job/allJobs/";
+    else url = "https://work-it-back.vercel.app/api/internship/allInternships/";
 
     try {
       setLoading(true);
@@ -173,6 +174,8 @@ export default function Companyview() {
               city={d.city}
               jobdescription={d.jobdescription}
               requiredskills={d.requiredskills}
+              setLoading={setLoading}
+              setData={setFilteredData}
             />
           ))}
         </ol>

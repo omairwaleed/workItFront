@@ -11,7 +11,7 @@ const InternCard = ({ data }) => {
         </div>
         <div className={styles.content} style={{ width: "100%" }}>
           <span className={styles.content_title}>{data.internshiptitle}</span>
-          <span className={styles.content_body}>Scarab Agency</span>
+          {/* <span className={styles.content_body}>Scarab Agency</span> */}
           <span className={styles.content_body}>
             {data.city} , {data.country}
           </span>

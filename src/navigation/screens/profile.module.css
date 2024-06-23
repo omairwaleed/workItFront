@@ -32,7 +32,7 @@ body {
   align-items: flex-end;
   gap: 5px;
   @media screen and (width < 450px) {
-      justify-content: center;
+    justify-content: center;
   }
 }
 
@@ -102,7 +102,9 @@ input[type="file"] {
   display: flex;
   flex-direction: column;
   @media (width>625px) {
-    input{width: 400px;}  
+    input {
+      width: 400px;
+    }
   }
 }
 
@@ -111,7 +113,9 @@ input[type="file"] {
   gap: 5px;
   flex-wrap: wrap;
   @media (width<700px) {
-    select{width: 250px !important;}  
+    select {
+      width: 250px !important;
+    }
   }
 }
 
@@ -119,7 +123,9 @@ input[type="file"] {
   display: flex;
   flex-direction: column;
   @media (width>625px) {
-    input{width: 400px;}  
+    input {
+      width: 400px;
+    }
   }
 }
 
@@ -132,7 +138,6 @@ input[type="file"] {
   display: flex;
   flex-direction: column;
 }
-
 
 .phone input {
   width: 200px;
@@ -155,7 +160,7 @@ input[type="file"] {
   background-color: #2d415c;
   color: white;
   cursor: pointer;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 }
 
 @media (max-width: 1024px) {
@@ -173,7 +178,6 @@ input[type="file"] {
     padding: 0 150px 0;
   }
 }
-
 
 @media (max-width: 625px) {
   .main {

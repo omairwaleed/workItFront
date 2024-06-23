@@ -14,10 +14,13 @@ export const action = async ({ request, params }) => {
   );
 
   try {
-    const res = await fetch("/api/scholarship/", {
-      method: "POST",
-      body: formData,
-    });
+    const res = await fetch(
+      "https://work-it-back.vercel.app/api/scholarship/",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
 
     const data = await res.json();
     console.log(data);

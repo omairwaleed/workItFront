@@ -2,12 +2,15 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "./navbar.module.css";
 import { Dropdown } from "react-bootstrap";
 import { useState } from "react";
+import Loader from "./Loader";
 
 const Navbar = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const type = user?.userType;
+  console.log(user, type);
   const navigate = useNavigate();
   const [selectedPage, setSelectedPage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleNavigation = async (selectedPage) => {
     switch (selectedPage) {
@@ -34,7 +37,36 @@ const Navbar = () => {
 
     // console.log("check point up")
   };
-
+  const deleteItem = async () => {
+    setLoading(true);
+    const localStrData = JSON.parse(localStorage.getItem("user"));
+    const id =
+      type === "user"
+        ? user.user.userid
+        : type === "company"
+        ? user.user.companyid
+        : user.user.universityid;
+    try {
+      const response = await fetch(
+        `https://work-it-back.vercel.app/api/${type}/${id}`,
+        {
+          method: "Delete",
+          headers: {
+            Authorization: "Bearer " + localStrData.token,
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error();
+      } else {
+        localStorage.removeItem("user");
+        navigate("/");
+      }
+    } catch (error) {
+      alert(`error while deleting  ${type} please try agaian`);
+    }
+    setLoading(false);
+  };
   return (
     <header className={styles.header}>
       <Link
@@ -79,55 +111,70 @@ const Navbar = () => {
           </div>
 
           <div className={styles.button_container}>
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="secondary"
-                size="lg"
-                value={selectedPage}
-                onChange={(e) => handleNavigation(e.target.value)}
-              ></Dropdown.Toggle>
+            {loading ? (
+              <Loader />
+            ) : (
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant="secondary"
+                  size="lg"
+                  value={selectedPage}
+                  onChange={(e) => handleNavigation(e.target.value)}
+                ></Dropdown.Toggle>
 
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => {
-                    const path =
-                      type == "user"
-                        ? "/profile"
-                        : type == "company"
-                        ? "/companyProfile"
-                        : "/universityProfile";
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    onClick={() => {
+                      const path =
+                        type == "user"
+                          ? "/profile"
+                          : type == "company"
+                          ? "/companyProfile"
+                          : "/universityProfile";
 
-                    navigate(path);
-                  }}
-                >
-                  profile
-                </Dropdown.Item>
+                      navigate(path);
+                    }}
+                  >
+                    profile
+                  </Dropdown.Item>
 
-                <Dropdown.Item
-                  onClick={() => {
-                    const path =
-                      type === "user"
-                        ? "/myapps"
-                        : type === "company"
-                        ? "/companyview"
-                        : "/collegeview";
+                  <Dropdown.Item
+                    onClick={() => {
+                      const path =
+                        type === "user"
+                          ? "/myapps"
+                          : type === "company"
+                          ? "/companyview"
+                          : "/collegeview";
 
-                    navigate(path);
-                  }}
-                >
-                  applications
-                </Dropdown.Item>
+                      navigate(path);
+                    }}
+                  >
+                    applications
+                  </Dropdown.Item>
 
-                <Dropdown.Item
-                  onClick={() => {
-                    localStorage.removeItem("user");
-                    navigate("/");
-                  }}
-                >
-                  logout
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+                  <Dropdown.Item
+                    onClick={() => {
+                      localStorage.removeItem("user");
+                      navigate("/");
+                    }}
+                  >
+                    logout
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => {
+                      if (
+                        window.confirm(`are you sure to delete this account`)
+                      ) {
+                        deleteItem();
+                      }
+                    }}
+                  >
+                    Delete Account
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
           </div>
         </div>
       )}

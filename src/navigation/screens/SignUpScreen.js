@@ -59,21 +59,24 @@ const SignUpScreen = () => {
       CompanyCategories.filter((con) => con.value === companyCategory)[0]
         ?.index || 0;
 
-    const response = await fetch("/api/user/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-        mobileNumber,
-        country,
-        city: city ?? "N/A",
-        companySize,
-        selectedOption,
-        companyCategoryId,
-      }),
-    });
+    const response = await fetch(
+      "https://work-it-back.vercel.app/api/user/signup",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          mobileNumber,
+          country,
+          city: city ?? "N/A",
+          companySize,
+          selectedOption,
+          companyCategoryId,
+        }),
+      }
+    );
     const json = await response.json();
 
     if (response.ok) {

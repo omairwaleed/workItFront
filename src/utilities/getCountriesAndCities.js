@@ -1,4 +1,4 @@
-  const getAllCountries = async () => {
+const getAllCountries = async () => {
   try {
     const response = await fetch(
       "https://countriesnow.space/api/v0.1/countries/positions"
@@ -55,7 +55,9 @@ const getAllCitiesInCountry = async (coutnry) => {
 
 const getAllCategories = async () => {
   try {
-    const res = await fetch("api/company/getCategories/");
+    const res = await fetch(
+      "https://work-it-back.vercel.app/api/company/getCategories/"
+    );
     const data = await res.json();
 
     return data;

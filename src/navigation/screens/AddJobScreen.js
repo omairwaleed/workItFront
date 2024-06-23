@@ -24,7 +24,7 @@ export const action = async ({ request, params }) => {
   formData.append("companyId", id);
 
   try {
-    const res = await fetch("/api/job/", {
+    const res = await fetch("https://work-it-back.vercel.app/api/job/", {
       method: "POST",
       body: formData,
     });
