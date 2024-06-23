@@ -32,6 +32,8 @@ import AddScholarScreen, {
 } from "../screens/AddScholarScreen";
 import Applicants, { loader as applicantsLoader } from "../screens/Applicants";
 import ChangePassword from "../screens/ChangePassword";
+import ForgetPassword from "../screens/ForgetPassword";
+import ResetPassword from "../screens/ResetPassword";
 
 // [x] test logged out user senarnio
 // [x] test user senarnio
@@ -130,6 +132,14 @@ const MainRoute = () => {
     {
       path: "/changePassword",
       element: <ChangePassword />,
+    },
+    {
+      path: "/forgetPassword",
+      element: <ForgetPassword />,
+    },
+    {
+      path: "/resetPassword/:token",
+      element: <ResetPassword />,
     },
   ]);
   return <RouterProvider router={routes} />;
