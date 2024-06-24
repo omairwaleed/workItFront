@@ -98,8 +98,8 @@ const ApplyScreen = () => {
                 const localStrData = JSON.parse(localStorage.getItem("user"));
 
                 const response = await fetch(
-                    // "https://work-it-back.vercel.app/api/user/editProfile",
-                    "http://localhost:5002/api/user/editProfile",
+                    "https://work-it-back.vercel.app/api/user/editProfile",
+                    // "http://localhost:5002/api/user/editProfile",
                     {
                       method: "put",
                       headers: {
