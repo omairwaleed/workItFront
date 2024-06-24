@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./detailsStyle.module.css";
 import pin from "../../assets/pin.png";
+import { Link } from "react-router-dom";
 import {
   Navigate,
   useLoaderData,
@@ -21,16 +22,13 @@ const DetailsScreen = () => {
   const userData = useLoaderData();
   const [modal, setModal] = useState({ show: false });
   const [isDisabled, setisDisabled] = useState(false);
+  const user = userData[0]
 
   const navigate = useNavigate();
 
   const { state } = useLocation();
   if (!state) return <Navigate to={"/preview"} />;
-
-  console.log(userData);
-  console.log(state);
-  console.log(userData[0]?.cv);
-
+  
   const handleClose = () => {
     setModal({ show: false });
     navigate(`/${isDisabled ? "profile" : "myapps"}`);
@@ -45,9 +43,7 @@ const DetailsScreen = () => {
         body: "Please upload your CV first! You have to complete your profile.",
       });
     }
-
-    // requiredskills , jobid , userid, date
-    //   jobtitle, companyname, country, city
+    
     const { userid } = userData[0];
     const { requiredskills, jobid, jobtitle, companyname, country, city } =
       state;
@@ -239,22 +235,17 @@ const DetailsScreen = () => {
             <img src={pin} alt="" />
             {state?.country}
           </div>
-          {/* <div className={styles.place}>
-            <img src={clock} alt="" />
-            Posted # days ago
-          </div> */}
-          {/* <div className={styles.place}>
-            <img src={bag} alt="" />
-            {state?.'}
-          </div> */}
+          
 
+          <Link to="/apply" state={{ state, user}}>
           <button
-            disabled={userData?.error ? true : isDisabled}
-            className={styles.applybtn}
-            onClick={handleApply}
-          >
-            Apply!
-          </button>
+              disabled={userData?.error ? true : isDisabled}
+              className={styles.applybtn}
+              // onClick={handleApply}
+            >
+              Apply!
+            </button>
+          </Link>
         </div>
         <div className={styles.right}>
           <strong>Company Name:</strong>

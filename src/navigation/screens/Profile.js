@@ -68,6 +68,7 @@ const Profile = () => {
       }
 
       if (formData.cv.size) {
+        console.log("-------------------------------------",formData)
         const cvURl = await uploadCv({ cv: formData.cv });
         formData.cvURl = cvURl;
         formData.cvName = formData.cv.name;
@@ -113,7 +114,6 @@ const Profile = () => {
       console.log("erorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
       console.error("Errorrr:", error);
     } finally {
-      console.log("++++++++++++++++++++++++++++++++");
       setLoading(false);
     }
   };
@@ -155,6 +155,7 @@ const Profile = () => {
       console.error("Error while uploading image: ", error);
     }
   };
+
   const uploadCv = async ({ cv }) => {
     try {
       let cvURL;
@@ -181,6 +182,7 @@ const Profile = () => {
       console.error("Error while uploading image: ", error);
     }
   };
+
   const refrechCountries = async () => {
     setCountries(await getAllCountries());
   };
