@@ -61,18 +61,6 @@ const LogInScreen = () => {
         <div className="left d-flex justify-content-center flex-column p-5 gap-4 mt-4 ">
           <div className="my_h1_size">Login</div>
 
-          <div className="logos d-flex justify-content-center align-items-center gap-2  ">
-            <a href="#" className="facebook ">
-              <img src={fbIcon} width="40" alt="" />
-            </a>
-            <a href="#" className="gmail">
-              <img src={googleIcon} width="40" alt="" />
-            </a>
-            <a href="#" className="linkedin">
-              <img src={LinkedinIcon} width="40" alt="" />
-            </a>
-          </div>
-
           <div className="box d-flex flex-column gap-3 justify-content-center align-items-center ">
             <p className="error">{error}</p>
             <TextBox
@@ -103,7 +91,8 @@ const LogInScreen = () => {
             <Button buttonContent="LOGIN" onClick={handelSubmit} />
           </div>
           <div className="d-flex flex-column gap-4 justify-content-center align-items-center mt-4">
-            <a
+            <Link
+              to="/forgetPassword"
               href="/"
               style={{
                 textDecoration: "none",
@@ -112,7 +101,7 @@ const LogInScreen = () => {
               }}
             >
               Forgot Your Password?
-            </a>
+            </Link>
 
             {/* REGISTRATION  */}
             <Link to={"/signUp"} className="registration">
