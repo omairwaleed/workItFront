@@ -3,7 +3,7 @@ import { createHashRouter, redirect, RouterProvider } from "react-router-dom";
 import LogInScreen from "../screens/LogInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import HomeScreen from "../screens/HomeScreen";
-// import TestPage from "../screens/TestPage";
+import TestPage from "../screens/TestPage";
 import PreviewScreen from "../screens/PreviewScreen";
 import Profile, { loader as profileLoader } from "../screens/Profile";
 import DetailsScreen, {
@@ -32,6 +32,8 @@ import AddScholarScreen, {
 } from "../screens/AddScholarScreen";
 import Applicants, { loader as applicantsLoader } from "../screens/Applicants";
 import ChangePassword from "../screens/ChangePassword";
+import ApplyScreen from "../screens/ApplyScreen";
+
 import ForgetPassword from "../screens/ForgetPassword";
 import ResetPassword from "../screens/ResetPassword";
 
@@ -45,6 +47,14 @@ const MainRoute = () => {
     {
       path: "/",
       element: <HomeScreen />,
+    },
+    {
+      path: "/test",
+      element: <TestPage />,
+    },
+    {
+      path: "/apply",
+      element: <ApplyScreen/>,
     },
     {
       path: "/universityProfile",
