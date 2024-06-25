@@ -86,7 +86,7 @@ const ApplyScreen = () => {
         event.preventDefault();
         setIsLoading(true)
         const formattedAvailabilityStart = dayjs(startAvailability).format('DD/MM/YYYY')
-        const concatinatedExpectedSalary = expectedSalary + currencyExpectedSalary ;
+        const concatinatedExpectedSalary = expectedSalary+ " " + currencyExpectedSalary ;
         
         const {userid}  = state?.user
         const { requiredskills, jobid, jobtitle, companyname, country, city } = state?.state;        
