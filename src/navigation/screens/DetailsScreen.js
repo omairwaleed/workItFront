@@ -267,7 +267,7 @@ const DetailsScreen = () => {
           <br />
           <strong>salary:</strong>
           <br />
-          &#x2022; {state?.salary === "0" ?  "Not specified":state?.salary}
+          &#x2022; {state?.salary === "0" ?  "Not specified":state?.salary} 
           <br />
           <strong>Required Skills :</strong>
           <br />
