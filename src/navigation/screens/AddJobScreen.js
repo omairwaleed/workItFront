@@ -23,6 +23,15 @@ export const action = async ({ request, params }) => {
   const formData = await request.formData();
   formData.append("companyId", id);
 
+   const formDataObj = {};
+  formData.forEach((value, key) => {
+    formDataObj[key] = value;
+  });
+
+  if (!formDataObj.salary) {
+    formData.set("salary", "0");
+  }
+  
   try {
     const res = await fetch("https://work-it-back.vercel.app/api/job/", {
       method: "POST",
@@ -81,7 +90,6 @@ const AddJobScreen = () => {
               id="salary"
               name="salary"
               placeholder="Salary"
-              required
             />
           </div>
 
