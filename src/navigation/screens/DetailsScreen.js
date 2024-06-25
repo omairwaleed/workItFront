@@ -221,13 +221,16 @@ const DetailsScreen = () => {
             </li>
           </ol>
         </section>
+        <Link to="/apply" state={{ state, user}}>
         <button
           disabled={userData?.error ? true : isDisabled}
           className={styles.applybtn}
-          onClick={handleApply}
+          // onClick={handleApply}
         >
           Apply!
         </button>
+        </Link>
+        
       </div>
       <div className={styles.main}>
         <div className={styles.left}>
