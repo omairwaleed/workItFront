@@ -14,6 +14,12 @@ import {
   getAllCitiesInCountry,
 } from "../../utilities/getCountriesAndCities";
 import "react-dropdown/style.css";
+import { MantineProvider, Select, Box, Autocomplete, ActionIcon } from '@mantine/core';
+import '@mantine/core/styles.css';
+import { IconX } from '@tabler/icons-react';
+
+
+
 
 const SignUpScreen = () => {
   const navigate = useNavigate();
@@ -23,12 +29,13 @@ const SignUpScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
-  const [country, setCountry] = useState("Afghanistan");
-  const [city, setCity] = useState("Herat");
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
   const [companySize, setCompanySize] = useState("1-10");
   const [companyCategory, setCompanyCategory] = useState("software");
-  const [cities, setCities] = useState([{}]);
-  const [countries, setCountries] = useState([{}]);
+  const [cities, setCities] = useState([{ key: 0, value: "" }]);
+  const [countries, setCountries] = useState([{ key: 0, value: "" }]);
+
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
@@ -196,22 +203,60 @@ const SignUpScreen = () => {
                 value={mobileNumber}
               />
             )}
+            {
+              <MantineProvider theme={{ colorScheme: 'light', }}>
+                <Box mb="">
+                  <Autocomplete
+                    placeholder="Choose your country"
+                    required
+                    onChange={(value) => setCountry(value)}
+                    data={countries || ""}
+                    value={country}
+                    rightSection={
+                      country && (
+                        <ActionIcon onClick={() => setCountry('')}>
+                          <IconX size={16} />
+                        </ActionIcon>
+                      )
+                    }
+                    styles={{
+                      input: {
+                        width: 500,
+                        borderRadius: '8px', // Rounded corners
+                        backgroundColor: '#f0f0f0', // Background color
+                        borderColor: '#ccc' // Border color
+                      }
+                    }}
 
-            <DropDown
-              data={countries}
-              placeholder="select country"
-              className="text_input"
-              state={country}
-              setState={setCountry}
-            />
+                  />
+                </Box>
+                <Box mb="">
+                  <Autocomplete
+                    placeholder="Choose your city"
+                    required
+                    onChange={(value) => setCity(value)}
+                    data={cities}
+                    value={city}
+                    rightSection={
+                      city && (
+                        <ActionIcon onClick={() => setCity('')}>
+                          <IconX size={16} />
+                        </ActionIcon>
+                      )
+                    }
+                    styles={{
+                      input: {
+                        width: 500,
+                        borderRadius: '8px', // Rounded corners
+                        backgroundColor: '#f0f0f0', // Background color
+                        borderColor: '#ccc' // Border color
+                      }
+                    }}
+                  />
+                </Box>
+              </MantineProvider>
 
-            <DropDown
-              data={cities}
-              placeholder="select City"
-              className="text_input"
-              state={city}
-              setState={setCity}
-            />
+            }
 
             {selectedOption === "company" && (
               <DropDown
@@ -236,7 +281,7 @@ const SignUpScreen = () => {
             <p className="error">{error}</p>
           </div>
 
-          <div className="button_box d-flex justify-content-center align-items-center mt-4">
+          <div className="button_box d-flex justify-content-center align-items-center">
             <Button buttonContent="JOIN NOW" />
           </div>
 
