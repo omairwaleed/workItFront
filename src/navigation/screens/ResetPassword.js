@@ -23,6 +23,7 @@ const ResetPassword = () => {
           },
           body: JSON.stringify({
             password: formData.password,
+            type: params.type,
           }),
         }
       );

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useNavigation } from "react-router-dom";
 import styles from "./navbar.module.css";
 import { Dropdown } from "react-bootstrap";
 import { useState } from "react";
@@ -67,6 +67,11 @@ const Navbar = () => {
     }
     setLoading(false);
   };
+  const { state: PageLoading } = useNavigation();
+
+  if (PageLoading === "loading") {
+    return <Loader fullPage />;
+  }
   return (
     <header className={styles.header}>
       <Link
