@@ -49,15 +49,9 @@ const ApplyScreen = () => {
     };
 
     const { state } = useLocation();
+
     const [yearsOfExp, setYearsOfExp] = useState("");
     const [englishLevel, setEnglishLevel] = useState("");
-    const [expectedSalary, setExpectedSalary] = useState("");
-    const [currencyExpectedSalary, setCurrencyExpectedSalary] = useState("");
-    const [startAvailability, setStartAvailability] = useState("");
-    const [prefJobLocation, setPrefJobLocation] = useState("");
-    const [cvFile, setCvFile] = useState('');
-    const [modal, setModal] = useState({ show: false });
-    const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -69,131 +63,19 @@ const ApplyScreen = () => {
             state?.user?.email &&
             state?.user?.mobilenumber &&
             englishLevel &&
-            yearsOfExp &&
-            expectedSalary&&
-            currencyExpectedSalary  &&
-            startAvailability &&
-            prefJobLocation &&
-            ((state?.user?.cv ) || (cvFile))
+            yearsOfExp 
         );
     }
-    const handleClose = () => {
-        setModal({ show: false });
-        navigate("/myapps");
-      };
-    
     const onFinish = async (event) => {
         event.preventDefault();
-        setIsLoading(true)
-        const formattedAvailabilityStart = dayjs(startAvailability).format('DD/MM/YYYY')
-        const concatinatedExpectedSalary = expectedSalary+ " " + currencyExpectedSalary ;
-        
-        const {userid}  = state?.user
-        const { requiredskills, jobid, jobtitle, companyname, country, city } = state?.state;        
-
-        try {
-            if(!state?.user?.cv){
-                console.log("---------------------",cvFile.name)
-                const cvURl = await uploadCv({ cv: cvFile });
-                const localStrData = JSON.parse(localStorage.getItem("user"));
-
-                const response = await fetch(
-                    "https://work-it-back.vercel.app/api/user/editProfile",
-                    // "http://localhost:5002/api/user/editProfile",
-                    {
-                      method: "put",
-                      headers: {
-                        "Content-Type": "application/json",
-                        authorization: "token: " + localStrData.token,
-                        type: "user",
-                      },                
-                      body: JSON.stringify({
-                        userData : {
-                            cvURl : cvURl,
-                            cvName : cvFile.name,
-                            userid : state?.user?.userid,
-                            onlyCv : true
-                        }
-                      }),
-                    }
-                  );
-            }
-            const res = await fetch("https://work-it-back.vercel.app/api/job/apply", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  userid,
-                  jobid,
-                  requiredskills,
-                  jobtitle,
-                  companyname,
-                  country,
-                  city,
-                  yearsOfExp,
-                  englishLevel,
-                  concatinatedExpectedSalary,
-                  formattedAvailabilityStart,
-                  prefJobLocation,
-                }),
-              });
-            const json = await res.json();
-
-            setIsLoading(false)
-            setModal({
-                show: true,
-                title: "Success",
-                body: json.msg,
-              });
-
-        } catch (error) {
-            setModal({
-                show: true,
-                title: "Failure",
-                body: error.message.includes("duplicate")
-                  ? "Can't Apply for the same job twice!"
-                  : "Something went wrong.",
-              });
-        }
+        console.log('will navigate')
+    navigate('/expectedsalary', { state : {state, englishLevel, yearsOfExp} });
     }
-    const uploadCv = async ({ cv }) => {
-        try {
-          let cvURL;
-          if (cv && cv.type === "application/pdf") {
-            const file = new FormData();
-            file.append("file", cv);
-            file.append("cloud_name", "dapnyieo6");
-            file.append("upload_preset", "swjjtdpv");
-            const response = await fetch(
-              "https://api.cloudinary.com/v1_1/dapnyieo6/auto/upload",
-              {
-                method: "post",
-                mode: "cors",
-                body: file,
-              }
-            );
-            const cvData = await response.json();
-            cvURL = cvData.url.toString();
-            return cvURL;
-          } else {
-            alert("type should be PDF ");
-          }
-        } catch (error) {
-          console.error("Error while uploading image: ", error);
-        }
-      };
     
-
     return (
         <div>
-        {isLoading && 
-        <MantineProvider theme={{colorScheme: 'light',}}>
-            <Container style={styles.containerWithoutBorder}>
-                <Title order={2} style={styles.title}>Applying for Job ...</Title>
-                <Loader />
-            </Container>
-        </MantineProvider>
-        }
-        {!isLoading && <MantineProvider
+        
+         <MantineProvider
             theme={{
                 colorScheme: 'light',
             }}
@@ -262,73 +144,6 @@ const ApplyScreen = () => {
                             value={yearsOfExp}
                         />
                     </Box>
-                    {/* expected salary */}
-                    <Box mb="20px">
-                        <Group>
-                            <NumberInput
-                                label="Expected Salary"
-                                placeholder="Enter your expected salary"
-                                required
-                                style={{ flex: 1 }}
-                                onChange={(value) => setExpectedSalary(value)}
-                                value={expectedSalary}
-                            />
-                            <Select
-                                label="Currency"
-                                placeholder="Select currency"
-                                required
-                                style={{ flex: 1 }}
-                                data={[
-                                    { value: 'usd', label: 'USD' },
-                                    { value: 'eur', label: 'EUR' },
-                                    { value: 'eg', label: 'EGY' },
-                                    { value: 'gbp', label: 'GBP' },
-                                    { value: 'inr', label: 'INR' },
-                                ]}
-                                onChange={(value) => setCurrencyExpectedSalary(value)}
-                                value={currencyExpectedSalary}
-                            />
-                        </Group>
-                    </Box>
-                    {/* availability to start */}
-                    <Box mb="20px">
-                        <DateInput
-                            label="Availability to Start"
-                            placeholder="Select your availability to start"
-                            required
-                            minDate={dayjs().toDate()}
-                            format="DD/MM/YYYY"
-                            onChange={(value) => setStartAvailability(value)}
-                            value={startAvailability}
-                        />
-                    </Box>
-                    {/* preferedjob location */}
-                    <Box mb="20px">
-                        <Select
-                            label="Preferred Job Location"
-                            placeholder="Select your preferred job location"
-                            required
-                            data={[
-                                { value: 'online', label: 'Online' },
-                                { value: 'onsite', label: 'Onsite' },
-                            ]}
-                            onChange={(value) => setPrefJobLocation(value)}
-                            value={prefJobLocation}
-                        />
-                    </Box>
-
-                    {/* Upload CV */}
-                    {   !state?.user?.cv &&
-                        <Box mb="20px">
-                        <FileInput
-                            label="Upload CV"
-                            accept=".pdf,.doc,.docx,.txt"
-                            placeholder="Select your CV file"
-                            required
-                            onChange={(value) => setCvFile(value)}
-                        />
-                    </Box>
-                    }
 
                     {/* button */}
                     <Box>
@@ -340,15 +155,7 @@ const ApplyScreen = () => {
             </Container>
             
         </MantineProvider>
-        }
-        {modal?.show && (
-        <Modal
-          show={modal?.show}
-          title={modal?.title}
-          body={modal?.body}
-          handleClose={handleClose}
-        />
-      )}
+        
         </div>
 
     );

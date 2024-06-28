@@ -33,7 +33,7 @@ import AddScholarScreen, {
 import Applicants, { loader as applicantsLoader } from "../screens/Applicants";
 import ChangePassword from "../screens/ChangePassword";
 import ApplyScreen from "../screens/ApplyScreen";
-
+import ExpextedSalaryScreen from "../screens/ExpextedSalaryScreen";
 import ForgetPassword from "../screens/ForgetPassword";
 import ResetPassword from "../screens/ResetPassword";
 
@@ -55,6 +55,10 @@ const MainRoute = () => {
     {
       path: "/apply",
       element: <ApplyScreen/>,
+    },
+    {
+      path: "/expectedsalary",
+      element: <ExpextedSalaryScreen/>,
     },
     {
       path: "/universityProfile",
