@@ -88,85 +88,81 @@ const ExpextedSalaryScreen = () => {
     navigate("/myapps");
   };
 
-  const onFinish = async (event) => {
-    event.preventDefault();
-    setIsLoading(true);
+//   const onFinish = async (event) => {
+//     event.preventDefault();
+//     setIsLoading(true);
 
-    const userid = state?.state?.user?.userid;
-    const { requiredskills, jobid, jobtitle, companyname, country, city } =
-      state?.state?.state;
-    const englishLevel = state?.englishLevel;
-    const yearsOfExp = state?.yearsOfExp;
-    const formattedAvailabilityStart =
-      dayjs(startAvailability).format("DD/MM/YYYY");
-    const concatinatedExpectedSalary = salary + " " + Currency;
+//     const userid = state?.state?.user?.userid;
+//     const { requiredskills, jobid, jobtitle, companyname, country, city } =
+//       state?.state?.state;
+//     const englishLevel = state?.englishLevel;
+//     const yearsOfExp = state?.yearsOfExp;
+//     const formattedAvailabilityStart =
+//       dayjs(startAvailability).format("DD/MM/YYYY");
+//     const concatinatedExpectedSalary = salary + " " + Currency;
 
-    try {
-      if (!state?.state?.user?.cv) {
-        const cvURl = await uploadCv({ cv: cvFile });
-        const localStrData = JSON.parse(localStorage.getItem("user"));
+//     try {
+//       if (!state?.state?.user?.cv) {
+//         const cvURl = await uploadCv({ cv: cvFile });
+//         const localStrData = JSON.parse(localStorage.getItem("user"));
 
-        const response = await fetch(
-          "https://work-it-back.vercel.app/api/user/editProfile",
-          // "http://localhost:5002/api/user/editProfile",
-          {
-            method: "put",
-            headers: {
-              "Content-Type": "application/json",
-              authorization: "token: " + localStrData.token,
-              type: "user",
-            },
-            body: JSON.stringify({
-              userData: {
-                cvURl: cvURl,
-                cvName: cvFile.name,
-                userid: state?.state?.user?.userid,
-                onlyCv: true,
-              },
-            }),
-          }
-        );
-      }
-      const res = await fetch("https://work-it-back.vercel.app/api/job/apply", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userid,
-          jobid,
-          requiredskills,
-          jobtitle,
-          companyname,
-          country,
-          city,
-          yearsOfExp,
-          englishLevel,
-          concatinatedExpectedSalary,
-          formattedAvailabilityStart,
-          prefJobLocation,
-        }),
-      });
+//         const response = await fetch(
+//           "https://work-it-back.vercel.app/api/user/editProfile",
+//           // "http://localhost:5002/api/user/editProfile",
+//           {
+//             method: "put",
+//             headers: {
+//               "Content-Type": "application/json",
+//               authorization: "token: " + localStrData.token,
+//               type: "user",
+//             },
+//             body: JSON.stringify({
+//               userData: {
+//                 cvURl: cvURl,
+//                 cvName: cvFile.name,
+//                 userid: state?.state?.user?.userid,
+//                 onlyCv: true,
+//               },
+//             }),
+//           }
+//         );
+//       }
+//       const res = await fetch("https://work-it-back.vercel.app/api/job/apply", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({
+//           userid,
+//           jobid,
+//           requiredskills,
+//           jobtitle,
+//           companyname,
+//           country,
+//           city,
+//           yearsOfExp,
+//           englishLevel,
+//           concatinatedExpectedSalary,
+//           formattedAvailabilityStart,
+//           prefJobLocation,
+//         }),
+//       });
 
-      const json = await res.json();
+//       const json = await res.json();
 
-      setIsLoading(false);
-      setModal({
-        show: true,
-        title: "Success",
-        body: json.msg,
-      });
-    } catch (error) {
-      setModal({
-        show: true,
-        title: "Failure",
-        body: error.message.includes("duplicate")
-          ? "Can't Apply for the same job twice!"
-          : "Something went wrong.",
-      });
-    }
-    const handleClose = () => {
-        setModal({ show: false });
-        navigate("/myapps");
-    };
+//       setIsLoading(false);
+//       setModal({
+//         show: true,
+//         title: "Success",
+//         body: json.msg,
+//       });
+//     } catch (error) {
+//       setModal({
+//         show: true,
+//         title: "Failure",
+//         body: error.message.includes("duplicate")
+//           ? "Can't Apply for the same job twice!"
+//           : "Something went wrong.",
+//       });
+//     }
 
     const onFinish = async (event) => {
         event.preventDefault();
@@ -281,12 +277,12 @@ const ExpextedSalaryScreen = () => {
 
         const url = 'https://accurate-viper-harmless.ngrok-free.app/predict';
         const data = {
-            job_title: "Data Scientist",
-            country: "United States",
-            years_of_experience: 9,
-            company_size: "S",
-            company_name: "Microsoft",
-            english_level: "Professional"
+            job_title: jobtitle,
+            country: country,
+            years_of_experience: yearsOfExp,
+            company_size: company_size,
+            company_name: companyname,
+            english_level: englishLevel
         }
 
         try {
@@ -481,82 +477,8 @@ const ExpextedSalaryScreen = () => {
                     body={modal?.body}
                     handleClose={handleClose}
 
-                />
-              </Box>
+                />)}
 
-              {/* preferedjob location */}
-              <Box mb="20px">
-                <Select
-                  label="Preferred Job Location"
-                  placeholder="Select your preferred job location"
-                  required
-                  data={[
-                    { value: "online", label: "Online" },
-                    { value: "onsite", label: "Onsite" },
-                  ]}
-                  onChange={(value) => setPrefJobLocation(value)}
-                  value={prefJobLocation}
-                />
-              </Box>
-
-              {/* Upload CV */}
-              {!state?.state?.user?.cv && (
-                <Box mb="20px">
-                  <FileInput
-                    label="Upload CV"
-                    accept=".pdf,.doc,.docx,.txt"
-                    placeholder="Select your CV file"
-                    required
-                    onChange={(value) => setCvFile(value)}
-                  />
-                </Box>
-              )}
-
-              {/* cover letter */}
-              <Box mb="20px">
-                <Textarea
-                  label="Cover letter"
-                  placeholder="Cover letter"
-
-                  // onChange={(value) => setPrefJobLocation(value)}
-                  // value={prefJobLocation}
-                />
-              </Box>
-
-              {/* How did you hear about us */}
-              <Box mb="20px">
-                <Select
-                  label="How did you hear about us ?"
-                  placeholder="How did you hear about us ?"
-                  data={[
-                    { value: "family/friends", label: "Family / Friends" },
-                    { value: "event", label: "Event" },
-                    { value: "social media", label: "Social media" },
-                    { value: "other", label: "Other" },
-                  ]}
-                  // onChange={(value) => setPrefJobLocation(value)}
-                  // value={prefJobLocation}
-                />
-              </Box>
-
-              {/* button */}
-              <Box>
-                <Button type="submit" disabled={!isFormValid()}>
-                  Apply
-                </Button>
-              </Box>
-            </form>
-          </Container>
-        </MantineProvider>
-      )}
-      {modal?.show && (
-        <Modal
-          show={modal?.show}
-          title={modal?.title}
-          body={modal?.body}
-          handleClose={handleClose}
-        />
-      )}
     </div>
   );
 };
