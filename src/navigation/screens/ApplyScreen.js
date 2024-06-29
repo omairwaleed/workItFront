@@ -125,9 +125,9 @@ const ApplyScreen = () => {
                             onChange={(value) => setEnglishLevel(value)}
                             value={englishLevel}
                             data={[
-                                { value: 'beginner', label: 'Beginner' },
-                                { value: 'intermediate', label: 'Intermediate' },
-                                { value: 'advanced', label: 'Advanced' },
+                                { value: 'Intermediate', label: 'Intermediate' },
+                                { value: 'Professional', label: 'Professional' },
+                                { value: 'Full Professional', label: 'Full Professional' },
                             ]}
                             name="englishLevel"
                         />
@@ -139,7 +139,7 @@ const ApplyScreen = () => {
                             placeholder="Enter your years of experience"
                             required
                             min={0}
-                            max={60}
+                            max={10}
                             onChange={(value) => setYearsOfExp(value)}
                             value={yearsOfExp}
                         />

@@ -8,7 +8,7 @@ import Button from "../../components/Button";
 import TextBox from "../../components/TextBox";
 import DropDown from "../../components/DropDown";
 import { useNavigate } from "react-router-dom";
-import { CompanySizes, CompanyCategories } from "../../data/DropDownData";
+import { CompanyCategories } from "../../data/DropDownData";
 import {
   getAllCountries,
   getAllCitiesInCountry,
@@ -31,11 +31,16 @@ const SignUpScreen = () => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
-  const [companySize, setCompanySize] = useState("1-10");
-  const [companyCategory, setCompanyCategory] = useState("software");
+  const [companySize, setCompanySize] = useState("");
+  const [companyCategory, setCompanyCategory] = useState("");
   const [cities, setCities] = useState([{ key: 0, value: "" }]);
   const [countries, setCountries] = useState([{ key: 0, value: "" }]);
 
+  const companySizes = [
+    { value: 'L', label: 'Large' },
+    { value: 'M', label: 'Medium' },
+    { value: 'S', label: 'Small' }
+  ];
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
@@ -65,6 +70,8 @@ const SignUpScreen = () => {
     const companyCategoryId =
       CompanyCategories.filter((con) => con.value === companyCategory)[0]
         ?.index || 0;
+        
+    console.log("the company size issssss : ", companySize)
 
     const response = await fetch(
       "https://work-it-back.vercel.app/api/user/signup",
@@ -259,23 +266,80 @@ const SignUpScreen = () => {
             }
 
             {selectedOption === "company" && (
-              <DropDown
-                data={CompanySizes}
-                state={companySize}
-                setState={setCompanySize}
-                placeholder="Company size"
-                className="text_input"
-              />
+
+              <MantineProvider theme={{ colorScheme: 'light', }}>
+                <Box mb="">
+                  <Autocomplete
+                    placeholder="Choose your company size"
+                    required
+                    onChange={(value) => {
+                      setCompanySize(value)
+                      console.log("value is : ", value)
+                    }}
+                    data={[{ value: 'L', label: 'L' },
+                    { value: 'M', label: 'M' },
+                    { value: 'S', label: 'S' }] || ""}
+                    value={companySize}
+                    rightSection={
+                      companySize && (
+                        <ActionIcon onClick={() => setCompanySize('')}>
+                          <IconX size={16} />
+                        </ActionIcon>
+                      )
+                    }
+                    styles={{
+                      input: {
+                        width: 500,
+                        borderRadius: '8px', // Rounded corners
+                        backgroundColor: '#f0f0f0', // Background color
+                        borderColor: '#ccc' // Border color
+                      }
+                    }}
+
+                  />
+                </Box>
+              </MantineProvider>
+
             )}
 
             {selectedOption === "company" && (
-              <DropDown
+              <>
+                {/* <DropDown
                 data={CompanyCategories}
                 state={companyCategory}
                 setState={setCompanyCategory}
                 placeholder="Company category"
                 className="text_input"
-              />
+              /> */}
+                <MantineProvider theme={{ colorScheme: 'light', }}>
+                  <Box mb="">
+                    <Autocomplete
+                      placeholder="Choose your company catrgory"
+                      required
+                      onChange={(value) => setCompanyCategory(value)}
+                      data={CompanyCategories || ""}
+                      value={companyCategory}
+                      rightSection={
+                        companyCategory && (
+                          <ActionIcon onClick={() => setCompanyCategory('')}>
+                            <IconX size={16} />
+                          </ActionIcon>
+                        )
+                      }
+                      styles={{
+                        input: {
+                          width: 500,
+                          borderRadius: '8px', // Rounded corners
+                          backgroundColor: '#f0f0f0', // Background color
+                          borderColor: '#ccc' // Border color
+                        }
+                      }}
+
+                    />
+                  </Box>
+                </MantineProvider>
+              </>
+
             )}
 
             <p className="error">{error}</p>

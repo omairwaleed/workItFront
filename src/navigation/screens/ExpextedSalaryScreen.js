@@ -57,7 +57,7 @@ const ExpextedSalaryScreen = () => {
     const [modal, setModal] = useState({ show: false });
     const [isLoading, setIsLoading] = useState(false);
     const [salary, setSalary] = useState(isSalarySpecified ? state?.state?.state?.salary : '');
-    const [Currency, setCurrency] = useState(isSalarySpecified ? 'USD' : '');    
+    const [Currency, setCurrency] = useState(isSalarySpecified ? 'USD' : '');
 
     const navigate = useNavigate();
 
@@ -78,8 +78,8 @@ const ExpextedSalaryScreen = () => {
     const onFinish = async (event) => {
         event.preventDefault();
         setIsLoading(true)
-        
-        const userid =state?.state?.user?.userid
+
+        const userid = state?.state?.user?.userid
         const { requiredskills, jobid, jobtitle, companyname, country, city } = state?.state?.state;
         const englishLevel = state?.englishLevel
         const yearsOfExp = state?.yearsOfExp
@@ -177,35 +177,41 @@ const ExpextedSalaryScreen = () => {
         }
     };
 
-    const Expect = async (event) =>{
+    const Expect = async (event) => {
         event.preventDefault();
 
-      const url = 'https://cors-anywhere.herokuapp.com/https://accurate-viper-harmless.ngrok-free.app/predict';
-      const data = {
-      job_title: "Data Scientist",
-      country: "United States",
-      years_of_experience: 9,
-      company_size: "S",
-      company_name: "Microsoft",
-      english_level: "Professional"
-    }
+        const { jobtitle, companyname, country, company_size } = state?.state?.state
+        const englishLevel = state?.englishLevel
+        const yearsOfExp = state?.yearsOfExp
+        
+        console.log('********************************', jobtitle, companyname, country, company_size, englishLevel, yearsOfExp)
 
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-requested-with': 'XMLHttpRequest'
-        },
-        body: JSON.stringify(data)
-      })
-      const result = await response.json();
-        setSalary(result.prediction)
-        setCurrency('USD')
+        const url = 'https://accurate-viper-harmless.ngrok-free.app/predict';
+        const data = {
+            job_title: "Data Scientist",
+            country: "United States",
+            years_of_experience: 9,
+            company_size: "S",
+            company_name: "Microsoft",
+            english_level: "Professional"
+        }
 
-    } catch (error) {
-        console.error('Error:', error);
-      }
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-requested-with': 'XMLHttpRequest'
+                },
+                body: JSON.stringify(data)
+            })
+            const result = await response.json();
+            setSalary(result.prediction)
+            setCurrency('USD')
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 
 
@@ -255,46 +261,46 @@ const ExpextedSalaryScreen = () => {
                             </Box>
                             :
                             <Box mb="20px">
-                            <Group>
-                                <NumberInput
-                                    label="Expected Salary"
-                                    placeholder="Enter your expected salary"
-                                    required
-                                    style={{ flex: 2 }}
-                                    onChange={(value) => {
-                                        setSalary(value)
-                                    }}
-                                    value={salary}
-                                />
-                                <Select
-                                    label="Currency"
-                                    placeholder="Select currency"
-                                    required
-                                    style={{ flex: 1 }}
-                                    data={[
-                                        { value: 'USD', label: 'USD' },
-                                        { value: 'EUR', label: 'EUR' },
-                                        { value: 'EGY', label: 'EGY' },
-                                        { value: 'GBP', label: 'GBP' },
-                                        { value: 'INR', label: 'INR' },
-                                    ]}
-                                    onChange={(value) => {
-                                        setCurrency(value)
+                                <Group>
+                                    <NumberInput
+                                        label="Expected Salary"
+                                        placeholder="Enter your expected salary"
+                                        required
+                                        style={{ flex: 2 }}
+                                        onChange={(value) => {
+                                            setSalary(value)
+                                        }}
+                                        value={salary}
+                                    />
+                                    <Select
+                                        label="Currency"
+                                        placeholder="Select currency"
+                                        required
+                                        style={{ flex: 1 }}
+                                        data={[
+                                            { value: 'USD', label: 'USD' },
+                                            { value: 'EUR', label: 'EUR' },
+                                            { value: 'EGY', label: 'EGY' },
+                                            { value: 'GBP', label: 'GBP' },
+                                            { value: 'INR', label: 'INR' },
+                                        ]}
+                                        onChange={(value) => {
+                                            setCurrency(value)
 
-                                        console.log('value is ; ',value)
-                                    }
-                                    }
-                                    value={Currency}
-                                />
-                                <Button 
-                                onClick={Expect}
-                                style={{ flex: 1 , marginTop: 20 }}>
-                                    Expect salary
-                                </Button>
-                                
-                            </Group>
-                        </Box>
-                            }
+                                            console.log('value is ; ', value)
+                                        }
+                                        }
+                                        value={Currency}
+                                    />
+                                    <Button
+                                        onClick={Expect}
+                                        style={{ flex: 1, marginTop: 20 }}>
+                                        Expect salary
+                                    </Button>
+
+                                </Group>
+                            </Box>
+                        }
 
                         {/* availability to start */}
                         <Box mb="20px">
