@@ -54,7 +54,7 @@ const MainRoute = () => {
     },
     {
       path: "/apply",
-      element: <ApplyScreen/>,
+      element: <ApplyScreen />,
     },
     {
       path: "/expectedsalary",
@@ -152,7 +152,7 @@ const MainRoute = () => {
       element: <ForgetPassword />,
     },
     {
-      path: "/resetPassword/:token",
+      path: "/resetPassword/:token/:type",
       element: <ResetPassword />,
     },
   ]);

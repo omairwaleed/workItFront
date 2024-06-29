@@ -23,6 +23,7 @@ const ResetPassword = () => {
           },
           body: JSON.stringify({
             password: formData.password,
+            type: params.type,
           }),
         }
       );
@@ -31,7 +32,9 @@ const ResetPassword = () => {
         alert(json.message ? json.message : "Error while reseting password");
       } else {
         // alert("Please check Your email to reset password");
+        console.log("aa");
         navigate("/login");
+        console.log("bb");
       }
     } catch (error) {
       alert("error while reseting password");
