@@ -22,13 +22,13 @@ const DetailsScreen = () => {
   const userData = useLoaderData();
   const [modal, setModal] = useState({ show: false });
   const [isDisabled, setisDisabled] = useState(false);
-  const user = userData[0]
+  const user = userData[0];
 
   const navigate = useNavigate();
 
   const { state } = useLocation();
   if (!state) return <Navigate to={"/preview"} />;
-  
+
   const handleClose = () => {
     setModal({ show: false });
     navigate(`/${isDisabled ? "profile" : "myapps"}`);
@@ -43,7 +43,7 @@ const DetailsScreen = () => {
         body: "Please upload your CV first! You have to complete your profile.",
       });
     }
-    
+
     const { userid } = userData[0];
     const { requiredskills, jobid, jobtitle, companyname, country, city } =
       state;
@@ -84,14 +84,13 @@ const DetailsScreen = () => {
   return (
     <div className={styles.body}>
       <div className={styles.intro}>
-        <div className={styles.img}>
-          <ErrorImageHandler
-            src={state.logo}
-            classN={styles.sora}
-            width={200}
-            height={200}
-          />
-        </div>
+        <ErrorImageHandler
+          src={state.logo}
+          classN={styles.sora}
+          width={200}
+          height={200}
+        />
+
         <div className={styles.portfolio}>
           <h1>{state?.jobtitle}</h1>
           {state?.jobdescription}
@@ -221,16 +220,15 @@ const DetailsScreen = () => {
             </li>
           </ol>
         </section>
-        <Link to="/apply" state={{ state, user}}>
-        <button
-          disabled={userData?.error ? true : isDisabled}
-          className={styles.applybtn}
-          // onClick={handleApply}
-        >
-          Apply!
-        </button>
+        <Link to="/apply" state={{ state, user }}>
+          <button
+            disabled={userData?.error ? true : isDisabled}
+            className={styles.applybtn}
+            // onClick={handleApply}
+          >
+            Apply!
+          </button>
         </Link>
-        
       </div>
       <div className={styles.main}>
         <div className={styles.left}>
@@ -238,10 +236,9 @@ const DetailsScreen = () => {
             <img src={pin} alt="" />
             {state?.country}
           </div>
-          
 
-          <Link to="/apply" state={{ state, user}}>
-          <button
+          <Link to="/apply" state={{ state, user }}>
+            <button
               disabled={userData?.error ? true : isDisabled}
               className={styles.applybtn}
               // onClick={handleApply}
@@ -267,7 +264,7 @@ const DetailsScreen = () => {
           <br />
           <strong>salary:</strong>
           <br />
-          &#x2022; {state?.salary === "0" ?  "Not specified":state?.salary} 
+          &#x2022; {state?.salary === "0" ? "Not specified" : state?.salary}
           <br />
           <strong>Required Skills :</strong>
           <br />

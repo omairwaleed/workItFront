@@ -75,14 +75,12 @@ const DetailsScreenScholar = () => {
   return (
     <div className={styles.body}>
       <div className={styles.intro}>
-        <div className={styles.img}>
-          <ErrorImageHandler
-            src={state.logo}
-            classN={styles.sora}
-            width={200}
-            height={200}
-          />
-        </div>
+        <ErrorImageHandler
+          src={state.logo}
+          classN={styles.sora}
+          width={200}
+          height={200}
+        />
         <div className={styles.portfolio}>
           <h1>{state.scholarshiptitle}</h1>
           {state.description}
